@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Сергей Провалинский](https://up.htmlacademy.ru/javascript/14/user/533179).
-* Наставник: `Неизвестно`.
+* Наставник: [Птетька Волобуев](https://htmlacademy.ru/profile/id635515).
 
 ---
 
