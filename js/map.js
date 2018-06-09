@@ -259,7 +259,7 @@ var advertisements = [
 
 document.querySelector('.map').classList.remove('map--faded');
 //  Размещение маркеров
-var mapListPin = document.querySelector('.map__pins');
+var mapPinList = document.querySelector('.map__pins');
 var templateMapPin = document.querySelector('template').content.querySelector('.map__pin');
 
 for (var i = 0; i < advertisements.length; i++) {
@@ -268,14 +268,15 @@ for (var i = 0; i < advertisements.length; i++) {
   mapPin.style = 'left: ' + advertisements[i].location.x + 'px; top: ' + advertisements[i].location.y + 'px;';
   mapPin.querySelector('img').src = advertisements[i].author.avatar;
   mapPin.querySelector('img').alt = advertisements[i].offer.title[i];
-  mapListPin.appendChild(mapPin);
+
+  mapPinList.appendChild(mapPin);
 }
 
 //  Размещение карточек объявлений
-var mapListCard = document.querySelector('.map');
+var mapCardList = document.querySelector('.map');
 var templateMapCard = document.querySelector('template').content.querySelector('.map__card');
 
-for (i = 0; i < advertisements.length; i++) {
+for (i = 0; i < 1; i++) {
   templateMapCard.querySelector('.popup__title').textContent = advertisements[i].offer.title[i];
   templateMapCard.querySelector('.popup__text--address').textContent = advertisements[i].offer.address;
   templateMapCard.querySelector('.popup__text--price').textContent = advertisements[i].offer.price + '₽/ночь';
@@ -287,7 +288,7 @@ for (i = 0; i < advertisements.length; i++) {
   //  templateMapCard.querySelector('.popup__photos').children[i].src = advertisements[i].offer.photos[0];
   templateMapCard.querySelector('.popup__avatar').src = advertisements[i].author.avatar;
 
-  mapListCard.insertBefore(templateMapCard, mapListCard[1]);
+  mapCardList.insertBefore(templateMapCard, mapCardList.children[1]);
 }
 
 /* Функция доавления маркера через фрагмент
@@ -305,5 +306,5 @@ var fragment = document.createDocumentFragment();
 for (var i = 0; i < advertisements.length; i++) {
   fragment.appendChild(renderMapPins(advertisements[i]));
 }
-mapListPin.appendChild(fragment);
+mapPinList.appendChild(fragment);
 */
