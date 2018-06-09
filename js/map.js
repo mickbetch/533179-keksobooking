@@ -275,7 +275,7 @@ for (var i = 0; i < advertisements.length; i++) {
 var mapListCard = document.querySelector('.map');
 var templateMapCard = document.querySelector('template').content.querySelector('.map__card');
 
-for (var i = 0; i < advertisements.length; i++) {
+for (i = 0; i < advertisements.length; i++) {
   templateMapCard.querySelector('.popup__title').textContent = advertisements[i].offer.title[i];
   templateMapCard.querySelector('.popup__text--address').textContent = advertisements[i].offer.address;
   templateMapCard.querySelector('.popup__text--price').textContent = advertisements[i].offer.price + '₽/ночь';
