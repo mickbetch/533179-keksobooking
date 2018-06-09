@@ -1,11 +1,13 @@
 'use strict';
 
-// Функция создания случайного числа в url картинки
-//var getNumberOfPictureURL = function (arr) {
-// for (var i = 0; i < arr.length; i++) {
-//    return 'img/avatars/user' + 0 + (i + 1) + '.png';
-//  }
-//};
+//  Функция создания случайного числа в url картинки
+/*
+var getNumberOfPictureURL = function (arr) {
+  for (var i = 0; i < arr.length; i++) {
+    return 'img/avatars/user' + 0 + (i + 1) + '.png';
+  }
+};
+*/
 
 // Массив заголовков объявлений
 var advertisementsTitles = [
@@ -20,11 +22,13 @@ var advertisementsTitles = [
 ];
 
 // Функция создания заголовка объявления
+/*
 var renderAdvertisementsTitles = function (arr) {
   for (var i = 0; i < arr.length; i++) {
     return arr[i];
   }
 };
+*/
 
 // Функция создания случайного числа
 var getRandomNumber = function (min, max) {
@@ -78,27 +82,27 @@ var advertisements = [
   },
 
   {
-    "author": {
-      "avatar": 'img/avatars/user02.png'
+    'author': {
+      'avatar': 'img/avatars/user02.png'
     },
 
-    "offer": {
-      "title": advertisementsTitles,
-      "address": "500, 250",
-      "price": getRandomNumber(1000, 1000000),
-      "type": houseType[1],
-      "rooms": getRandomNumber(1, 5),
-      "guests": getRandomNumber(1, 5),
-      "checkin": checkIn[1],
-      "checkout": checkOut[1],
-      "features": houseDescription,
-      "description": '',
-      "photos": housePhotos
+    'offer': {
+      'title': advertisementsTitles,
+      'address': '500, 250',
+      'price': getRandomNumber(1000, 1000000),
+      'type': houseType[1],
+      'rooms': getRandomNumber(1, 5),
+      'guests': getRandomNumber(1, 5),
+      'checkin': checkIn[1],
+      'checkout': checkOut[1],
+      'features': houseDescription,
+      'description': '',
+      'photos': housePhotos
     },
 
-    "location": {
-      "x": getRandomNumber(300, 900),
-      "y": getRandomNumber(130, 630)
+    'location': {
+      'x': getRandomNumber(300, 900),
+      'y': getRandomNumber(130, 630)
     }
   },
 
