@@ -9,7 +9,7 @@ var getNumberOfPictureURL = function (arr) {
 };
 */
 
-// Массив заголовков объявлений
+//  Массив заголовков объявлений
 var advertisementsTitles = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
@@ -21,7 +21,7 @@ var advertisementsTitles = [
   'Неуютное бунгало по колено в воде'
 ];
 
-// Функция создания заголовка объявления
+//  Функция создания заголовка объявления
 /*
 var renderAdvertisementsTitles = function (arr) {
   for (var i = 0; i < arr.length; i++) {
@@ -30,31 +30,31 @@ var renderAdvertisementsTitles = function (arr) {
 };
 */
 
-// Функция создания случайного числа
+//  Функция создания случайного числа
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-// Массив типов жилья
+//  Массив типов жилья
 var houseType = ['palace', 'flat', 'house', 'bungalo'];
 
-// Массив времени заселения
+//  Массив времени заселения
 var checkIn = ['12:00', '13:00', '14:00'];
 
-// Массив времени выселения
+//  Массив времени выселения
 var checkOut = ['12:00', '13:00', '14:00'];
 
-// Массив данных о характеристиках жилья
+//  Массив данных о характеристиках жилья
 var houseDescription = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
-// Массив фото жилья
+//  Массив фото жилья
 var housePhotos = [
   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
-// Массив похожих объявлений (объекты с данными)
+//  Массив похожих объявлений (объекты с данными)
 var advertisements = [
   {
     'author': {
@@ -107,158 +107,158 @@ var advertisements = [
   },
 
   {
-    "author": {
-      "avatar": "img/avatars/user03.png"
+    'author': {
+      'avatar': 'img/avatars/user03.png'
     },
 
-    "offer": {
-      "title": advertisementsTitles,
-      "address": '600, 350',
-      "price": getRandomNumber(1000, 1000000),
-      "type": houseType[0],
-      "rooms": getRandomNumber(1, 5),
-      "guests": getRandomNumber(1, 5),
-      "checkin": checkIn[0],
-      "checkout": checkOut[0],
-      "features": houseDescription,
-      "description": '',
-      "photos": housePhotos
+    'offer': {
+      'title': advertisementsTitles,
+      'address': '600, 350',
+      'price': getRandomNumber(1000, 1000000),
+      'type': houseType[0],
+      'rooms': getRandomNumber(1, 5),
+      'guests': getRandomNumber(1, 5),
+      'checkin': checkIn[0],
+      'checkout': checkOut[0],
+      'features': houseDescription,
+      'description': '',
+      'photos': housePhotos
     },
 
-    "location": {
-      "x": getRandomNumber(300, 900),
-      "y": getRandomNumber(130, 630)
+    'location': {
+      'x': getRandomNumber(300, 900),
+      'y': getRandomNumber(130, 630)
     }
   },
 
   {
-    "author": {
-      "avatar": "img/avatars/user04.png"
+    'author': {
+      'avatar': 'img/avatars/user04.png'
     },
 
-    "offer": {
-      "title": advertisementsTitles,
-      "address": '600, 350',
-      "price": getRandomNumber(1000, 1000000),
-      "type": houseType[0],
-      "rooms": getRandomNumber(1, 5),
-      "guests": getRandomNumber(1, 5),
-      "checkin": checkIn[0],
-      "checkout": checkOut[0],
-      "features": houseDescription,
-      "description": '',
-      "photos": housePhotos
+    'offer': {
+      'title': advertisementsTitles,
+      'address': '600, 350',
+      'price': getRandomNumber(1000, 1000000),
+      'type': houseType[0],
+      'rooms': getRandomNumber(1, 5),
+      'guests': getRandomNumber(1, 5),
+      'checkin': checkIn[0],
+      'checkout': checkOut[0],
+      'features': houseDescription,
+      'description': '',
+      'photos': housePhotos
     },
 
-    "location": {
-      "x": getRandomNumber(300, 900),
-      "y": getRandomNumber(130, 630)
+    'location': {
+      'x': getRandomNumber(300, 900),
+      'y': getRandomNumber(130, 630)
     }
   },
 
   {
-    "author": {
-      "avatar": "img/avatars/user05.png"
+    'author': {
+      'avatar': 'img/avatars/user05.png'
     },
 
-    "offer": {
-      "title": advertisementsTitles,
-      "address": '600, 350',
-      "price": getRandomNumber(1000, 1000000),
-      "type": houseType[2],
-      "rooms": getRandomNumber(1, 5),
-      "guests": getRandomNumber(1, 5),
-      "checkin": checkIn[0],
-      "checkout": checkOut[0],
-      "features": houseDescription,
-      "description": '',
-      "photos": housePhotos
+    'offer': {
+      'title': advertisementsTitles,
+      'address': '600, 350',
+      'price': getRandomNumber(1000, 1000000),
+      'type': houseType[2],
+      'rooms': getRandomNumber(1, 5),
+      'guests': getRandomNumber(1, 5),
+      'checkin': checkIn[0],
+      'checkout': checkOut[0],
+      'features': houseDescription,
+      'description': '',
+      'photos': housePhotos
     },
 
-    "location": {
-      "x": getRandomNumber(300, 900),
-      "y": getRandomNumber(130, 630)
+    'location': {
+      'x': getRandomNumber(300, 900),
+      'y': getRandomNumber(130, 630)
     }
   },
 
   {
-    "author": {
-      "avatar": "img/avatars/user06.png"
+    'author': {
+      'avatar': 'img/avatars/user06.png'
     },
 
-    "offer": {
-      "title": advertisementsTitles,
-      "address": '600, 350',
-      "price": getRandomNumber(1000, 1000000),
-      "type": houseType[2],
-      "rooms": getRandomNumber(1, 5),
-      "guests": getRandomNumber(1, 5),
-      "checkin": checkIn[0],
-      "checkout": checkOut[0],
-      "features": houseDescription,
-      "description": '',
-      "photos": housePhotos
+    'offer': {
+      'title': advertisementsTitles,
+      'address': '600, 350',
+      'price': getRandomNumber(1000, 1000000),
+      'type': houseType[2],
+      'rooms': getRandomNumber(1, 5),
+      'guests': getRandomNumber(1, 5),
+      'checkin': checkIn[0],
+      'checkout': checkOut[0],
+      'features': houseDescription,
+      'description': '',
+      'photos': housePhotos
     },
 
-    "location": {
-      "x": getRandomNumber(300, 900),
-      "y": getRandomNumber(130, 630)
+    'location': {
+      'x': getRandomNumber(300, 900),
+      'y': getRandomNumber(130, 630)
     }
   },
 
   {
-    "author": {
-      "avatar": "img/avatars/user07.png"
+    'author': {
+      'avatar': 'img/avatars/user07.png'
     },
 
-    "offer": {
-      "title": advertisementsTitles,
-      "address": '600, 350',
-      "price": getRandomNumber(1000, 1000000),
-      "type": houseType[3],
-      "rooms": getRandomNumber(1, 5),
-      "guests": getRandomNumber(1, 5),
-      "checkin": checkIn[0],
-      "checkout": checkOut[0],
-      "features": houseDescription,
-      "description": '',
-      "photos": housePhotos
+    'offer': {
+      'title': advertisementsTitles,
+      'address': '600, 350',
+      'price': getRandomNumber(1000, 1000000),
+      'type': houseType[3],
+      'rooms': getRandomNumber(1, 5),
+      'guests': getRandomNumber(1, 5),
+      'checkin': checkIn[0],
+      'checkout': checkOut[0],
+      'features': houseDescription,
+      'description': '',
+      'photos': housePhotos
     },
 
-    "location": {
-      "x": getRandomNumber(300, 900),
-      "y": getRandomNumber(130, 630)
+    'location': {
+      'x': getRandomNumber(300, 900),
+      'y': getRandomNumber(130, 630)
     }
   },
 
   {
-    "author": {
-      "avatar": "img/avatars/user08.png"
+    'author': {
+      'avatar': 'img/avatars/user08.png'
     },
 
-    "offer": {
-      "title": advertisementsTitles,
-      "address": '600, 350',
-      "price": getRandomNumber(1000, 1000000),
-      "type": houseType[3],
-      "rooms": getRandomNumber(1, 5),
-      "guests": getRandomNumber(1, 5),
-      "checkin": checkIn[1],
-      "checkout": checkOut[1],
-      "features": houseDescription,
-      "description": '',
-      "photos": housePhotos
+    'offer': {
+      'title': advertisementsTitles,
+      'address': '600, 350',
+      'price': getRandomNumber(1000, 1000000),
+      'type': houseType[3],
+      'rooms': getRandomNumber(1, 5),
+      'guests': getRandomNumber(1, 5),
+      'checkin': checkIn[1],
+      'checkout': checkOut[1],
+      'features': houseDescription,
+      'description': '',
+      'photos': housePhotos
     },
 
-    "location": {
-      "x": getRandomNumber(300, 900),
-      "y": getRandomNumber(130, 630)
+    'location': {
+      'x': getRandomNumber(300, 900),
+      'y': getRandomNumber(130, 630)
     }
   }
 ];
 
 document.querySelector('.map').classList.remove('map--faded');
-// Размещение маркеров
+//  Размещение маркеров
 var mapListPin = document.querySelector('.map__pins');
 var templateMapPin = document.querySelector('template').content.querySelector('.map__pin');
 
@@ -271,10 +271,9 @@ for (var i = 0; i < advertisements.length; i++) {
   mapListPin.appendChild(mapPin);
 }
 
-// Размещение карточек объявлений
+//  Размещение карточек объявлений
 var mapListCard = document.querySelector('.map');
 var templateMapCard = document.querySelector('template').content.querySelector('.map__card');
-console.log(mapListCard);
 
 for (var i = 0; i < advertisements.length; i++) {
   templateMapCard.querySelector('.popup__title').textContent = advertisements[i].offer.title[i];
@@ -285,7 +284,7 @@ for (var i = 0; i < advertisements.length; i++) {
   templateMapCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + advertisements[i].offer.checkin + ', выезд до ' + advertisements[i].offer.checkout;
   templateMapCard.querySelector('.popup__features').children[i].textContent = advertisements[i].offer.features[i];
   templateMapCard.querySelector('.popup__description').textContent = advertisements[i].offer.description;
-  //templateMapCard.querySelector('.popup__photos').children[i].src = advertisements[i].offer.photos[0];
+  //  templateMapCard.querySelector('.popup__photos').children[i].src = advertisements[i].offer.photos[0];
   templateMapCard.querySelector('.popup__avatar').src = advertisements[i].author.avatar;
 
   mapListCard.insertBefore(templateMapCard, mapListCard[1]);
