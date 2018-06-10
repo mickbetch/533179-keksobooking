@@ -78,6 +78,14 @@ var randomListURLS = getRandomArrayUniqeElement(picturesCopies);
 // Массив случайных элементов с аватарками маркера
 var randomListTitles = getRandomArrayUniqeElement(ADVERTISEMENT_TITLEs_COPIES);
 
+// Переменная для задания координат адреса
+var newArrayElementForAdress = {
+  location: {
+    'x': getRandomNumber(300, 900),
+    'y': getRandomNumber(130, 630)
+  }
+};
+
 //  Массив похожих объявлений (объекты с данными)
 var advertisements = [
   {
@@ -87,7 +95,7 @@ var advertisements = [
 
     'offer': {
       'title': randomListTitles,
-      'address': '600, 350',
+      'address': newArrayElementForAdress.location.x + ', ' + newArrayElementForAdress.location.y,
       'price': getRandomNumber(1000, 1000000),
       'type': HOUSE_TYPEs[1],
       'rooms': getRandomNumber(1, 5),
@@ -112,7 +120,7 @@ var advertisements = [
 
     'offer': {
       'title': randomListTitles,
-      'address': '500, 250',
+      'address': newArrayElementForAdress.location.x + ', ' + newArrayElementForAdress.location.y,
       'price': getRandomNumber(1000, 1000000),
       'type': HOUSE_TYPEs[1],
       'rooms': getRandomNumber(1, 5),
@@ -137,7 +145,7 @@ var advertisements = [
 
     'offer': {
       'title': randomListTitles,
-      'address': '600, 350',
+      'address': newArrayElementForAdress.location.x + ', ' + newArrayElementForAdress.location.y,
       'price': getRandomNumber(1000, 1000000),
       'type': HOUSE_TYPEs[0],
       'rooms': getRandomNumber(1, 5),
@@ -162,7 +170,7 @@ var advertisements = [
 
     'offer': {
       'title': randomListTitles,
-      'address': '600, 350',
+      'address': newArrayElementForAdress.location.x + ', ' + newArrayElementForAdress.location.y,
       'price': getRandomNumber(1000, 1000000),
       'type': HOUSE_TYPEs[0],
       'rooms': getRandomNumber(1, 5),
@@ -187,7 +195,7 @@ var advertisements = [
 
     'offer': {
       'title': randomListTitles,
-      'address': '600, 350',
+      'address': newArrayElementForAdress.location.x + ', ' + newArrayElementForAdress.location.y,
       'price': getRandomNumber(1000, 1000000),
       'type': HOUSE_TYPEs[2],
       'rooms': getRandomNumber(1, 5),
@@ -212,7 +220,7 @@ var advertisements = [
 
     'offer': {
       'title': randomListTitles,
-      'address': '600, 350',
+      'address': newArrayElementForAdress.location.x + ', ' + newArrayElementForAdress.location.y,
       'price': getRandomNumber(1000, 1000000),
       'type': HOUSE_TYPEs[2],
       'rooms': getRandomNumber(1, 5),
@@ -237,7 +245,7 @@ var advertisements = [
 
     'offer': {
       'title': randomListTitles,
-      'address': '600, 350',
+      'address': newArrayElementForAdress.location.x + ', ' + newArrayElementForAdress.location.y,
       'price': getRandomNumber(1000, 1000000),
       'type': HOUSE_TYPEs[3],
       'rooms': getRandomNumber(1, 5),
@@ -262,7 +270,7 @@ var advertisements = [
 
     'offer': {
       'title': randomListTitles,
-      'address': '600, 350',
+      'address': newArrayElementForAdress.location.x + ', ' + newArrayElementForAdress.location.y,
       'price': getRandomNumber(1000, 1000000),
       'type': HOUSE_TYPEs[3],
       'rooms': getRandomNumber(1, 5),
