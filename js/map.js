@@ -86,6 +86,11 @@ var newArrayElementForAdress = {
   }
 };
 
+// Функция создания случайного элемента массива
+var getRandomArrayElement = function (arr) {
+  return arr[getRandomNumber(0, arr.length - 1)];
+};
+
 //  Массив похожих объявлений (объекты с данными)
 var advertisements = [
   {
@@ -97,11 +102,11 @@ var advertisements = [
       'title': randomListTitles,
       'address': newArrayElementForAdress.location.x + ', ' + newArrayElementForAdress.location.y,
       'price': getRandomNumber(1000, 1000000),
-      'type': HOUSE_TYPEs[1],
+      'type': getRandomArrayElement(HOUSE_TYPEs),
       'rooms': getRandomNumber(1, 5),
       'guests': getRandomNumber(1, 5),
-      'checkin': CHECK_INs[0],
-      'checkout': CHECK_OUTs[0],
+      'checkin': getRandomArrayElement(CHECK_INs),
+      'checkout': getRandomArrayElement(CHECK_OUTs),
       'features': HOUSE_DESCRIPTIONs,
       'description': '',
       'photos': HOUSE_PHOTOs
@@ -122,11 +127,11 @@ var advertisements = [
       'title': randomListTitles,
       'address': newArrayElementForAdress.location.x + ', ' + newArrayElementForAdress.location.y,
       'price': getRandomNumber(1000, 1000000),
-      'type': HOUSE_TYPEs[1],
+      'type': getRandomArrayElement(HOUSE_TYPEs),
       'rooms': getRandomNumber(1, 5),
       'guests': getRandomNumber(1, 5),
-      'checkin': CHECK_INs[1],
-      'checkout': CHECK_OUTs[1],
+      'checkin': getRandomArrayElement(CHECK_INs),
+      'checkout': getRandomArrayElement(CHECK_OUTs),
       'features': HOUSE_DESCRIPTIONs,
       'description': '',
       'photos': HOUSE_PHOTOs
@@ -147,11 +152,11 @@ var advertisements = [
       'title': randomListTitles,
       'address': newArrayElementForAdress.location.x + ', ' + newArrayElementForAdress.location.y,
       'price': getRandomNumber(1000, 1000000),
-      'type': HOUSE_TYPEs[0],
+      'type': getRandomArrayElement(HOUSE_TYPEs),
       'rooms': getRandomNumber(1, 5),
       'guests': getRandomNumber(1, 5),
-      'checkin': CHECK_INs[0],
-      'checkout': CHECK_OUTs[0],
+      'checkin': getRandomArrayElement(CHECK_INs),
+      'checkout': getRandomArrayElement(CHECK_OUTs),
       'features': HOUSE_DESCRIPTIONs,
       'description': '',
       'photos': HOUSE_PHOTOs
@@ -172,11 +177,11 @@ var advertisements = [
       'title': randomListTitles,
       'address': newArrayElementForAdress.location.x + ', ' + newArrayElementForAdress.location.y,
       'price': getRandomNumber(1000, 1000000),
-      'type': HOUSE_TYPEs[0],
+      'type': getRandomArrayElement(HOUSE_TYPEs),
       'rooms': getRandomNumber(1, 5),
       'guests': getRandomNumber(1, 5),
-      'checkin': CHECK_INs[0],
-      'checkout': CHECK_OUTs[0],
+      'checkin': getRandomArrayElement(CHECK_INs),
+      'checkout': getRandomArrayElement(CHECK_OUTs),
       'features': HOUSE_DESCRIPTIONs,
       'description': '',
       'photos': HOUSE_PHOTOs
@@ -197,11 +202,11 @@ var advertisements = [
       'title': randomListTitles,
       'address': newArrayElementForAdress.location.x + ', ' + newArrayElementForAdress.location.y,
       'price': getRandomNumber(1000, 1000000),
-      'type': HOUSE_TYPEs[2],
+      'type': getRandomArrayElement(HOUSE_TYPEs),
       'rooms': getRandomNumber(1, 5),
       'guests': getRandomNumber(1, 5),
-      'checkin': CHECK_INs[0],
-      'checkout': CHECK_OUTs[0],
+      'checkin': getRandomArrayElement(CHECK_INs),
+      'checkout': getRandomArrayElement(CHECK_OUTs),
       'features': HOUSE_DESCRIPTIONs,
       'description': '',
       'photos': HOUSE_PHOTOs
@@ -222,11 +227,11 @@ var advertisements = [
       'title': randomListTitles,
       'address': newArrayElementForAdress.location.x + ', ' + newArrayElementForAdress.location.y,
       'price': getRandomNumber(1000, 1000000),
-      'type': HOUSE_TYPEs[2],
+      'type': getRandomArrayElement(HOUSE_TYPEs),
       'rooms': getRandomNumber(1, 5),
       'guests': getRandomNumber(1, 5),
-      'checkin': CHECK_INs[0],
-      'checkout': CHECK_OUTs[0],
+      'checkin': getRandomArrayElement(CHECK_INs),
+      'checkout': getRandomArrayElement(CHECK_OUTs),
       'features': HOUSE_DESCRIPTIONs,
       'description': '',
       'photos': HOUSE_PHOTOs
@@ -247,11 +252,11 @@ var advertisements = [
       'title': randomListTitles,
       'address': newArrayElementForAdress.location.x + ', ' + newArrayElementForAdress.location.y,
       'price': getRandomNumber(1000, 1000000),
-      'type': HOUSE_TYPEs[3],
+      'type': getRandomArrayElement(HOUSE_TYPEs),
       'rooms': getRandomNumber(1, 5),
       'guests': getRandomNumber(1, 5),
-      'checkin': CHECK_INs[0],
-      'checkout': CHECK_OUTs[0],
+      'checkin': getRandomArrayElement(CHECK_INs),
+      'checkout': getRandomArrayElement(CHECK_OUTs),
       'features': HOUSE_DESCRIPTIONs,
       'description': '',
       'photos': HOUSE_PHOTOs
@@ -272,11 +277,11 @@ var advertisements = [
       'title': randomListTitles,
       'address': newArrayElementForAdress.location.x + ', ' + newArrayElementForAdress.location.y,
       'price': getRandomNumber(1000, 1000000),
-      'type': HOUSE_TYPEs[3],
+      'type': getRandomArrayElement(HOUSE_TYPEs),
       'rooms': getRandomNumber(1, 5),
       'guests': getRandomNumber(1, 5),
-      'checkin': CHECK_INs[1],
-      'checkout': CHECK_OUTs[1],
+      'checkin': getRandomArrayElement(CHECK_INs),
+      'checkout': getRandomArrayElement(CHECK_OUTs),
       'features': HOUSE_DESCRIPTIONs,
       'description': '',
       'photos': HOUSE_PHOTOs
