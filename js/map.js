@@ -1,16 +1,7 @@
 'use strict';
 
-//  Функция создания случайного числа в url картинки
-/*
-var getNumberOfPictureURL = function (arr) {
-  for (var i = 0; i < arr.length; i++) {
-    return 'img/avatars/user' + 0 + (i + 1) + '.png';
-  }
-};
-*/
-
 //  Массив заголовков объявлений
-var advertisementsTitles = [
+var ADVERTISEMENT_TITLEs = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
   'Огромный прекрасный дворец',
@@ -21,58 +12,91 @@ var advertisementsTitles = [
   'Неуютное бунгало по колено в воде'
 ];
 
-//  Функция создания заголовка объявления
-/*
-var renderAdvertisementsTitles = function (arr) {
-  for (var i = 0; i < arr.length; i++) {
-    return arr[i];
-  }
-};
-*/
-
-//  Функция создания случайного числа
-var getRandomNumber = function (min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
+var ADVERTISEMENT_TITLEs_COPIES = ADVERTISEMENT_TITLEs.slice(0, ADVERTISEMENT_TITLEs.length);
 
 //  Массив типов жилья
-var houseType = ['palace', 'flat', 'house', 'bungalo'];
+var HOUSE_TYPEs = ['palace', 'flat', 'house', 'bungalo'];
 
 //  Массив времени заселения
-var checkIn = ['12:00', '13:00', '14:00'];
+var CHECK_INs = ['12:00', '13:00', '14:00'];
 
 //  Массив времени выселения
-var checkOut = ['12:00', '13:00', '14:00'];
+var CHECK_OUTs = ['12:00', '13:00', '14:00'];
 
 //  Массив данных о характеристиках жилья
-var houseDescription = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var HOUSE_DESCRIPTIONs = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
 //  Массив фото жилья
-var housePhotos = [
+var HOUSE_PHOTOs = [
   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
+//  Функция создания случайного числа
+var getRandomNumber = function (min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+};
+
+// Функция генерации чисел (от 1 до 9 спереди добавляется 0(ноль))
+var leadingZeroes =  function (number, length) { // length - это разрядность чисел,
+  // number - число, которое передается
+  var string = '' + number;
+  while (string.length < length) { // str.length - длина строки (т.е. если '9', то длина
+    // равна 1, если '10' и до '99' - равна 2)
+    string = '0' + string;
+  }
+  return string;
+};
+
+// Функция генерации адресов картинок
+var generateURLs = function(count){
+  var URLs = [];
+  for (var i = 1; i <= count; i++){
+    URLs.push("img/avatars/user" + leadingZeroes(i, 2) + ".png");
+  }
+  return URLs;
+};
+
+var pictures = generateURLs(8);
+var picturesCopies = pictures.slice(0, pictures.length);
+
+// Функция создания случайного элемента массива аватарок пользователей
+var getRandomArrayUniqeElement = function (arr) {
+    var elements = [];
+    while (arr.length > 0) {
+      var returnedElement = arr.splice(getRandomNumber(0, arr.length - 1), 1);
+      elements.push(returnedElement[0]);
+    }
+    return elements;
+};
+
+// Массив случайных элементов с аватарками маркера
+var randomListURLS = getRandomArrayUniqeElement(picturesCopies);
+
+
+// Массив случайных элементов с аватарками маркера
+var randomListTitles = getRandomArrayUniqeElement(ADVERTISEMENT_TITLEs_COPIES);
+
 //  Массив похожих объявлений (объекты с данными)
 var advertisements = [
   {
     'author': {
-      'avatar': 'img/avatars/user01.png'
+      'avatar': randomListURLS
     },
 
     'offer': {
-      'title': advertisementsTitles,
+      'title': randomListTitles,
       'address': '600, 350',
       'price': getRandomNumber(1000, 1000000),
-      'type': houseType[1],
+      'type': HOUSE_TYPEs[1],
       'rooms': getRandomNumber(1, 5),
       'guests': getRandomNumber(1, 5),
-      'checkin': checkIn[0],
-      'checkout': checkOut[0],
-      'features': houseDescription,
+      'checkin': CHECK_INs[0],
+      'checkout': CHECK_OUTs[0],
+      'features': HOUSE_DESCRIPTIONs,
       'description': '',
-      'photos': housePhotos
+      'photos': HOUSE_PHOTOs
     },
 
     'location': {
@@ -83,21 +107,21 @@ var advertisements = [
 
   {
     'author': {
-      'avatar': 'img/avatars/user02.png'
+      'avatar': randomListURLS
     },
 
     'offer': {
-      'title': advertisementsTitles,
+      'title': randomListTitles,
       'address': '500, 250',
       'price': getRandomNumber(1000, 1000000),
-      'type': houseType[1],
+      'type': HOUSE_TYPEs[1],
       'rooms': getRandomNumber(1, 5),
       'guests': getRandomNumber(1, 5),
-      'checkin': checkIn[1],
-      'checkout': checkOut[1],
-      'features': houseDescription,
+      'checkin': CHECK_INs[1],
+      'checkout': CHECK_OUTs[1],
+      'features': HOUSE_DESCRIPTIONs,
       'description': '',
-      'photos': housePhotos
+      'photos': HOUSE_PHOTOs
     },
 
     'location': {
@@ -108,21 +132,21 @@ var advertisements = [
 
   {
     'author': {
-      'avatar': 'img/avatars/user03.png'
+      'avatar': randomListURLS
     },
 
     'offer': {
-      'title': advertisementsTitles,
+      'title': randomListTitles,
       'address': '600, 350',
       'price': getRandomNumber(1000, 1000000),
-      'type': houseType[0],
+      'type': HOUSE_TYPEs[0],
       'rooms': getRandomNumber(1, 5),
       'guests': getRandomNumber(1, 5),
-      'checkin': checkIn[0],
-      'checkout': checkOut[0],
-      'features': houseDescription,
+      'checkin': CHECK_INs[0],
+      'checkout': CHECK_OUTs[0],
+      'features': HOUSE_DESCRIPTIONs,
       'description': '',
-      'photos': housePhotos
+      'photos': HOUSE_PHOTOs
     },
 
     'location': {
@@ -133,21 +157,21 @@ var advertisements = [
 
   {
     'author': {
-      'avatar': 'img/avatars/user04.png'
+      'avatar': randomListURLS
     },
 
     'offer': {
-      'title': advertisementsTitles,
+      'title': randomListTitles,
       'address': '600, 350',
       'price': getRandomNumber(1000, 1000000),
-      'type': houseType[0],
+      'type': HOUSE_TYPEs[0],
       'rooms': getRandomNumber(1, 5),
       'guests': getRandomNumber(1, 5),
-      'checkin': checkIn[0],
-      'checkout': checkOut[0],
-      'features': houseDescription,
+      'checkin': CHECK_INs[0],
+      'checkout': CHECK_OUTs[0],
+      'features': HOUSE_DESCRIPTIONs,
       'description': '',
-      'photos': housePhotos
+      'photos': HOUSE_PHOTOs
     },
 
     'location': {
@@ -158,21 +182,21 @@ var advertisements = [
 
   {
     'author': {
-      'avatar': 'img/avatars/user05.png'
+      'avatar': randomListURLS
     },
 
     'offer': {
-      'title': advertisementsTitles,
+      'title': randomListTitles,
       'address': '600, 350',
       'price': getRandomNumber(1000, 1000000),
-      'type': houseType[2],
+      'type': HOUSE_TYPEs[2],
       'rooms': getRandomNumber(1, 5),
       'guests': getRandomNumber(1, 5),
-      'checkin': checkIn[0],
-      'checkout': checkOut[0],
-      'features': houseDescription,
+      'checkin': CHECK_INs[0],
+      'checkout': CHECK_OUTs[0],
+      'features': HOUSE_DESCRIPTIONs,
       'description': '',
-      'photos': housePhotos
+      'photos': HOUSE_PHOTOs
     },
 
     'location': {
@@ -183,21 +207,21 @@ var advertisements = [
 
   {
     'author': {
-      'avatar': 'img/avatars/user06.png'
+      'avatar': randomListURLS
     },
 
     'offer': {
-      'title': advertisementsTitles,
+      'title': randomListTitles,
       'address': '600, 350',
       'price': getRandomNumber(1000, 1000000),
-      'type': houseType[2],
+      'type': HOUSE_TYPEs[2],
       'rooms': getRandomNumber(1, 5),
       'guests': getRandomNumber(1, 5),
-      'checkin': checkIn[0],
-      'checkout': checkOut[0],
-      'features': houseDescription,
+      'checkin': CHECK_INs[0],
+      'checkout': CHECK_OUTs[0],
+      'features': HOUSE_DESCRIPTIONs,
       'description': '',
-      'photos': housePhotos
+      'photos': HOUSE_PHOTOs
     },
 
     'location': {
@@ -208,21 +232,21 @@ var advertisements = [
 
   {
     'author': {
-      'avatar': 'img/avatars/user07.png'
+      'avatar': randomListURLS
     },
 
     'offer': {
-      'title': advertisementsTitles,
+      'title': randomListTitles,
       'address': '600, 350',
       'price': getRandomNumber(1000, 1000000),
-      'type': houseType[3],
+      'type': HOUSE_TYPEs[3],
       'rooms': getRandomNumber(1, 5),
       'guests': getRandomNumber(1, 5),
-      'checkin': checkIn[0],
-      'checkout': checkOut[0],
-      'features': houseDescription,
+      'checkin': CHECK_INs[0],
+      'checkout': CHECK_OUTs[0],
+      'features': HOUSE_DESCRIPTIONs,
       'description': '',
-      'photos': housePhotos
+      'photos': HOUSE_PHOTOs
     },
 
     'location': {
@@ -233,21 +257,21 @@ var advertisements = [
 
   {
     'author': {
-      'avatar': 'img/avatars/user08.png'
+      'avatar': randomListURLS
     },
 
     'offer': {
-      'title': advertisementsTitles,
+      'title': randomListTitles,
       'address': '600, 350',
       'price': getRandomNumber(1000, 1000000),
-      'type': houseType[3],
+      'type': HOUSE_TYPEs[3],
       'rooms': getRandomNumber(1, 5),
       'guests': getRandomNumber(1, 5),
-      'checkin': checkIn[1],
-      'checkout': checkOut[1],
-      'features': houseDescription,
+      'checkin': CHECK_INs[1],
+      'checkout': CHECK_OUTs[1],
+      'features': HOUSE_DESCRIPTIONs,
       'description': '',
-      'photos': housePhotos
+      'photos': HOUSE_PHOTOs
     },
 
     'location': {
@@ -262,21 +286,28 @@ document.querySelector('.map').classList.remove('map--faded');
 var mapPinList = document.querySelector('.map__pins');
 var templateMapPin = document.querySelector('template').content.querySelector('.map__pin');
 
+// Функция размещения маркеров объявлений
+var renderMapPins = function (map, template) {
+  var mapPin = template.cloneNode(true);
+
+  mapPin.style = 'left: ' + map.location.x + 'px; top: ' + map.location.y + 'px;';
+  mapPin.querySelector('img').src = map.author.avatar[i];
+  mapPin.querySelector('img').alt = map.offer.title[i];
+
+  return mapPin;
+};
+
+var fragment = document.createDocumentFragment();
 for (var i = 0; i < advertisements.length; i++) {
-  var mapPin = templateMapPin.cloneNode(true);
-
-  mapPin.style = 'left: ' + advertisements[i].location.x + 'px; top: ' + advertisements[i].location.y + 'px;';
-  mapPin.querySelector('img').src = advertisements[i].author.avatar;
-  mapPin.querySelector('img').alt = advertisements[i].offer.title[i];
-
-  mapPinList.appendChild(mapPin);
+  fragment.appendChild(renderMapPins(advertisements[i], templateMapPin));
 }
+mapPinList.appendChild(fragment);
 
 //  Размещение карточек объявлений
 var mapCardList = document.querySelector('.map');
 var templateMapCard = document.querySelector('template').content.querySelector('.map__card');
 
-for (i = 0; i < 1; i++) {
+for (i = 0; i < advertisements.length; i++) {
   templateMapCard.querySelector('.popup__title').textContent = advertisements[i].offer.title[i];
   templateMapCard.querySelector('.popup__text--address').textContent = advertisements[i].offer.address;
   templateMapCard.querySelector('.popup__text--price').textContent = advertisements[i].offer.price + '₽/ночь';
@@ -286,25 +317,7 @@ for (i = 0; i < 1; i++) {
   templateMapCard.querySelector('.popup__features').children[i].textContent = advertisements[i].offer.features[i];
   templateMapCard.querySelector('.popup__description').textContent = advertisements[i].offer.description;
   //  templateMapCard.querySelector('.popup__photos').children[i].src = advertisements[i].offer.photos[0];
-  templateMapCard.querySelector('.popup__avatar').src = advertisements[i].author.avatar;
+  templateMapCard.querySelector('.popup__avatar').src = advertisements[i].author.avatar[i];
 
   mapCardList.insertBefore(templateMapCard, mapCardList.children[1]);
 }
-
-/* Функция доавления маркера через фрагмент
-var renderMapPins = function (map) {
-  var mapPin = templateMapPin.cloneNode(true);
-
-  mapPin.style = 'left: ' + map[i].location.x + 'px; top: ' + map[i].location.y + 'px;';
-  mapPin.querySelector('img').src = map[i].author.avatar;
-  mapPin.querySelector('img').alt = map[i].offer.title[i];
-
-  return mapPin;
-};
-
-var fragment = document.createDocumentFragment();
-for (var i = 0; i < advertisements.length; i++) {
-  fragment.appendChild(renderMapPins(advertisements[i]));
-}
-mapPinList.appendChild(fragment);
-*/
