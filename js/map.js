@@ -32,25 +32,26 @@ var HOUSE_PHOTOs = [
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
+var HOUSE_PHOTO_COPY = HOUSE_PHOTOs.slice(0, HOUSE_PHOTOs.length);
 
 //  Функция создания случайного числа
 var getRandomNumber = function (min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
+  return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-// Функция генерации чисел (от 1 до 9 спереди добавляется 0(ноль))
+// Функция генерации чисел (от 1 до 9 с ведущим нулем, начиная с 10 - ноль пропадает)
 var leadingZeroes =  function (number, length) { // length - это разрядность чисел,
   // number - число, которое передается
   var string = '' + number;
-  while (string.length < length) { // str.length - длина строки (т.е. если '9', то длина
-    // равна 1, если '10' и до '99' - равна 2)
+  while (string.length < length) { // string.length - длина строки (т.е. если '9', то
+    // длина равна 1, если '10' и до '99' - равна 2)
     string = '0' + string;
   }
   return string;
 };
 
 // Функция генерации адресов картинок
-var generateURLs = function(count){
+var generateURLs = function (count){
   var URLs = [];
   for (var i = 1; i <= count; i++){
     URLs.push("img/avatars/user" + leadingZeroes(i, 2) + ".png");
@@ -58,10 +59,11 @@ var generateURLs = function(count){
   return URLs;
 };
 
+// Массив с адресами картинок  и его копия
 var pictures = generateURLs(8);
 var picturesCopies = pictures.slice(0, pictures.length);
 
-// Функция создания случайного элемента массива аватарок пользователей
+// Функция создания массива с адресами картинок в случайном порядке
 var getRandomArrayUniqeElement = function (arr) {
     var elements = [];
     while (arr.length > 0) {
@@ -71,11 +73,10 @@ var getRandomArrayUniqeElement = function (arr) {
     return elements;
 };
 
-// Массив случайных элементов с аватарками маркера
+// Массив случайных элементов с картинками маркера
 var randomListURLS = getRandomArrayUniqeElement(picturesCopies);
 
-
-// Массив случайных элементов с аватарками маркера
+// Массив случайных элементов с заголовками карточек-объявлений
 var randomListTitles = getRandomArrayUniqeElement(ADVERTISEMENT_TITLEs_COPIES);
 
 // Переменная для задания координат адреса
@@ -86,7 +87,7 @@ var newArrayElementForAdress = {
   }
 };
 
-// Функция создания случайного элемента массива
+// Функция получения случайного элемента массива
 var getRandomArrayElement = function (arr) {
   return arr[getRandomNumber(0, arr.length - 1)];
 };
@@ -109,7 +110,7 @@ var advertisements = [
       'checkout': getRandomArrayElement(CHECK_OUTs),
       'features': HOUSE_DESCRIPTIONs,
       'description': '',
-      'photos': HOUSE_PHOTOs
+      'photos': getRandomArrayUniqeElement(HOUSE_PHOTO_COPY)
     },
 
     'location': {
@@ -134,7 +135,7 @@ var advertisements = [
       'checkout': getRandomArrayElement(CHECK_OUTs),
       'features': HOUSE_DESCRIPTIONs,
       'description': '',
-      'photos': HOUSE_PHOTOs
+      'photos': getRandomArrayUniqeElement(HOUSE_PHOTO_COPY)
     },
 
     'location': {
@@ -159,7 +160,7 @@ var advertisements = [
       'checkout': getRandomArrayElement(CHECK_OUTs),
       'features': HOUSE_DESCRIPTIONs,
       'description': '',
-      'photos': HOUSE_PHOTOs
+      'photos': getRandomArrayUniqeElement(HOUSE_PHOTO_COPY)
     },
 
     'location': {
@@ -184,7 +185,7 @@ var advertisements = [
       'checkout': getRandomArrayElement(CHECK_OUTs),
       'features': HOUSE_DESCRIPTIONs,
       'description': '',
-      'photos': HOUSE_PHOTOs
+      'photos': getRandomArrayUniqeElement(HOUSE_PHOTO_COPY)
     },
 
     'location': {
@@ -209,7 +210,7 @@ var advertisements = [
       'checkout': getRandomArrayElement(CHECK_OUTs),
       'features': HOUSE_DESCRIPTIONs,
       'description': '',
-      'photos': HOUSE_PHOTOs
+      'photos': getRandomArrayUniqeElement(HOUSE_PHOTO_COPY)
     },
 
     'location': {
@@ -234,7 +235,7 @@ var advertisements = [
       'checkout': getRandomArrayElement(CHECK_OUTs),
       'features': HOUSE_DESCRIPTIONs,
       'description': '',
-      'photos': HOUSE_PHOTOs
+      'photos': getRandomArrayUniqeElement(HOUSE_PHOTO_COPY)
     },
 
     'location': {
@@ -259,7 +260,7 @@ var advertisements = [
       'checkout': getRandomArrayElement(CHECK_OUTs),
       'features': HOUSE_DESCRIPTIONs,
       'description': '',
-      'photos': HOUSE_PHOTOs
+      'photos': getRandomArrayUniqeElement(HOUSE_PHOTO_COPY)
     },
 
     'location': {
@@ -284,7 +285,7 @@ var advertisements = [
       'checkout': getRandomArrayElement(CHECK_OUTs),
       'features': HOUSE_DESCRIPTIONs,
       'description': '',
-      'photos': HOUSE_PHOTOs
+      'photos': getRandomArrayUniqeElement(HOUSE_PHOTO_COPY)
     },
 
     'location': {
@@ -294,7 +295,9 @@ var advertisements = [
   }
 ];
 
+// Переключение карты из неактивного состояния в активное
 document.querySelector('.map').classList.remove('map--faded');
+
 //  Размещение маркеров
 var mapPinList = document.querySelector('.map__pins');
 var templateMapPin = document.querySelector('template').content.querySelector('.map__pin');
@@ -320,7 +323,7 @@ mapPinList.appendChild(fragment);
 var mapCardList = document.querySelector('.map');
 var templateMapCard = document.querySelector('template').content.querySelector('.map__card');
 
-for (i = 0; i < advertisements.length; i++) {
+for (i = 0; i < 1; i++) {
   templateMapCard.querySelector('.popup__title').textContent = advertisements[i].offer.title[i];
   templateMapCard.querySelector('.popup__text--address').textContent = advertisements[i].offer.address;
   templateMapCard.querySelector('.popup__text--price').textContent = advertisements[i].offer.price + '₽/ночь';
@@ -329,7 +332,7 @@ for (i = 0; i < advertisements.length; i++) {
   templateMapCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + advertisements[i].offer.checkin + ', выезд до ' + advertisements[i].offer.checkout;
   templateMapCard.querySelector('.popup__features').children[i].textContent = advertisements[i].offer.features[i];
   templateMapCard.querySelector('.popup__description').textContent = advertisements[i].offer.description;
-  //  templateMapCard.querySelector('.popup__photos').children[i].src = advertisements[i].offer.photos[0];
+  templateMapCard.querySelector('.popup__photos').children[i].src = advertisements[i].offer.photos;
   templateMapCard.querySelector('.popup__avatar').src = advertisements[i].author.avatar[i];
 
   mapCardList.insertBefore(templateMapCard, mapCardList.children[1]);
