@@ -33,6 +33,8 @@ var CHECK_OUTS = ['12:00', '13:00', '14:00'];
 //  Массив данных о характеристиках жилья
 var HOUSE_DESCRIPTIONS = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
+var HOUSE_DESCRIPTIONS_COPY = HOUSE_DESCRIPTIONS.slice(0, HOUSE_DESCRIPTIONS.length);
+
 //  Массив фото жилья
 var HOUSE_PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
@@ -93,6 +95,12 @@ var getRandomArrayElement = function (arr) {
   return arr[getRandomNumber(0, arr.length - 1)];
 };
 
+// Функция получения массива с случайной длинной
+var getRandomArrayLength = function (arr) {
+  var newArr = arr.slice(0, getRandomNumber(0, arr.length - 1));
+  return newArr;
+};
+
 //  Массив похожих объявлений (объекты с данными)
 var advertisements = [];
 
@@ -118,7 +126,7 @@ for (var i = 0; i < 8; i++) {
         'guests': getRandomNumber(1, 5),
         'checkin': getRandomArrayElement(CHECK_INS),
         'checkout': getRandomArrayElement(CHECK_OUTS),
-        'features': HOUSE_DESCRIPTIONS,
+        'features': getRandomArrayLength(HOUSE_DESCRIPTIONS_COPY),
         'description': '',
         'photos': getRandomArrayUniqeElement(HOUSE_PHOTO_COPY)
       },
@@ -163,7 +171,7 @@ for (i = 0; i < 1; i++) {
   templateMapCard.querySelector('.popup__type').textContent = HOUSE_LABELS[advertisements[i].offer.type];
   templateMapCard.querySelector('.popup__text--capacity').textContent = advertisements[i].offer.rooms + ' комнаты для ' + advertisements[i].offer.guests + ' гостей';
   templateMapCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + advertisements[i].offer.checkin + ', выезд до ' + advertisements[i].offer.checkout;
-  templateMapCard.querySelector('.popup__features').children[i].textContent = advertisements[i].offer.features[i];
+  templateMapCard.querySelector('.popup__features').children.textContent = advertisements[i].offer.features;
   templateMapCard.querySelector('.popup__description').textContent = advertisements[i].offer.description;
   templateMapCard.querySelector('.popup__photos').children[i].src = advertisements[i].offer.photos;
   templateMapCard.querySelector('.popup__avatar').src = advertisements[i].author.avatar;
