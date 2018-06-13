@@ -73,7 +73,7 @@ var pictures = generateURLs(8);
 var picturesCopies = pictures.slice(0, pictures.length);
 
 // Функция создания массива с адресами картинок в случайном порядке
-var getRandomArrayUniqeElement = function (arr) {
+var getRandomArrayElementsOrder = function (arr) {
   var elements = [];
   while (arr.length > 0) {
     var returnedElement = arr.splice(getRandomNumber(0, arr.length - 1), 1);
@@ -83,12 +83,12 @@ var getRandomArrayUniqeElement = function (arr) {
 };
 
 // Массив случайных элементов с картинками маркера
-var randomListURLS = getRandomArrayUniqeElement(picturesCopies);
+var randomListURLS = getRandomArrayElementsOrder(picturesCopies);
 
 // Массив случайных элементов с заголовками карточек-объявлений
-var randomListTitles = getRandomArrayUniqeElement(ADVERTISEMENT_TITLES_COPIES);
+var randomListTitles = getRandomArrayElementsOrder(ADVERTISEMENT_TITLES_COPIES);
 
-var randomListHouseTitles = getRandomArrayUniqeElement(HOUSE_TYPES);
+var randomListHouseTitles = getRandomArrayElementsOrder(HOUSE_TYPES);
 
 // Функция получения случайного элемента массива
 var getRandomArrayElement = function (arr) {
@@ -97,7 +97,7 @@ var getRandomArrayElement = function (arr) {
 
 // Функция получения массива с случайной длинной
 var getRandomArrayLength = function (arr) {
-  var newArr = arr.slice(0, getRandomNumber(0, arr.length - 1));
+  var newArr = arr.slice(0, getRandomNumber(0, arr.length));
   return newArr;
 };
 
@@ -128,7 +128,7 @@ for (var i = 0; i < 8; i++) {
         'checkout': getRandomArrayElement(CHECK_OUTS),
         'features': getRandomArrayLength(HOUSE_DESCRIPTIONS_COPY),
         'description': '',
-        'photos': getRandomArrayUniqeElement(HOUSE_PHOTO_COPY)
+        'photos': getRandomArrayElementsOrder(HOUSE_PHOTO_COPY)
       },
 
       'location': randomLocation
@@ -173,7 +173,8 @@ for (i = 0; i < 1; i++) {
   templateMapCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + advertisements[i].offer.checkin + ', выезд до ' + advertisements[i].offer.checkout;
   templateMapCard.querySelector('.popup__features').children.textContent = advertisements[i].offer.features;
   templateMapCard.querySelector('.popup__description').textContent = advertisements[i].offer.description;
-  templateMapCard.querySelector('.popup__photos').children[i].src = advertisements[i].offer.photos;
+  // templateMapCard.querySelector('.popup__photos').children[i].src =
+  // advertisements[i].offer.photos;
   templateMapCard.querySelector('.popup__avatar').src = advertisements[i].author.avatar;
 
   mapCardList.insertBefore(templateMapCard, mapCardList.children[1]);
