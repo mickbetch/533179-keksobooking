@@ -53,6 +53,11 @@ var TEMPLATE = document.querySelector('template').content;
 var TEMPLATE_MAP_CARD = TEMPLATE.querySelector('.map__card');
 var TEMPLATE_MAP_PIN = TEMPLATE.querySelector('.map__pin');
 
+var MIN_X = 300;
+var MAX_X = 900;
+var MIN_Y = 130;
+var MAX_Y = 630;
+
 //  Функция создания случайного числа
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -117,8 +122,8 @@ var advertisements = [];
 for (var i = 0; i < 8; i++) {
 
   var randomLocation = {
-    'x': getRandomNumber(300, 900),
-    'y': getRandomNumber(130, 630)
+    'x': getRandomNumber(MIN_X, MAX_X),
+    'y': getRandomNumber(MIN_Y, MAX_Y)
   };
 
   advertisements.push(
