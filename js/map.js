@@ -162,20 +162,25 @@ mapPinList.appendChild(fragment);
 
 //  Размещение карточек объявлений
 var mapCardList = document.querySelector('.map');
+
 var templateMapCard = document.querySelector('template').content.querySelector('.map__card');
 
-for (i = 0; i < 1; i++) {
-  templateMapCard.querySelector('.popup__title').textContent = advertisements[i].offer.title;
-  templateMapCard.querySelector('.popup__text--address').textContent = advertisements[i].offer.address;
-  templateMapCard.querySelector('.popup__text--price').textContent = advertisements[i].offer.price + '₽/ночь';
-  templateMapCard.querySelector('.popup__type').textContent = HOUSE_LABELS[advertisements[i].offer.type];
-  templateMapCard.querySelector('.popup__text--capacity').textContent = advertisements[i].offer.rooms + ' комнаты для ' + advertisements[i].offer.guests + ' гостей';
-  templateMapCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + advertisements[i].offer.checkin + ', выезд до ' + advertisements[i].offer.checkout;
-  templateMapCard.querySelector('.popup__features').children.textContent = advertisements[i].offer.features;
-  templateMapCard.querySelector('.popup__description').textContent = advertisements[i].offer.description;
-  // templateMapCard.querySelector('.popup__photos').children[i].src =
-  // advertisements[i].offer.photos;
-  templateMapCard.querySelector('.popup__avatar').src = advertisements[i].author.avatar;
+// Пробное решение
+var renderMapCard = function (template, arr) {
+  for (i = 0; i < 1; i++) {
+    template.querySelector('.popup__title').textContent = arr[i].offer.title;
+    template.querySelector('.popup__text--address').textContent = arr[i].offer.address;
+    template.querySelector('.popup__text--price').textContent = arr[i].offer.price + '₽/ночь';
+    template.querySelector('.popup__type').textContent = HOUSE_LABELS[arr[i].offer.type];
+    template.querySelector('.popup__text--capacity').textContent = arr[i].offer.rooms + ' комнаты для ' + arr[i].offer.guests + ' гостей';
+    template.querySelector('.popup__text--time').textContent = 'Заезд после ' + arr[i].offer.checkin + ', выезд до ' + arr[i].offer.checkout;
+    template.querySelector('.popup__features').children.textContent = arr[i].offer.features;
+    template.querySelector('.popup__description').textContent = arr[i].offer.description;
+    // templateMapCard.querySelector('.popup__photos').children[i].src =
+    // advertisements[i].offer.photos;
+    template.querySelector('.popup__avatar').src = arr[i].author.avatar;
+  }
+  return template;
+};
 
-  mapCardList.insertBefore(templateMapCard, mapCardList.children[1]);
-}
+mapCardList.insertBefore(renderMapCard(templateMapCard, advertisements), mapCardList.children[1]);
