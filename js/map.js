@@ -175,7 +175,7 @@ MAP_PIN_LIST.appendChild(fragment);
 
 // Функция создания и размещения карточек объявлений
 var renderMapCard = function (template, arr) {
-  for (var i = 0; i < arr.length; i++) {
+  for (i = 0; i < arr.length; i++) {
     template.querySelector('.popup__title').textContent = arr[i].offer.title;
     template.querySelector('.popup__text--address').textContent = arr[i].offer.address;
     template.querySelector('.popup__text--price').textContent = arr[i].offer.price + '₽/ночь';
