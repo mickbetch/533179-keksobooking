@@ -103,8 +103,8 @@ var getRandomArrayElement = function (arr) {
 
 // Функция получения массива с случайной длинной
 var getRandomArrayLength = function (arr) {
-  var newArr = arr.slice(0, getRandomNumber(0, arr.length));
-  return newArr;
+  var randomLength = getRandomNumber(0, arr.length);
+  return arr.slice(0, randomLength);
 };
 
 // Массив случайных элементов с картинками маркера
