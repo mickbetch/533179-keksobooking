@@ -55,6 +55,8 @@ var MAX_Y = 630;
 var MIN_PRICE = 1000;
 var MAX_PRICE = 1000000;
 
+var ADVERTISEMENT_COUNT = 8;
+
 //  Функция создания случайного числа
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -81,7 +83,7 @@ var generateURLs = function (count) {
 };
 
 // Массив с адресами картинок  и его копия
-var pictures = generateURLs(8);
+var pictures = generateURLs(ADVERTISEMENT_COUNT);
 var picturesCopies = pictures.slice(0, pictures.length);
 
 // Функция создания массива с адресами картинок в случайном порядке
@@ -94,14 +96,6 @@ var shuffleArray = function (arr) {
   return elements;
 };
 
-// Массив случайных элементов с картинками маркера
-var randomListURLS = shuffleArray(picturesCopies);
-
-// Массив случайных элементов с заголовками карточек-объявлений
-var randomListTitles = shuffleArray(ADVERTISEMENT_TITLES_COPIES);
-
-var randomListHouseTitles = shuffleArray(HOUSE_TYPES);
-
 // Функция получения случайного элемента массива
 var getRandomArrayElement = function (arr) {
   return arr[getRandomNumber(0, arr.length - 1)];
@@ -113,22 +107,27 @@ var getRandomArrayLength = function (arr) {
   return newArr;
 };
 
-//  Массив похожих объявлений (объекты с данными)
-var advertisements = [];
+// Массив случайных элементов с картинками маркера
+var randomListURLS = shuffleArray(picturesCopies);
 
-for (var i = 0; i < 8; i++) {
+// Массив случайных элементов с заголовками карточек-объявлений
+var randomListTitles = shuffleArray(ADVERTISEMENT_TITLES_COPIES);
 
-  var randomLocation = {
-    'x': getRandomNumber(MIN_X, MAX_X),
-    'y': getRandomNumber(MIN_Y, MAX_Y)
-  };
+var randomListHouseTitles = shuffleArray(HOUSE_TYPES);
 
-  advertisements.push(
-    {
+
+// Функция генерации массива объявлений
+var generateAdvertisement = function (n) {
+  var advertiseList = [];
+  for (var i = 0; i < n; i++) {
+    var randomLocation = {
+      'x': getRandomNumber(MIN_X, MAX_X),
+      'y': getRandomNumber(MIN_Y, MAX_Y)
+    };
+    var advertiseEl = {
       'author': {
         'avatar': randomListURLS[i]
       },
-
       'offer': {
         'title': randomListTitles[i],
         'address': randomLocation.x + ', ' + randomLocation.y,
@@ -142,16 +141,18 @@ for (var i = 0; i < 8; i++) {
         'description': '',
         'photos': shuffleArray(HOUSE_PHOTO_COPY)
       },
-
       'location': randomLocation
-    }
-  );
-}
+    };
+    advertiseList.push(advertiseEl);
+  }
+  return advertiseList;
+};
+
+// Создание массива объектов с объявлениями
+var advertisements = generateAdvertisement(ADVERTISEMENT_COUNT).slice(0);
 
 // Переключение карты из неактивного состояния в активное
 document.querySelector('.map').classList.remove('map--faded');
-
-//  Размещение маркеров
 
 // Функция создания и размещения маркеров объявлений
 var renderMapPins = function (el, template) {
@@ -171,8 +172,6 @@ for (var i = 0; i < advertisements.length; i++) {
   fragment.appendChild(renderMapPins(advertisements[i], TEMPLATE_MAP_PIN));
 }
 MAP_PIN_LIST.appendChild(fragment);
-
-//  Размещение карточек объявлений
 
 // Функция создания и размещения карточек объявлений
 var renderMapCard = function (template, arr) {
