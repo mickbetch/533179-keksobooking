@@ -1,6 +1,5 @@
 'use strict';
 
-//  Массив заголовков объявлений
 var ADVERTISEMENT_TITLES = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
@@ -14,7 +13,6 @@ var ADVERTISEMENT_TITLES = [
 
 var ADVERTISEMENT_TITLES_COPIES = ADVERTISEMENT_TITLES.slice(0, ADVERTISEMENT_TITLES.length);
 
-// Массив типов жилья
 var HOUSE_TYPES = ['palace', 'flat', 'house', 'bungalo'];
 
 var HOUSE_LABELS = {
@@ -24,23 +22,20 @@ var HOUSE_LABELS = {
   'bungalo': 'бунгало'
 };
 
-//  Массив времени заселения
 var CHECK_INS = ['12:00', '13:00', '14:00'];
 
-//  Массив времени выселения
 var CHECK_OUTS = ['12:00', '13:00', '14:00'];
 
-//  Массив данных о характеристиках жилья
 var HOUSE_DESCRIPTIONS = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
 var HOUSE_DESCRIPTIONS_COPY = HOUSE_DESCRIPTIONS.slice(0, HOUSE_DESCRIPTIONS.length);
 
-//  Массив фото жилья
 var HOUSE_PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
+
 var HOUSE_PHOTO_COPY = HOUSE_PHOTOS.slice(0, HOUSE_PHOTOS.length);
 
 // Блок, где размещаются маркеры объявлений
@@ -57,6 +52,8 @@ var MIN_X = 300;
 var MAX_X = 900;
 var MIN_Y = 130;
 var MAX_Y = 630;
+var MIN_PRICE = 1000;
+var MAX_PRICE = 1000000;
 
 //  Функция создания случайного числа
 var getRandomNumber = function (min, max) {
@@ -135,7 +132,7 @@ for (var i = 0; i < 8; i++) {
       'offer': {
         'title': randomListTitles[i],
         'address': randomLocation.x + ', ' + randomLocation.y,
-        'price': getRandomNumber(1000, 1000000),
+        'price': getRandomNumber(MIN_PRICE, MAX_PRICE),
         'type': randomListHouseTitles[i],
         'rooms': getRandomNumber(1, 5),
         'guests': getRandomNumber(1, 5),
@@ -159,8 +156,10 @@ document.querySelector('.map').classList.remove('map--faded');
 // Функция создания и размещения маркеров объявлений
 var renderMapPins = function (el, template) {
   var mapPin = template.cloneNode(true);
+  var mapPinWidth = mapPin.style.width;
+  var mapPinHeight = mapPin.style.height;
 
-  mapPin.style = 'left: ' + el.location.x + 'px; top: ' + el.location.y + 'px;';
+  mapPin.style = 'left: ' + (el.location.x - (mapPinWidth / 2)) + 'px; top: ' + (el.location.y - mapPinHeight) + 'px;';
   mapPin.querySelector('img').src = el.author.avatar;
   mapPin.querySelector('img').alt = el.offer.title[i];
 
