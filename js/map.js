@@ -43,6 +43,16 @@ var HOUSE_PHOTOS = [
 ];
 var HOUSE_PHOTO_COPY = HOUSE_PHOTOS.slice(0, HOUSE_PHOTOS.length);
 
+// Блок, где размещаются маркеры объявлений
+var MAP = document.querySelector('.map');
+var MAP_PIN_LIST = MAP.querySelector('.map__pins');
+var MAP_BEFORE_CARD_LIST = MAP.querySelector('.map__filters-container');
+
+// Константы шаблона
+var TEMPLATE = document.querySelector('template').content;
+var TEMPLATE_MAP_CARD = TEMPLATE.querySelector('.map__card');
+var TEMPLATE_MAP_PIN = TEMPLATE.querySelector('.map__pin');
+
 //  Функция создания случайного числа
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -73,7 +83,7 @@ var pictures = generateURLs(8);
 var picturesCopies = pictures.slice(0, pictures.length);
 
 // Функция создания массива с адресами картинок в случайном порядке
-var getRandomArrayElementsOrder = function (arr) {
+var shuffleArray = function (arr) {
   var elements = [];
   while (arr.length > 0) {
     var returnedElement = arr.splice(getRandomNumber(0, arr.length - 1), 1);
@@ -83,12 +93,12 @@ var getRandomArrayElementsOrder = function (arr) {
 };
 
 // Массив случайных элементов с картинками маркера
-var randomListURLS = getRandomArrayElementsOrder(picturesCopies);
+var randomListURLS = shuffleArray(picturesCopies);
 
 // Массив случайных элементов с заголовками карточек-объявлений
-var randomListTitles = getRandomArrayElementsOrder(ADVERTISEMENT_TITLES_COPIES);
+var randomListTitles = shuffleArray(ADVERTISEMENT_TITLES_COPIES);
 
-var randomListHouseTitles = getRandomArrayElementsOrder(HOUSE_TYPES);
+var randomListHouseTitles = shuffleArray(HOUSE_TYPES);
 
 // Функция получения случайного элемента массива
 var getRandomArrayElement = function (arr) {
@@ -128,7 +138,7 @@ for (var i = 0; i < 8; i++) {
         'checkout': getRandomArrayElement(CHECK_OUTS),
         'features': getRandomArrayLength(HOUSE_DESCRIPTIONS_COPY),
         'description': '',
-        'photos': getRandomArrayElementsOrder(HOUSE_PHOTO_COPY)
+        'photos': shuffleArray(HOUSE_PHOTO_COPY)
       },
 
       'location': randomLocation
@@ -140,32 +150,27 @@ for (var i = 0; i < 8; i++) {
 document.querySelector('.map').classList.remove('map--faded');
 
 //  Размещение маркеров
-var mapPinList = document.querySelector('.map__pins');
-var templateMapPin = document.querySelector('template').content.querySelector('.map__pin');
 
-// Функция размещения маркеров объявлений
-var renderMapPins = function (map, template) {
+// Функция создания и размещения маркеров объявлений
+var renderMapPins = function (el, template) {
   var mapPin = template.cloneNode(true);
 
-  mapPin.style = 'left: ' + map.location.x + 'px; top: ' + map.location.y + 'px;';
-  mapPin.querySelector('img').src = map.author.avatar;
-  mapPin.querySelector('img').alt = map.offer.title[i];
+  mapPin.style = 'left: ' + el.location.x + 'px; top: ' + el.location.y + 'px;';
+  mapPin.querySelector('img').src = el.author.avatar;
+  mapPin.querySelector('img').alt = el.offer.title[i];
 
   return mapPin;
 };
 
 var fragment = document.createDocumentFragment();
 for (var i = 0; i < advertisements.length; i++) {
-  fragment.appendChild(renderMapPins(advertisements[i], templateMapPin));
+  fragment.appendChild(renderMapPins(advertisements[i], TEMPLATE_MAP_PIN));
 }
-mapPinList.appendChild(fragment);
+MAP_PIN_LIST.appendChild(fragment);
 
 //  Размещение карточек объявлений
-var mapCardList = document.querySelector('.map');
 
-var templateMapCard = document.querySelector('template').content.querySelector('.map__card');
-
-// Пробное решение
+// Функция создания и размещения карточек объявлений
 var renderMapCard = function (template, arr) {
   for (i = 0; i < 1; i++) {
     template.querySelector('.popup__title').textContent = arr[i].offer.title;
@@ -183,4 +188,4 @@ var renderMapCard = function (template, arr) {
   return template;
 };
 
-mapCardList.insertBefore(renderMapCard(templateMapCard, advertisements), mapCardList.children[1]);
+MAP.insertBefore(renderMapCard(TEMPLATE_MAP_CARD, advertisements), MAP_BEFORE_CARD_LIST);
