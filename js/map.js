@@ -38,7 +38,7 @@ var HOUSE_PHOTOS = [
 
 var HOUSE_PHOTO_COPY = HOUSE_PHOTOS.slice(0, HOUSE_PHOTOS.length);
 
-// Блок, где размещаются маркеры объявлений
+// Блок карты,блок вставки маркеров, блок, перел=д которым вставить объявления
 var MAP = document.querySelector('.map');
 var MAP_PIN_LIST = MAP.querySelector('.map__pins');
 var MAP_BEFORE_CARD_LIST = MAP.querySelector('.map__filters-container');
