@@ -96,6 +96,11 @@ var shuffleArray = function (arr) {
   return elements;
 };
 
+// Функция создания случайного порядка в массиве
+var compareRandom = function () {
+  return Math.random() - 0.5;
+};
+
 // Функция получения случайного элемента массива
 var getRandomArrayElement = function (arr) {
   return arr[getRandomNumber(0, arr.length - 1)];
@@ -113,10 +118,7 @@ var randomListURLS = shuffleArray(picturesCopies);
 // Массив случайных элементов с заголовками карточек-объявлений
 var randomListTitles = shuffleArray(ADVERTISEMENT_TITLES_COPIES);
 
-var randomListHouseTitles = shuffleArray(HOUSE_TYPES);
-
-
-
+// Функция создания описания удобств жилья
 var createFeaturesElem = function (feature) {
   var featureElem = document.createElement('li');
   featureElem.classList.add('popup__feature', 'popup__feature--' + feature);
@@ -124,7 +126,17 @@ var createFeaturesElem = function (feature) {
   return featureElem;
 };
 
-var cleanNode = function(parentElement) {
+var createPhotoElem = function () {
+  var photoElem = document.createElement('img');
+  photoElem.classList.add('popup__photo');
+  photoElem.width = '45';
+  photoElem.height = '40';
+  photoElem.alt = 'Фотография жилья';
+
+  return photoElem;
+};
+
+var cleanNode = function (parentElement) {
   while (parentElement.firstChild) {
     parentElement.removeChild(parentElement.firstChild);
   }
@@ -135,6 +147,17 @@ var renderFeaturesElem = function (featuresArr, parentElement) {
   var featuresFragment = document.createDocumentFragment();
   for (var i = 0; i < featuresArr.length; i++) {
     featuresFragment.appendChild(createFeaturesElem(featuresArr[i]));
+  }
+  return featuresFragment;
+};
+
+var renderPhotoElem = function (featuresArr, parentElement) {
+  cleanNode(parentElement);
+  var featuresFragment = document.createDocumentFragment();
+  for (var i = 0; i < featuresArr.length; i++) {
+    var photo = createPhotoElem();
+    photo.src = featuresArr[i];
+    featuresFragment.appendChild(photo);
   }
   return featuresFragment;
 };
@@ -156,14 +179,14 @@ var generateAdvertisement = function (n) {
         'title': randomListTitles[i],
         'address': randomLocation.x + ', ' + randomLocation.y,
         'price': getRandomNumber(MIN_PRICE, MAX_PRICE),
-        'type': randomListHouseTitles[i],
+        'type': getRandomArrayElement(HOUSE_TYPES),
         'rooms': getRandomNumber(1, 5),
         'guests': getRandomNumber(1, 5),
         'checkin': getRandomArrayElement(CHECK_INS),
         'checkout': getRandomArrayElement(CHECK_OUTS),
         'features': getRandomArrayLength(HOUSE_DESCRIPTIONS_COPY),
         'description': '',
-        'photos': shuffleArray(HOUSE_PHOTO_COPY)
+        'photos': HOUSE_PHOTO_COPY.sort(compareRandom)
       },
       'location': randomLocation
     };
@@ -209,8 +232,7 @@ var renderMapCard = function (template, arr) {
 
     template.querySelector('.popup__features').appendChild(renderFeaturesElem(arr[i].offer.features, template.querySelector('.popup__features')));
     template.querySelector('.popup__description').textContent = arr[i].offer.description;
-    // templateMapCard.querySelector('.popup__photos').children[i].src =
-    // advertisements[i].offer.photos;
+    template.querySelector('.popup__photos').appendChild(renderPhotoElem(arr[i].offer.photos, template.querySelector('.popup__photos')));
     template.querySelector('.popup__avatar').src = arr[i].author.avatar;
   }
   return template;
