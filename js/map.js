@@ -116,6 +116,30 @@ var randomListTitles = shuffleArray(ADVERTISEMENT_TITLES_COPIES);
 var randomListHouseTitles = shuffleArray(HOUSE_TYPES);
 
 
+
+var createFeaturesElem = function (feature) {
+  var featureElem = document.createElement('li');
+  featureElem.classList.add('popup__feature', 'popup__feature--' + feature);
+
+  return featureElem;
+};
+
+var cleanNode = function(parentElement) {
+  while (parentElement.firstChild) {
+    parentElement.removeChild(parentElement.firstChild);
+  }
+};
+
+var renderFeaturesElem = function (featuresArr, parentElement) {
+  cleanNode(parentElement);
+  var featuresFragment = document.createDocumentFragment();
+  for (var i = 0; i < featuresArr.length; i++) {
+    featuresFragment.appendChild(createFeaturesElem(featuresArr[i]));
+  }
+  return featuresFragment;
+};
+
+
 // Функция генерации массива объявлений
 var generateAdvertisement = function (n) {
   var advertiseList = [];
@@ -182,7 +206,8 @@ var renderMapCard = function (template, arr) {
     template.querySelector('.popup__type').textContent = HOUSE_LABELS[arr[i].offer.type];
     template.querySelector('.popup__text--capacity').textContent = arr[i].offer.rooms + ' комнаты для ' + arr[i].offer.guests + ' гостей';
     template.querySelector('.popup__text--time').textContent = 'Заезд после ' + arr[i].offer.checkin + ', выезд до ' + arr[i].offer.checkout;
-    template.querySelector('.popup__features').children.textContent = arr[i].offer.features;
+
+    template.querySelector('.popup__features').appendChild(renderFeaturesElem(arr[i].offer.features, template.querySelector('.popup__features')));
     template.querySelector('.popup__description').textContent = arr[i].offer.description;
     // templateMapCard.querySelector('.popup__photos').children[i].src =
     // advertisements[i].offer.photos;
