@@ -198,9 +198,6 @@ var generateAdvertisement = function (n) {
 // Создание массива объектов с объявлениями
 var advertisements = generateAdvertisement(ADVERTISEMENT_COUNT).slice(0);
 
-// Переключение карты из неактивного состояния в активное
-document.querySelector('.map').classList.remove('map--faded');
-
 // Функция создания и размещения маркеров объявлений
 var renderMapPins = function (el, template) {
   var mapPin = template.cloneNode(true);
@@ -218,7 +215,8 @@ var fragment = document.createDocumentFragment();
 for (var i = 0; i < advertisements.length; i++) {
   fragment.appendChild(renderMapPins(advertisements[i], TEMPLATE_MAP_PIN));
 }
-MAP_PIN_LIST.appendChild(fragment);
+// Отрисовка маркеров объявлений
+// MAP_PIN_LIST.appendChild(fragment);
 
 // Функция создания и размещения карточек объявлений
 var renderMapCard = function (template, arr) {
@@ -238,4 +236,25 @@ var renderMapCard = function (template, arr) {
   return template;
 };
 
-MAP.insertBefore(renderMapCard(TEMPLATE_MAP_CARD, advertisements), MAP_BEFORE_CARD_LIST);
+// Отрисовка карточки объявления
+// MAP.insertBefore(renderMapCard(TEMPLATE_MAP_CARD, advertisements),
+// MAP_BEFORE_CARD_LIST);
+
+// Ветка №4 Обработка событий
+
+// Переключение карты из неактивного состояния в активное
+// document.querySelector('.map').classList.remove('map--faded');
+
+// Добавление fieldset атрибута disabled
+var form = document.forms[1];
+console.log(form);
+
+var fieldsets = form.querySelectorAll('fieldset');
+console.log(fieldsets);
+
+var addDisabledAttribute = function (arr) {
+  for (var i = 0; i < arr.length; i++) {
+    arr[i].setAttribute('disabled', true);
+  }
+};
+addDisabledAttribute(fieldsets);
