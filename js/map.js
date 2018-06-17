@@ -199,7 +199,7 @@ var generateAdvertisement = function (n) {
 var advertisements = generateAdvertisement(ADVERTISEMENT_COUNT).slice(0);
 
 // Функция создания и размещения маркеров объявлений
-var renderMapPins = function (el, template) {
+var renderMapPins = function (el, template, id) {
   var mapPin = template.cloneNode(true);
   var mapPinWidth = mapPin.style.width;
   var mapPinHeight = mapPin.style.height;
@@ -207,33 +207,33 @@ var renderMapPins = function (el, template) {
   mapPin.style = 'left: ' + (el.location.x - (mapPinWidth / 2)) + 'px; top: ' + (el.location.y - mapPinHeight) + 'px;';
   mapPin.querySelector('img').src = el.author.avatar;
   mapPin.querySelector('img').alt = el.offer.title[i];
+  mapPin.myId = id;
 
   return mapPin;
 };
 
 var fragment = document.createDocumentFragment();
 for (var i = 0; i < advertisements.length; i++) {
-  fragment.appendChild(renderMapPins(advertisements[i], TEMPLATE_MAP_PIN));
+  fragment.appendChild(renderMapPins(advertisements[i], TEMPLATE_MAP_PIN, i));
 }
 // Отрисовка маркеров объявлений
 // MAP_PIN_LIST.appendChild(fragment);
 
 // Функция создания и размещения карточек объявлений
-var renderMapCard = function (template, arr) {
-  for (i = 0; i < arr.length; i++) {
-    template.querySelector('.popup__title').textContent = arr[i].offer.title;
-    template.querySelector('.popup__text--address').textContent = arr[i].offer.address;
-    template.querySelector('.popup__text--price').textContent = arr[i].offer.price + '₽/ночь';
-    template.querySelector('.popup__type').textContent = HOUSE_LABELS[arr[i].offer.type];
-    template.querySelector('.popup__text--capacity').textContent = arr[i].offer.rooms + ' комнаты для ' + arr[i].offer.guests + ' гостей';
-    template.querySelector('.popup__text--time').textContent = 'Заезд после ' + arr[i].offer.checkin + ', выезд до ' + arr[i].offer.checkout;
+var renderMapCard = function (template, advertment) {
+    template.querySelector('.popup__title').textContent = advertment.offer.title;
+    template.querySelector('.popup__text--address').textContent = advertment.offer.address;
+    template.querySelector('.popup__text--price').textContent = advertment.offer.price + '₽/ночь';
+    template.querySelector('.popup__type').textContent = HOUSE_LABELS[advertment.offer.type];
+    template.querySelector('.popup__text--capacity').textContent = advertment.offer.rooms + ' комнаты для ' + advertment.offer.guests + ' гостей';
+    template.querySelector('.popup__text--time').textContent = 'Заезд после ' + advertment.offer.checkin + ', выезд до ' + advertment.offer.checkout;
 
-    template.querySelector('.popup__features').appendChild(renderFeaturesElem(arr[i].offer.features, template.querySelector('.popup__features')));
-    template.querySelector('.popup__description').textContent = arr[i].offer.description;
-    template.querySelector('.popup__photos').appendChild(renderPhotoElem(arr[i].offer.photos, template.querySelector('.popup__photos')));
-    template.querySelector('.popup__avatar').src = arr[i].author.avatar;
-  }
-  return template;
+    template.querySelector('.popup__features').appendChild(renderFeaturesElem(advertment.offer.features, template.querySelector('.popup__features')));
+    template.querySelector('.popup__description').textContent = advertment.offer.description;
+    template.querySelector('.popup__photos').appendChild(renderPhotoElem(advertment.offer.photos, template.querySelector('.popup__photos')));
+    template.querySelector('.popup__avatar').src = advertment.author.avatar;
+
+    return template;
 };
 
 // Отрисовка карточки объявления
@@ -300,17 +300,21 @@ var onMapPinMainMouseUp = function (evt) {
       'height': parseInt(styleMapPin.height)
     };
 
-    var mapPinCoordinates =  (Math.floor(coordinatesMapPin.left + (coordinatesMapPin.width / 2)) + ', ' + (Math.floor(coordinatesMapPin.top + coordinatesMapPin.height)));
+    var mapPinCoordinates =  coordinatesMapPin.left  + ', ' + coordinatesMapPin.top;
 
     mapPin[i].addEventListener('click', function () {
-      MAP.insertBefore(renderMapCard(TEMPLATE_MAP_CARD, advertisements), MAP_BEFORE_CARD_LIST);
+      console.log(this.myId);
+      var popup = document.querySelector('.popup');
+      if (popup) {
+        popup.classList.remove('hidden');
+      }
+      MAP.insertBefore(renderMapCard(TEMPLATE_MAP_CARD, advertisements[this.myId]), MAP_BEFORE_CARD_LIST);
       addressInput.value =  mapPinCoordinates;
 
       var buttonClose = document.querySelector('.popup__close');
-      var popup = document.querySelector('.popup');
-      console.log(popup);
       buttonClose.addEventListener('click', function () {
-        popup.style.display = 'none';
+        var popup = document.querySelector('.popup');
+        popup.classList.add('hidden');
       });
     });
 
