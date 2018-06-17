@@ -240,21 +240,39 @@ var renderMapCard = function (template, arr) {
 // MAP.insertBefore(renderMapCard(TEMPLATE_MAP_CARD, advertisements),
 // MAP_BEFORE_CARD_LIST);
 
-// Ветка №4 Обработка событий
-
 // Переключение карты из неактивного состояния в активное
 // document.querySelector('.map').classList.remove('map--faded');
 
+// Ветка №4 Обработка событий
+
 // Добавление fieldset атрибута disabled
-var form = document.forms[1];
-console.log(form);
+var FORM = document.forms[1];
 
-var fieldsets = form.querySelectorAll('fieldset');
-console.log(fieldsets);
+var fieldsets = FORM.querySelectorAll('fieldset');
 
-var addDisabledAttribute = function (arr) {
+var addDisabledAttribute = function (arr, boo) {
   for (var i = 0; i < arr.length; i++) {
-    arr[i].setAttribute('disabled', true);
+    arr[i].setAttribute('disabled', boo);
   }
 };
-addDisabledAttribute(fieldsets);
+addDisabledAttribute(fieldsets, true);
+
+var removeDisabledAttribute = function (arr) {
+  for (var i = 0; i < arr.length; i++) {
+    arr[i].removeAttribute('disabled');
+  }
+};
+
+// Активация карты
+var pinMain = MAP.querySelector('.map__pin--main');
+
+var onpinMainMouseUp = function () {
+  MAP.classList.remove('map--faded');
+  removeDisabledAttribute(fieldsets);
+  MAP_PIN_LIST.appendChild(fragment);
+  MAP.insertBefore(renderMapCard(TEMPLATE_MAP_CARD, advertisements), MAP_BEFORE_CARD_LIST);
+  FORM.classList.remove('ad-form--disabled');
+};
+
+pinMain.addEventListener('mouseup', onpinMainMouseUp);
+
