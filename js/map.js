@@ -265,14 +265,31 @@ var removeDisabledAttribute = function (arr) {
 
 // Активация карты
 var pinMain = MAP.querySelector('.map__pin--main');
+var addressInput = FORM.querySelector('#address');
 
-var onpinMainMouseUp = function () {
+var styleMapPin = getComputedStyle(pinMain);
+
+var coordinatesMapPin = {
+  'top': parseInt(styleMapPin.top),
+  'left': parseInt(styleMapPin.left),
+  'width': parseInt(styleMapPin.width),
+  'height': parseInt(styleMapPin.height)
+};
+
+// Стартовые координаты - центр главного маркера
+var startAddressCoordinates =  (Math.floor(coordinatesMapPin.top + (coordinatesMapPin.height / 2))) + ', ' + (Math.floor(coordinatesMapPin.left + (coordinatesMapPin.width / 2)));
+
+// Функция-обработчик активации карты
+var onpinMainMouseUp = function (evt) {
   MAP.classList.remove('map--faded');
   removeDisabledAttribute(fieldsets);
   MAP_PIN_LIST.appendChild(fragment);
   MAP.insertBefore(renderMapCard(TEMPLATE_MAP_CARD, advertisements), MAP_BEFORE_CARD_LIST);
   FORM.classList.remove('ad-form--disabled');
+  addressInput.value = startAddressCoordinates;
 };
 
 pinMain.addEventListener('mouseup', onpinMainMouseUp);
+
+
 
