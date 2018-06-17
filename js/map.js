@@ -305,6 +305,13 @@ var onMapPinMainMouseUp = function (evt) {
     mapPin[i].addEventListener('click', function () {
       MAP.insertBefore(renderMapCard(TEMPLATE_MAP_CARD, advertisements), MAP_BEFORE_CARD_LIST);
       addressInput.value =  mapPinCoordinates;
+
+      var buttonClose = document.querySelector('.popup__close');
+      var popup = document.querySelector('.popup');
+      console.log(popup);
+      buttonClose.addEventListener('click', function () {
+        popup.style.display = 'none';
+      });
     });
 
   }
