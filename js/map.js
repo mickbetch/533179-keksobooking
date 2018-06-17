@@ -267,17 +267,17 @@ var removeDisabledAttribute = function (arr) {
 var mapPinMain = MAP.querySelector('.map__pin--main');
 var addressInput = FORM.querySelector('#address');
 
-var styleMapPin = getComputedStyle(mapPinMain);
+var styleMapPinMain = getComputedStyle(mapPinMain);
 
-var coordinatesMapPin = {
-  'top': parseInt(styleMapPin.top),
-  'left': parseInt(styleMapPin.left),
-  'width': parseInt(styleMapPin.width),
-  'height': parseInt(styleMapPin.height)
+var coordinatesMapPinMain = {
+  'top': parseInt(styleMapPinMain.top),
+  'left': parseInt(styleMapPinMain.left),
+  'width': parseInt(styleMapPinMain.width),
+  'height': parseInt(styleMapPinMain.height)
 };
 
 // Стартовые координаты - центр главного маркера
-var startAddressCoordinates =  (Math.floor(coordinatesMapPin.left + (coordinatesMapPin.width / 2)) + ', ' + (Math.floor(coordinatesMapPin.top + (coordinatesMapPin.height / 2))));
+var startAddressCoordinates =  (Math.floor(coordinatesMapPinMain.left + (coordinatesMapPinMain.width / 2)) + ', ' + (Math.floor(coordinatesMapPinMain.top + (coordinatesMapPinMain.height / 2))));
 
 // Функция-обработчик активации карты
 var onMapPinMainMouseUp = function (evt) {
@@ -288,9 +288,26 @@ var onMapPinMainMouseUp = function (evt) {
   addressInput.value = startAddressCoordinates;
 
   var mapPin = MAP.querySelectorAll('.map__pin');
-  mapPin.addEventListener
+
+  for (var i = 1; i < mapPin.length; i++) {
+
+    var styleMapPin = getComputedStyle(mapPin[i]);
+
+    var coordinatesMapPin = {
+      'top': parseInt(styleMapPin.top),
+      'left': parseInt(styleMapPin.left),
+      'width': parseInt(styleMapPin.width),
+      'height': parseInt(styleMapPin.height)
+    };
+
+    var mapPinCoordinates =  (Math.floor(coordinatesMapPin.left + (coordinatesMapPin.width / 2)) + ', ' + (Math.floor(coordinatesMapPin.top + coordinatesMapPin.height)));
+
+    mapPin[i].addEventListener('click', function () {
+      MAP.insertBefore(renderMapCard(TEMPLATE_MAP_CARD, advertisements), MAP_BEFORE_CARD_LIST);
+      addressInput.value =  mapPinCoordinates;
+    });
+
+  }
 };
 
 mapPinMain.addEventListener('mouseup', onMapPinMainMouseUp);
-
-
