@@ -264,10 +264,10 @@ var removeDisabledAttribute = function (arr) {
 };
 
 // Активация карты
-var pinMain = MAP.querySelector('.map__pin--main');
+var mapPinMain = MAP.querySelector('.map__pin--main');
 var addressInput = FORM.querySelector('#address');
 
-var styleMapPin = getComputedStyle(pinMain);
+var styleMapPin = getComputedStyle(mapPinMain);
 
 var coordinatesMapPin = {
   'top': parseInt(styleMapPin.top),
@@ -277,19 +277,20 @@ var coordinatesMapPin = {
 };
 
 // Стартовые координаты - центр главного маркера
-var startAddressCoordinates =  (Math.floor(coordinatesMapPin.top + (coordinatesMapPin.height / 2))) + ', ' + (Math.floor(coordinatesMapPin.left + (coordinatesMapPin.width / 2)));
+var startAddressCoordinates =  (Math.floor(coordinatesMapPin.left + (coordinatesMapPin.width / 2)) + ', ' + (Math.floor(coordinatesMapPin.top + (coordinatesMapPin.height / 2))));
 
 // Функция-обработчик активации карты
-var onpinMainMouseUp = function (evt) {
+var onMapPinMainMouseUp = function (evt) {
   MAP.classList.remove('map--faded');
   removeDisabledAttribute(fieldsets);
   MAP_PIN_LIST.appendChild(fragment);
-  MAP.insertBefore(renderMapCard(TEMPLATE_MAP_CARD, advertisements), MAP_BEFORE_CARD_LIST);
   FORM.classList.remove('ad-form--disabled');
   addressInput.value = startAddressCoordinates;
+
+  var mapPin = MAP.querySelectorAll('.map__pin');
+  mapPin.addEventListener
 };
 
-pinMain.addEventListener('mouseup', onpinMainMouseUp);
-
+mapPinMain.addEventListener('mouseup', onMapPinMainMouseUp);
 
 
