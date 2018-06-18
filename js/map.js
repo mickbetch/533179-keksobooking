@@ -251,7 +251,9 @@ var renderMapCard = function (template, advertment) {
 // Добавление fieldset атрибута disabled
 var FORM = document.forms[1];
 
-var fieldsets = FORM.querySelectorAll('fieldset');
+var FIELDSETS = FORM.querySelectorAll('fieldset');
+var MAP_PIN_MAIN = MAP.querySelector('.map__pin--main');
+var addressInput = FORM.querySelector('#address');
 
 // Функция добавление элементам массива атрибутов disabled
 var toogleDisabledOnArrayElements = function (arr, isDisabled) {
@@ -259,18 +261,35 @@ var toogleDisabledOnArrayElements = function (arr, isDisabled) {
     arr[i].setAttribute('disabled', isDisabled);
   }
 };
-toogleDisabledOnArrayElements(fieldsets, true);
 
-// Функция удаления атрибутов disabled
-var removeDisabledAttribute = function (arr) {
-  for (i = 0; i < arr.length; i++) {
-    arr[i].removeAttribute('disabled');
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === 27) {
+    closePopup();
   }
 };
 
-// Активация карты
-var MAP_PIN_MAIN = MAP.querySelector('.map__pin--main');
-var addressInput = FORM.querySelector('#address');
+var openPopup = function () {
+  var mapCard = document.querySelector('.map__card');
+  mapCard.classList.remove('hidden');
+};
+
+var closePopup = function () {
+  var mapCard = document.querySelector('.map__card');
+  mapCard.classList.add('hidden');
+};
+
+var onPopupCloseClick = function () {
+    var popupClose = document.querySelector('.popup__close');
+    popuClose.addEventListener('click', function () {
+      closePopup();
+    });
+    document.addEventListener('keydown', onPopupEscPress );
+};
+
+
+
+
+
 
 var styleMapPinMain = getComputedStyle(MAP_PIN_MAIN);
 
@@ -289,7 +308,6 @@ var getInputAddressCoordinates = function (coordinates) {
 // Функция-обработчик активации карты
 var onMapPinMainMouseUp = function () {
   MAP.classList.remove('map--faded');
-  removeDisabledAttribute(fieldsets);
   MAP_PIN_LIST.appendChild(mapPinFragment);
   FORM.classList.remove('ad-form--disabled');
   addressInput.value = getInputAddressCoordinates(coordinatesMapPinMain);
