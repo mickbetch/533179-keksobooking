@@ -250,13 +250,16 @@ var FORM = document.forms[1];
 
 var fieldsets = FORM.querySelectorAll('fieldset');
 
+// Функция добавление элементам массива атрибутов disabled
 var addDisabledAttribute = function (arr, boo) {
   for (var i = 0; i < arr.length; i++) {
     arr[i].setAttribute('disabled', boo);
   }
 };
+
 addDisabledAttribute(fieldsets, true);
 
+// Функция удаления атрибутов disabled
 var removeDisabledAttribute = function (arr) {
   for (var i = 0; i < arr.length; i++) {
     arr[i].removeAttribute('disabled');
@@ -275,9 +278,11 @@ var coordinatesMapPinMain = {
   'width': parseInt(styleMapPinMain.width),
   'height': parseInt(styleMapPinMain.height)
 };
-
-// Стартовые координаты - центр главного маркера
-var startAddressCoordinates =  (Math.floor(coordinatesMapPinMain.left + (coordinatesMapPinMain.width / 2)) + ', ' + (Math.floor(coordinatesMapPinMain.top + (coordinatesMapPinMain.height / 2))));
+// Получение стартовых коордитнат поля с адресом (центр стартовой конпки)
+var getInputAddressCoordinates = function (coordinates) {
+  var string = (Math.floor(coordinates.left + (coordinates.width / 2)) + ', ' + (Math.floor(coordinates.top + (coordinates.height / 2))));
+  return string;
+};
 
 // Функция-обработчик активации карты
 var onMapPinMainMouseUp = function (evt) {
@@ -285,13 +290,13 @@ var onMapPinMainMouseUp = function (evt) {
   removeDisabledAttribute(fieldsets);
   MAP_PIN_LIST.appendChild(fragment);
   FORM.classList.remove('ad-form--disabled');
-  addressInput.value = startAddressCoordinates;
+  addressInput.value = getInputAddressCoordinates(coordinatesMapPinMain);
 
-  var mapPin = MAP.querySelectorAll('.map__pin');
+  var mapPins = MAP.querySelectorAll('.map__pin');
 
-  for (var i = 1; i < mapPin.length; i++) {
+  for (var i = 1; i < mapPins.length; i++) {
 
-    var styleMapPin = getComputedStyle(mapPin[i]);
+    var styleMapPin = getComputedStyle(mapPins[i]);
 
     var coordinatesMapPin = {
       'top': parseInt(styleMapPin.top),
@@ -300,16 +305,16 @@ var onMapPinMainMouseUp = function (evt) {
       'height': parseInt(styleMapPin.height)
     };
 
-    var mapPinCoordinates =  coordinatesMapPin.left  + ', ' + coordinatesMapPin.top;
+    var newInputAddressCoordinates =  coordinatesMapPin.left  + ', ' + coordinatesMapPin.top;
+    console.log(newInputAddressCoordinates);
 
-    mapPin[i].addEventListener('click', function () {
-      console.log(this.myId);
+    mapPins[i].addEventListener('click', function () {
       var popup = document.querySelector('.popup');
       if (popup) {
         popup.classList.remove('hidden');
       }
       MAP.insertBefore(renderMapCard(TEMPLATE_MAP_CARD, advertisements[this.myId]), MAP_BEFORE_CARD_LIST);
-      addressInput.value =  mapPinCoordinates;
+      addressInput.value =  newInputAddressCoordinates;
 
       var buttonClose = document.querySelector('.popup__close');
       buttonClose.addEventListener('click', function () {
