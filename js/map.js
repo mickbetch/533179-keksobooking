@@ -28,7 +28,7 @@ var CHECK_OUTS = ['12:00', '13:00', '14:00'];
 
 var HOUSE_DESCRIPTIONS = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
-var HOUSE_DESCRIPTIONS_COPY = HOUSE_DESCRIPTIONS.slice(0, HOUSE_DESCRIPTIONS.length);
+var houseDescriptionCopy = HOUSE_DESCRIPTIONS.slice(0, HOUSE_DESCRIPTIONS.length);
 
 var HOUSE_PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
@@ -37,16 +37,6 @@ var HOUSE_PHOTOS = [
 ];
 
 var HOUSE_PHOTO_COPY = HOUSE_PHOTOS.slice(0, HOUSE_PHOTOS.length);
-
-// Блок карты,блок вставки маркеров, блок, перел=д которым вставить объявления
-var MAP = document.querySelector('.map');
-var MAP_PIN_LIST = MAP.querySelector('.map__pins');
-var MAP_BEFORE_CARD_LIST = MAP.querySelector('.map__filters-container');
-
-// Константы шаблона
-var TEMPLATE = document.querySelector('template').content;
-var TEMPLATE_MAP_CARD = TEMPLATE.querySelector('.map__card');
-var TEMPLATE_MAP_PIN = TEMPLATE.querySelector('.map__pin');
 
 var MIN_X = 300;
 var MAX_X = 900;
@@ -57,23 +47,32 @@ var MAX_PRICE = 1000000;
 
 var ADVERTISEMENT_COUNT = 8;
 
-//  Функция создания случайного числа
+/*
+* Генерация случайного числа
+* {min} number
+* {max} number
+* */
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-// Функция генерации чисел (от 1 до 9 с ведущим нулем, начиная с 10 - ноль пропадает)
-var leadingZeroes = function (number, length) { // length - это разрядность чисел,
-  // number - число, которое передается
+/*
+* Генерация строки с ведущим нулем типа '01'
+* {number} number числовое значение
+* {length} number разрядность чила(от 1 до 9 - '1', от 10 и до 99 - '2')
+* */
+var leadingZeroes = function (number, length) {
   var string = '' + number;
-  while (string.length < length) { // string.length - длина строки (т.е. если '9', то
-    // длина равна 1, если '10' и до '99' - равна 2)
+  while (string.length < length) {
     string = '0' + string;
   }
   return string;
 };
 
-// Функция генерации адресов картинок
+/*
+* Генерация массива адресов картинок, отличающихся номером
+* {count} number количество картинок
+* */
 var generateURLs = function (count) {
   var URLs = [];
   for (var i = 1; i <= count; i++) {
@@ -82,11 +81,14 @@ var generateURLs = function (count) {
   return URLs;
 };
 
-// Массив с адресами картинок  и его копия
-var pictures = generateURLs(ADVERTISEMENT_COUNT);
-var picturesCopies = pictures.slice(0, pictures.length);
+// Массив с адресами картинок
+var PICTURES = generateURLs(ADVERTISEMENT_COUNT);
+var picturesCopies = PICTURES.slice(0, PICTURES.length);
 
-// Функция создания массива с элементами в случайном порядке
+/*
+* Создание массива с раположением элементов в слуйчайном порядке
+* {arr} arr массив
+* */
 var shuffleArray = function (arr) {
   var elements = [];
   while (arr.length > 0) {
@@ -96,7 +98,9 @@ var shuffleArray = function (arr) {
   return elements;
 };
 
-// Функция создания случайного порядка в массиве
+/*
+* Используется с методом массива sort для сортировки элементов массива случайным образом
+* */
 var compareRandom = function () {
   return Math.random() - 0.5;
 };
@@ -113,10 +117,10 @@ var getRandomArrayLength = function (arr) {
 };
 
 // Массив случайных элементов с картинками маркера
-var randomListURLS = shuffleArray(picturesCopies);
+var RANDOM_LIST_URLS = shuffleArray(picturesCopies);
 
 // Массив случайных элементов с заголовками карточек-объявлений
-var randomListTitles = shuffleArray(ADVERTISEMENT_TITLES_COPIES);
+var RANDOM_LIST_TITLES = shuffleArray(ADVERTISEMENT_TITLES_COPIES);
 
 // Функция создания описания удобств жилья
 var createFeaturesElem = function (feature) {
@@ -162,21 +166,21 @@ var renderPhotoElem = function (photosArr, parentElement) {
   return featuresFragment;
 };
 
-
 // Функция генерации массива объявлений
 var generateAdvertisement = function (n) {
   var advertiseList = [];
+  var advertiseEl;
   for (var i = 0; i < n; i++) {
     var randomLocation = {
       'x': getRandomNumber(MIN_X, MAX_X),
       'y': getRandomNumber(MIN_Y, MAX_Y)
     };
-    var advertiseEl = {
+    advertiseEl = {
       'author': {
-        'avatar': randomListURLS[i]
+        'avatar': RANDOM_LIST_URLS[i]
       },
       'offer': {
-        'title': randomListTitles[i],
+        'title': RANDOM_LIST_TITLES[i],
         'address': randomLocation.x + ', ' + randomLocation.y,
         'price': getRandomNumber(MIN_PRICE, MAX_PRICE),
         'type': getRandomArrayElement(HOUSE_TYPES),
@@ -184,7 +188,7 @@ var generateAdvertisement = function (n) {
         'guests': getRandomNumber(1, 5),
         'checkin': getRandomArrayElement(CHECK_INS),
         'checkout': getRandomArrayElement(CHECK_OUTS),
-        'features': getRandomArrayLength(HOUSE_DESCRIPTIONS_COPY),
+        'features': getRandomArrayLength(houseDescriptionCopy),
         'description': '',
         'photos': HOUSE_PHOTO_COPY.sort(compareRandom)
       },
@@ -195,11 +199,19 @@ var generateAdvertisement = function (n) {
   return advertiseList;
 };
 
-// Создание массива объектов с объявлениями
-var advertisements = generateAdvertisement(ADVERTISEMENT_COUNT).slice(0);
+// Массив объектов с объявлениями
+var ADVERTISEMENTS = generateAdvertisement(ADVERTISEMENT_COUNT).slice(0);
 
-// Функция создания и размещения маркеров объявлений
-var renderMapPins = function (el, template, id) {
+var MAP = document.querySelector('.map');
+var MAP_PIN_LIST = MAP.querySelector('.map__pins');
+var PLACE_BEFORE_CARD_LIST = MAP.querySelector('.map__filters-container');
+
+var TEMPLATE = document.querySelector('template').content;
+var TEMPLATE_MAP_CARD = TEMPLATE.querySelector('.map__card');
+var TEMPLATE_MAP_PIN = TEMPLATE.querySelector('.map__pin');
+
+// Функция создания маркера-пина
+var renderMapPins = function (el, template, index) {
   var mapPin = template.cloneNode(true);
   var mapPinWidth = mapPin.style.width;
   var mapPinHeight = mapPin.style.height;
@@ -207,19 +219,18 @@ var renderMapPins = function (el, template, id) {
   mapPin.style = 'left: ' + (el.location.x - (mapPinWidth / 2)) + 'px; top: ' + (el.location.y - mapPinHeight) + 'px;';
   mapPin.querySelector('img').src = el.author.avatar;
   mapPin.querySelector('img').alt = el.offer.title[i];
-  mapPin.myId = id;
+  mapPin.id = index;
 
   return mapPin;
 };
 
-var fragment = document.createDocumentFragment();
-for (var i = 0; i < advertisements.length; i++) {
-  fragment.appendChild(renderMapPins(advertisements[i], TEMPLATE_MAP_PIN, i));
+// Генерация маркеров и  их сохранение в документ-фрагмент
+var mapPinFragment = document.createDocumentFragment();
+for (var i = 0; i < ADVERTISEMENTS.length; i++) {
+  mapPinFragment.appendChild(renderMapPins(ADVERTISEMENTS[i], TEMPLATE_MAP_PIN, i));
 }
-// Отрисовка маркеров объявлений
-// MAP_PIN_LIST.appendChild(fragment);
 
-// Функция создания и размещения карточек объявлений
+// Функция создания карточки объявления
 var renderMapCard = function (template, advertment) {
   template.querySelector('.popup__title').textContent = advertment.offer.title;
   template.querySelector('.popup__text--address').textContent = advertment.offer.address;
@@ -235,14 +246,7 @@ var renderMapCard = function (template, advertment) {
   return template;
 };
 
-// Отрисовка карточки объявления
-// MAP.insertBefore(renderMapCard(TEMPLATE_MAP_CARD, advertisements),
-// MAP_BEFORE_CARD_LIST);
-
-// Переключение карты из неактивного состояния в активное
-// document.querySelector('.map').classList.remove('map--faded');
-
-// Ветка №4 Обработка событий
+// ВЕТКА MODULE-4 ОБРАБОТКА СОБЫТИЙ
 
 // Добавление fieldset атрибута disabled
 var FORM = document.forms[1];
@@ -250,13 +254,12 @@ var FORM = document.forms[1];
 var fieldsets = FORM.querySelectorAll('fieldset');
 
 // Функция добавление элементам массива атрибутов disabled
-var addDisabledAttribute = function (arr, boo) {
+var toogleDisabledOnArrayElements = function (arr, isDisabled) {
   for (i = 0; i < arr.length; i++) {
-    arr[i].setAttribute('disabled', boo);
+    arr[i].setAttribute('disabled', isDisabled);
   }
 };
-
-addDisabledAttribute(fieldsets, true);
+toogleDisabledOnArrayElements(fieldsets, true);
 
 // Функция удаления атрибутов disabled
 var removeDisabledAttribute = function (arr) {
@@ -266,10 +269,10 @@ var removeDisabledAttribute = function (arr) {
 };
 
 // Активация карты
-var mapPinMain = MAP.querySelector('.map__pin--main');
+var MAP_PIN_MAIN = MAP.querySelector('.map__pin--main');
 var addressInput = FORM.querySelector('#address');
 
-var styleMapPinMain = getComputedStyle(mapPinMain);
+var styleMapPinMain = getComputedStyle(MAP_PIN_MAIN);
 
 var coordinatesMapPinMain = {
   'top': parseInt(styleMapPinMain.top, 10),
@@ -287,7 +290,7 @@ var getInputAddressCoordinates = function (coordinates) {
 var onMapPinMainMouseUp = function () {
   MAP.classList.remove('map--faded');
   removeDisabledAttribute(fieldsets);
-  MAP_PIN_LIST.appendChild(fragment);
+  MAP_PIN_LIST.appendChild(mapPinFragment);
   FORM.classList.remove('ad-form--disabled');
   addressInput.value = getInputAddressCoordinates(coordinatesMapPinMain);
 
@@ -306,13 +309,13 @@ var onMapPinMainMouseUp = function () {
 
     var newInputAddressCoordinates = coordinatesMapPin.left + ', ' + coordinatesMapPin.top;
 
-    mapPins[i].addEventListener('click', function () {
+    mapPins[i].addEventListener('click', function (evt) {
       var popup = document.querySelector('.popup');
       if (popup) {
         popup.classList.remove('hidden');
       }
-      MAP.insertBefore(renderMapCard(TEMPLATE_MAP_CARD, advertisements[this.myId]), MAP_BEFORE_CARD_LIST);
-      addressInput.value =  newInputAddressCoordinates;
+      MAP.insertBefore(renderMapCard(TEMPLATE_MAP_CARD, ADVERTISEMENTS[evt.target.parentElement.id]), PLACE_BEFORE_CARD_LIST);
+      addressInput.value = newInputAddressCoordinates;
 
       var buttonClose = document.querySelector('.popup__close');
       buttonClose.addEventListener('click', function () {
@@ -324,4 +327,4 @@ var onMapPinMainMouseUp = function () {
   }
 };
 
-mapPinMain.addEventListener('mouseup', onMapPinMainMouseUp);
+MAP_PIN_MAIN.addEventListener('mouseup', onMapPinMainMouseUp);
