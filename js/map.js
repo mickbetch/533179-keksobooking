@@ -221,19 +221,18 @@ for (var i = 0; i < advertisements.length; i++) {
 
 // Функция создания и размещения карточек объявлений
 var renderMapCard = function (template, advertment) {
-    template.querySelector('.popup__title').textContent = advertment.offer.title;
-    template.querySelector('.popup__text--address').textContent = advertment.offer.address;
-    template.querySelector('.popup__text--price').textContent = advertment.offer.price + '₽/ночь';
-    template.querySelector('.popup__type').textContent = HOUSE_LABELS[advertment.offer.type];
-    template.querySelector('.popup__text--capacity').textContent = advertment.offer.rooms + ' комнаты для ' + advertment.offer.guests + ' гостей';
-    template.querySelector('.popup__text--time').textContent = 'Заезд после ' + advertment.offer.checkin + ', выезд до ' + advertment.offer.checkout;
+  template.querySelector('.popup__title').textContent = advertment.offer.title;
+  template.querySelector('.popup__text--address').textContent = advertment.offer.address;
+  template.querySelector('.popup__text--price').textContent = advertment.offer.price + '₽/ночь';
+  template.querySelector('.popup__type').textContent = HOUSE_LABELS[advertment.offer.type];
+  template.querySelector('.popup__text--capacity').textContent = advertment.offer.rooms + ' комнаты для ' + advertment.offer.guests + ' гостей';
+  template.querySelector('.popup__text--time').textContent = 'Заезд после ' + advertment.offer.checkin + ', выезд до ' + advertment.offer.checkout;
+  template.querySelector('.popup__features').appendChild(renderFeaturesElem(advertment.offer.features, template.querySelector('.popup__features')));
+  template.querySelector('.popup__description').textContent = advertment.offer.description;
+  template.querySelector('.popup__photos').appendChild(renderPhotoElem(advertment.offer.photos, template.querySelector('.popup__photos')));
+  template.querySelector('.popup__avatar').src = advertment.author.avatar;
 
-    template.querySelector('.popup__features').appendChild(renderFeaturesElem(advertment.offer.features, template.querySelector('.popup__features')));
-    template.querySelector('.popup__description').textContent = advertment.offer.description;
-    template.querySelector('.popup__photos').appendChild(renderPhotoElem(advertment.offer.photos, template.querySelector('.popup__photos')));
-    template.querySelector('.popup__avatar').src = advertment.author.avatar;
-
-    return template;
+  return template;
 };
 
 // Отрисовка карточки объявления
@@ -252,7 +251,7 @@ var fieldsets = FORM.querySelectorAll('fieldset');
 
 // Функция добавление элементам массива атрибутов disabled
 var addDisabledAttribute = function (arr, boo) {
-  for (var i = 0; i < arr.length; i++) {
+  for (i = 0; i < arr.length; i++) {
     arr[i].setAttribute('disabled', boo);
   }
 };
@@ -261,7 +260,7 @@ addDisabledAttribute(fieldsets, true);
 
 // Функция удаления атрибутов disabled
 var removeDisabledAttribute = function (arr) {
-  for (var i = 0; i < arr.length; i++) {
+  for (i = 0; i < arr.length; i++) {
     arr[i].removeAttribute('disabled');
   }
 };
@@ -273,10 +272,10 @@ var addressInput = FORM.querySelector('#address');
 var styleMapPinMain = getComputedStyle(mapPinMain);
 
 var coordinatesMapPinMain = {
-  'top': parseInt(styleMapPinMain.top),
-  'left': parseInt(styleMapPinMain.left),
-  'width': parseInt(styleMapPinMain.width),
-  'height': parseInt(styleMapPinMain.height)
+  'top': parseInt(styleMapPinMain.top, 10),
+  'left': parseInt(styleMapPinMain.left, 10),
+  'width': parseInt(styleMapPinMain.width, 10),
+  'height': parseInt(styleMapPinMain.height, 10)
 };
 // Получение стартовых коордитнат поля с адресом (центр стартовой конпки)
 var getInputAddressCoordinates = function (coordinates) {
@@ -285,7 +284,7 @@ var getInputAddressCoordinates = function (coordinates) {
 };
 
 // Функция-обработчик активации карты
-var onMapPinMainMouseUp = function (evt) {
+var onMapPinMainMouseUp = function () {
   MAP.classList.remove('map--faded');
   removeDisabledAttribute(fieldsets);
   MAP_PIN_LIST.appendChild(fragment);
@@ -294,19 +293,18 @@ var onMapPinMainMouseUp = function (evt) {
 
   var mapPins = MAP.querySelectorAll('.map__pin');
 
-  for (var i = 1; i < mapPins.length; i++) {
+  for (i = 1; i < mapPins.length; i++) {
 
     var styleMapPin = getComputedStyle(mapPins[i]);
 
     var coordinatesMapPin = {
-      'top': parseInt(styleMapPin.top),
-      'left': parseInt(styleMapPin.left),
-      'width': parseInt(styleMapPin.width),
-      'height': parseInt(styleMapPin.height)
+      'top': parseInt(styleMapPin.top, 10),
+      'left': parseInt(styleMapPin.left, 10),
+      'width': parseInt(styleMapPin.width, 10),
+      'height': parseInt(styleMapPin.height, 10)
     };
 
-    var newInputAddressCoordinates =  coordinatesMapPin.left  + ', ' + coordinatesMapPin.top;
-    console.log(newInputAddressCoordinates);
+    var newInputAddressCoordinates = coordinatesMapPin.left + ', ' + coordinatesMapPin.top;
 
     mapPins[i].addEventListener('click', function () {
       var popup = document.querySelector('.popup');
