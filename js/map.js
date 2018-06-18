@@ -86,7 +86,7 @@ var generateURLs = function (count) {
 var pictures = generateURLs(ADVERTISEMENT_COUNT);
 var picturesCopies = pictures.slice(0, pictures.length);
 
-// Функция создания массива с адресами картинок в случайном порядке
+// Функция создания массива с элементами в случайном порядке
 var shuffleArray = function (arr) {
   var elements = [];
   while (arr.length > 0) {
@@ -151,12 +151,12 @@ var renderFeaturesElem = function (featuresArr, parentElement) {
   return featuresFragment;
 };
 
-var renderPhotoElem = function (featuresArr, parentElement) {
+var renderPhotoElem = function (photosArr, parentElement) {
   cleanNode(parentElement);
   var featuresFragment = document.createDocumentFragment();
-  for (var i = 0; i < featuresArr.length; i++) {
+  for (var i = 0; i < photosArr.length; i++) {
     var photo = createPhotoElem();
-    photo.src = featuresArr[i];
+    photo.src = photosArr[i];
     featuresFragment.appendChild(photo);
   }
   return featuresFragment;
