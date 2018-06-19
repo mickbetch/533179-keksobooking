@@ -281,7 +281,7 @@ var toogleDisabledOnArrayElements = function (arr, isDisabled) {
 toogleDisabledOnArrayElements(FIELDSETS, true);
 
 var removeDisabledOnArrayElements = function (arr) {
-  for (i = 0; i < arr.length; i++)  {
+  for (i = 0; i < arr.length; i++) {
     arr[i].removeAttribute('disabled');
   }
 };
@@ -298,11 +298,11 @@ var closePopup = function () {
 };
 
 var onPopupCloseClick = function () {
-    var popupClose = document.querySelector('.popup__close');
-    popupClose.addEventListener('click', function () {
-      closePopup();
-    });
-    document.addEventListener('keydown', onPopupEscPress );
+  var popupClose = document.querySelector('.popup__close');
+  popupClose.addEventListener('click', function () {
+    closePopup();
+  });
+  document.addEventListener('keydown', onPopupEscPress);
 };
 
 var showActiveMap = function () {
@@ -345,8 +345,8 @@ var renderMapCard = function (template, advertment) {
 };
 
 var onMapPinClick = function (evt) {
-    renderMapCard(TEMPLATE_MAP_CARD, getClickedMapPinId(evt.target.parentNode));
-    onPopupCloseClick();
+  renderMapCard(TEMPLATE_MAP_CARD, getClickedMapPinId(evt.target.parentNode));
+  onPopupCloseClick();
 };
 
 MAP_PIN_LIST.addEventListener('click', onMapPinClick);
