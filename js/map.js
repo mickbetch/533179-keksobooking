@@ -231,7 +231,7 @@ for (var i = 0; i < ADVERTISEMENTS.length; i++) {
 }
 
 // Функция создания карточки объявления
-var renderMapCard = function (template, advertment) {
+var createMapCard = function (template, advertment) {
   template.querySelector('.popup__title').textContent = advertment.offer.title;
   template.querySelector('.popup__text--address').textContent = advertment.offer.address;
   template.querySelector('.popup__text--price').textContent = advertment.offer.price + '₽/ночь';
@@ -255,6 +255,22 @@ var addressInput = FORM.querySelector('#address');
 var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
 var SPACE_KEYCODE = 32;
+var styleMapPinMain = getComputedStyle(MAP_PIN_MAIN);
+
+var coordinatesMapPinMain = {
+  'top': parseInt(styleMapPinMain.top, 10),
+  'left': parseInt(styleMapPinMain.left, 10),
+  'width': parseInt(styleMapPinMain.width, 10),
+  'height': parseInt(styleMapPinMain.height, 10)
+};
+
+// Получение стартовых коордитнат поля с адресом (центр стартовой конпки)
+var getInputAddressCoordinates = function (coordinates) {
+  var string = (Math.floor(coordinates.left + (coordinates.width / 2)) + ', ' + (Math.floor(coordinates.top + (coordinates.height / 2))));
+  return string;
+};
+
+addressInput.value = getInputAddressCoordinates(coordinatesMapPinMain);
 
 // Функция добавление элементам массива атрибутов disabled
 var toogleDisabledOnArrayElements = function (arr, isDisabled) {
@@ -276,11 +292,6 @@ var onPopupEscPress = function (evt) {
   }
 };
 
-var openPopup = function () {
-  var mapCard = document.querySelector('.map__card');
-  mapCard.classList.remove('hidden');
-};
-
 var closePopup = function () {
   var mapCard = document.querySelector('.map__card');
   mapCard.classList.add('hidden');
@@ -288,7 +299,7 @@ var closePopup = function () {
 
 var onPopupCloseClick = function () {
     var popupClose = document.querySelector('.popup__close');
-    popuClose.addEventListener('click', function () {
+    popupClose.addEventListener('click', function () {
       closePopup();
     });
     document.addEventListener('keydown', onPopupEscPress );
@@ -318,18 +329,24 @@ var onMapPinMainPressEnter = function (evt) {
 MAP_PIN_MAIN.addEventListener('mouseup', onMapPinMainMouseUp);
 MAP_PIN_MAIN.addEventListener('keydown', onMapPinMainPressEnter);
 
-
-
-var styleMapPinMain = getComputedStyle(MAP_PIN_MAIN);
-
-var coordinatesMapPinMain = {
-  'top': parseInt(styleMapPinMain.top, 10),
-  'left': parseInt(styleMapPinMain.left, 10),
-  'width': parseInt(styleMapPinMain.width, 10),
-  'height': parseInt(styleMapPinMain.height, 10)
+var getClickedMapPinId = function (elem) {
+  var offerIndex = parseInt(elem.id, 10);
+  return ADVERTISEMENTS[offerIndex];
 };
-// Получение стартовых коордитнат поля с адресом (центр стартовой конпки)
-var getInputAddressCoordinates = function (coordinates) {
-  var string = (Math.floor(coordinates.left + (coordinates.width / 2)) + ', ' + (Math.floor(coordinates.top + (coordinates.height / 2))));
-  return string;
+
+var renderMapCard = function (template, advertment) {
+  var oldOfferElem = MAP.querySelector('.map__card');
+  var offerElem = createMapCard(template, advertment);
+  if (oldOfferElem) {
+    MAP.replaceChild(offerElem, oldOfferElem);
+  } else {
+    MAP.insertBefore(createMapCard(template, advertment), PLACE_BEFORE_CARD_LIST);
+  }
 };
+
+var onMapPinClick = function (evt) {
+    renderMapCard(TEMPLATE_MAP_CARD, getClickedMapPinId(evt.target.parentNode));
+    onPopupCloseClick();
+};
+
+MAP_PIN_LIST.addEventListener('click', onMapPinClick);
