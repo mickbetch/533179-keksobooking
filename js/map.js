@@ -1,5 +1,5 @@
 'use strict';
-
+// Константы, полученные из ТЗ
 var ADVERTISEMENT_TITLES = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
@@ -46,6 +46,24 @@ var MIN_PRICE = 1000;
 var MAX_PRICE = 1000000;
 
 var ADVERTISEMENT_COUNT = 8;
+
+// Константы, связанные с отрисовкой меток и каточек объявлений
+var MAP = document.querySelector('.map');
+var MAP_PIN_LIST = MAP.querySelector('.map__pins');
+var PLACE_BEFORE_CARD_LIST = MAP.querySelector('.map__filters-container');
+
+var TEMPLATE = document.querySelector('template').content;
+var TEMPLATE_MAP_CARD = TEMPLATE.querySelector('.map__card');
+var TEMPLATE_MAP_PIN = TEMPLATE.querySelector('.map__pin');
+
+var FORM = document.forms[1];
+var FIELDSETS = FORM.querySelectorAll('fieldset');
+var MAP_PIN_MAIN = MAP.querySelector('.map__pin--main');
+var addressInput = FORM.querySelector('#address');
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
+var SPACE_KEYCODE = 32;
+var STYLE_MAP_PIN_MAIN = getComputedStyle(MAP_PIN_MAIN);
 
 /*
 * Генерация случайного числа
@@ -98,6 +116,12 @@ var shuffleArray = function (arr) {
   return elements;
 };
 
+// Массив случайных элементов с картинками маркера
+var RANDOM_LIST_URLS = shuffleArray(picturesCopies);
+
+// Массив случайных элементов с заголовками карточек-объявлений
+var RANDOM_LIST_TITLES = shuffleArray(ADVERTISEMENT_TITLES_COPIES);
+
 /*
 * Используется с методом массива sort для сортировки элементов массива случайным образом
 * */
@@ -115,12 +139,6 @@ var getRandomArrayLength = function (arr) {
   var randomLength = getRandomNumber(0, arr.length);
   return arr.slice(0, randomLength);
 };
-
-// Массив случайных элементов с картинками маркера
-var RANDOM_LIST_URLS = shuffleArray(picturesCopies);
-
-// Массив случайных элементов с заголовками карточек-объявлений
-var RANDOM_LIST_TITLES = shuffleArray(ADVERTISEMENT_TITLES_COPIES);
 
 // Функция создания описания удобств жилья
 var createFeaturesElem = function (feature) {
@@ -202,13 +220,11 @@ var generateAdvertisement = function (n) {
 // Массив объектов с объявлениями
 var ADVERTISEMENTS = generateAdvertisement(ADVERTISEMENT_COUNT).slice(0);
 
-var MAP = document.querySelector('.map');
-var MAP_PIN_LIST = MAP.querySelector('.map__pins');
-var PLACE_BEFORE_CARD_LIST = MAP.querySelector('.map__filters-container');
-
-var TEMPLATE = document.querySelector('template').content;
-var TEMPLATE_MAP_CARD = TEMPLATE.querySelector('.map__card');
-var TEMPLATE_MAP_PIN = TEMPLATE.querySelector('.map__pin');
+var onMapPinClick = function (evt) {
+  renderMapCard(TEMPLATE_MAP_CARD, getClickedMapPinId(evt.currentTarget));
+  onPopupCloseClick();
+  openPopup();
+};
 
 // Функция создания маркера-пина
 var renderMapPins = function (el, template, index) {
@@ -220,6 +236,7 @@ var renderMapPins = function (el, template, index) {
   mapPin.querySelector('img').src = el.author.avatar;
   mapPin.querySelector('img').alt = el.offer.title[i];
   mapPin.id = index;
+  mapPin.addEventListener('click', onMapPinClick);
 
   return mapPin;
 };
@@ -248,20 +265,13 @@ var createMapCard = function (template, advertment) {
 
 // ВЕТКА MODULE-4 ОБРАБОТКА СОБЫТИЙ
 
-var FORM = document.forms[1];
-var FIELDSETS = FORM.querySelectorAll('fieldset');
-var MAP_PIN_MAIN = MAP.querySelector('.map__pin--main');
-var addressInput = FORM.querySelector('#address');
-var ESC_KEYCODE = 27;
-var ENTER_KEYCODE = 13;
-var SPACE_KEYCODE = 32;
-var STYLE_MAP_PIN_MAIN = getComputedStyle(MAP_PIN_MAIN);
-
-var COORDINATES_MAP_PIN_MAIN = {
-  'top': parseInt(STYLE_MAP_PIN_MAIN.top, 10),
-  'left': parseInt(STYLE_MAP_PIN_MAIN.left, 10),
-  'width': parseInt(STYLE_MAP_PIN_MAIN.width, 10),
-  'height': parseInt(STYLE_MAP_PIN_MAIN.height, 10)
+var getCoordinatesMapPinMain = function () {
+  return {
+    'top': parseInt(STYLE_MAP_PIN_MAIN.top, 10),
+    'left': parseInt(STYLE_MAP_PIN_MAIN.left, 10),
+    'width': parseInt(STYLE_MAP_PIN_MAIN.width, 10),
+    'height': parseInt(STYLE_MAP_PIN_MAIN.height, 10)
+  };
 };
 
 // Получение стартовых коордитнат поля с адресом (центр стартовой конпки)
@@ -270,39 +280,17 @@ var getInputAddressCoordinates = function (coordinates) {
   return string;
 };
 
-addressInput.value = getInputAddressCoordinates(COORDINATES_MAP_PIN_MAIN);
-
 // Функция добавление элементам массива атрибутов disabled
 var toogleDisabledOnArrayElements = function (arr, isDisabled) {
   for (i = 0; i < arr.length; i++) {
     arr[i].setAttribute('disabled', isDisabled);
   }
 };
-toogleDisabledOnArrayElements(FIELDSETS, true);
 
 var removeDisabledOnArrayElements = function (arr) {
   for (i = 0; i < arr.length; i++) {
     arr[i].removeAttribute('disabled');
   }
-};
-
-var onPopupEscPress = function (evt) {
-  if (evt.keyCode === ESC_KEYCODE) {
-    closePopup();
-  }
-};
-
-var closePopup = function () {
-  var mapCard = document.querySelector('.map__card');
-  mapCard.classList.add('hidden');
-};
-
-var onPopupCloseClick = function () {
-  var popupClose = document.querySelector('.popup__close');
-  popupClose.addEventListener('click', function () {
-    closePopup();
-  });
-  document.addEventListener('keydown', onPopupEscPress);
 };
 
 var showActiveMap = function () {
@@ -314,6 +302,7 @@ var showActiveMap = function () {
 
 var onMapPinMainMouseUp = function () {
   showActiveMap();
+  addressInput.value = getInputAddressCoordinates(getCoordinatesMapPinMain());
   MAP_PIN_MAIN.removeEventListener('mouseup', onMapPinMainMouseUp);
   MAP_PIN_MAIN.removeEventListener('keydown', onMapPinMainPressEnter);
 };
@@ -329,9 +318,28 @@ var onMapPinMainPressEnter = function (evt) {
 MAP_PIN_MAIN.addEventListener('mouseup', onMapPinMainMouseUp);
 MAP_PIN_MAIN.addEventListener('keydown', onMapPinMainPressEnter);
 
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closePopup();
+  }
+};
+
 var openPopup = function () {
   var mapCard = document.querySelector('.map__card');
   mapCard.classList.remove('hidden');
+};
+
+var closePopup = function () {
+  var mapCard = document.querySelector('.map__card');
+  mapCard.classList.add('hidden');
+};
+
+var onPopupCloseClick = function () {
+  var popupClose = document.querySelector('.popup__close');
+  popupClose.addEventListener('click', function () {
+    closePopup();
+  });
+  document.addEventListener('keydown', onPopupEscPress);
 };
 
 var getClickedMapPinId = function (elem) {
@@ -349,10 +357,5 @@ var renderMapCard = function (template, advertment) {
   }
 };
 
-var onMapPinClick = function (evt) {
-  renderMapCard(TEMPLATE_MAP_CARD, getClickedMapPinId(evt.target.parentNode));
-  onPopupCloseClick();
-  openPopup();
-};
-
-MAP_PIN_LIST.addEventListener('click', onMapPinClick);
+addressInput.value = getInputAddressCoordinates(getCoordinatesMapPinMain());
+toogleDisabledOnArrayElements(FIELDSETS, true);
