@@ -359,3 +359,130 @@ var renderMapCard = function (template, advertment) {
 
 addressInput.value = getInputAddressCoordinates(getCoordinatesMapPinMain());
 toogleDisabledOnArrayElements(FIELDSETS, true);
+
+
+// Константы
+
+var MIN_PRICES = {
+  bungalo: '0',
+  flat: '1000',
+  house: '5000',
+  palace: '10000'
+};
+
+var userFormElem = document.querySelector('.ad-form');
+
+var checkinSelectElem = userFormElem.querySelector("select[name='timein']");
+
+var checkoutSelectElem = userFormElem.querySelector("select[name='timeout']");
+
+var typeSelectElem = userFormElem.querySelector('#type');
+
+var priceInputElem = userFormElem.querySelector('#price');
+
+var numRoomSelectElem = userFormElem.querySelector("select[name='rooms']");
+
+var capacitySelectElem = userFormElem.querySelector("select[name='capacity']");
+
+var addressInputElem = userFormElem.querySelector('#address');
+
+var titleInputElem = userFormElem.querySelector('#title');
+
+var NOT_FOR_GUESTS_VALUE = '100';
+
+var syncCheckinSelect = function (evt) {
+  var selectOne = evt.currentTarget;
+  var selectedOption = selectOne.options[selectOne.selectedIndex];
+  var form = selectOne.parentElement;
+
+  while(form.tagName !== 'FORM'){
+    form = form.parentElement;
+  }
+
+  var selectTwo = form.querySelector("select[name='timeout']");
+
+  for (var i = 0; i < selectTwo.options.length; i++) {
+    if (selectTwo.options[i].value === selectedOption.value) {
+      selectTwo.options[i].selected = 'true';
+      break;
+    }
+  }
+};
+
+var syncCheckoutSelect = function (evt) {
+  var selectOne = evt.currentTarget;
+  var selectedOption = selectOne.options[selectOne.selectedIndex];
+  var form = selectOne.parentElement;
+
+  while(form.tagName !== 'FORM'){
+    form = form.parentElement;
+  }
+
+  var selectTwo = form.querySelector("select[name='timein']");
+
+  for (var i = 0; i < selectTwo.options.length; i++) {
+    if (selectTwo.options[i].value === selectedOption.value) {
+      selectTwo.options[i].selected = 'true';
+      break;
+    }
+  }
+};
+
+var syncSelectElemValue = function (select1, select2) {
+  var selectOne = evt.currentTarget;
+  var selectedOption = select1.options[select1.selectedIndex];
+
+  for (var i = 0; i < select2.options.length; i++) {
+    if (select2.options[i].value === selectedOption.value) {
+      select2.options[i].selected = 'true';
+      break;
+    }
+  }
+};
+
+var syncTypeWithMinPrice = function () {
+  var selectedType = typeSelectElem.options[typeSelectElem.selectedIndex].value;
+  priceInputElem.min = MIN_PRICES[selectedType];
+  priceInputElem.placeholder = priceInputElem.min;
+};
+
+// var onUserFormElemChange = function (evt) {
+//   var target = evt.target;
+//
+//   switch (target) {
+//     case checkinSelectElem:
+//       syncSelectElemValue(checkinSelectElem, checkoutSelectElem);
+//       break;
+//     case checkoutSelectElem:
+//       syncSelectElemValue(checkoutSelectElem, checkinSelectElem);
+//       break;
+//     case typeSelectElem:
+//       syncTypeWithMinPrice();
+//       break;
+//   }
+// };
+//
+// userFormElem.addEventListener('change', onUserFormElemChange);
+
+// var changeHandler = function(evt){
+//   var selectOne = evt.currentTarget;
+//   var form = selectOne.parentElement;
+//   while(form.tagName !== 'FORM'){
+//     form = form.parentElement;
+//   }
+//
+//   var selectTwo = form.querySelector("select[name='capacity']");
+//
+//   for (var i = 0; i < selectTwo.options.length; i++) {
+//     var selectedOption = selectOne.options[selectOne.selectedIndex];
+//     if (selectedOption.value < selectTwo.options[i].value) {
+//       selectTwo.options[i].disabled = 'true';
+//       break;
+//     }
+//   }
+// };
+//
+// numRoomSelectElem.addEventListener('change', changeHandler);
+
+checkinSelectElem.addEventListener('change', syncCheckinSelect);
+checkoutSelectElem.addEventListener('change', syncCheckoutSelect);
