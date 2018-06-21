@@ -361,7 +361,7 @@ addressInput.value = getInputAddressCoordinates(getCoordinatesMapPinMain());
 toogleDisabledOnArrayElements(FIELDSETS, true);
 
 
-// Константы
+// Валидация форм
 
 var MIN_PRICES = {
   bungalo: '0',
@@ -376,9 +376,9 @@ var checkinSelectElem = userFormElem.querySelector("select[name='timein']");
 
 var checkoutSelectElem = userFormElem.querySelector("select[name='timeout']");
 
-var typeSelectElem = userFormElem.querySelector('#type');
+var typeSelectElem = userFormElem.querySelector("select[name='type']");
 
-var priceInputElem = userFormElem.querySelector('#price');
+var priceInputElem = userFormElem.querySelector("select[name='price']");
 
 var numRoomSelectElem = userFormElem.querySelector("select[name='rooms']");
 
@@ -428,22 +428,19 @@ var syncCheckoutSelect = function (evt) {
   }
 };
 
-var syncSelectElemValue = function (select1, select2) {
+var syncTypeWithMinPrice = function (evt) {
   var selectOne = evt.currentTarget;
-  var selectedOption = select1.options[select1.selectedIndex];
+  var selectedValue = selectOne.options[selectOne.selectedIndex].value;
+  var form = selectOne.parentElement;
 
-  for (var i = 0; i < select2.options.length; i++) {
-    if (select2.options[i].value === selectedOption.value) {
-      select2.options[i].selected = 'true';
-      break;
-    }
+  while(form.tagName !== 'FORM'){
+    form = form.parentElement;
   }
-};
 
-var syncTypeWithMinPrice = function () {
-  var selectedType = typeSelectElem.options[typeSelectElem.selectedIndex].value;
-  priceInputElem.min = MIN_PRICES[selectedType];
-  priceInputElem.placeholder = priceInputElem.min;
+  var selectTwo = userFormElem.querySelector("input[name='price']");
+
+  selectTwo.min = MIN_PRICES[selectedValue];
+  selectTwo.placeholder = selectTwo.min;
 };
 
 // var onUserFormElemChange = function (evt) {
@@ -464,25 +461,6 @@ var syncTypeWithMinPrice = function () {
 //
 // userFormElem.addEventListener('change', onUserFormElemChange);
 
-// var changeHandler = function(evt){
-//   var selectOne = evt.currentTarget;
-//   var form = selectOne.parentElement;
-//   while(form.tagName !== 'FORM'){
-//     form = form.parentElement;
-//   }
-//
-//   var selectTwo = form.querySelector("select[name='capacity']");
-//
-//   for (var i = 0; i < selectTwo.options.length; i++) {
-//     var selectedOption = selectOne.options[selectOne.selectedIndex];
-//     if (selectedOption.value < selectTwo.options[i].value) {
-//       selectTwo.options[i].disabled = 'true';
-//       break;
-//     }
-//   }
-// };
-//
-// numRoomSelectElem.addEventListener('change', changeHandler);
-
 checkinSelectElem.addEventListener('change', syncCheckinSelect);
 checkoutSelectElem.addEventListener('change', syncCheckoutSelect);
+typeSelectElem.addEventListener('change', syncTypeWithMinPrice);
