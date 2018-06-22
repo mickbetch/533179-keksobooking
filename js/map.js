@@ -390,6 +390,13 @@ var titleInputElem = userFormElem.querySelector('#title');
 
 var NOT_FOR_GUESTS_VALUE = '100';
 
+var CAPACITY_NUMBER = {
+  '1': ['1'],
+  '2': ['1', '2'],
+  '3': ['1', '2', '3'],
+  '100': ['0']
+};
+
 var syncCheckinSelect = function (evt) {
   var selectOne = evt.currentTarget;
   var selectedOption = selectOne.options[selectOne.selectedIndex];
@@ -429,7 +436,7 @@ var syncCheckoutSelect = function (evt) {
 };
 
 var syncTypeWithMinPrice = function (evt) {
-  var selectOne = evt.currentTarget;
+  var selectOne = typeSelectElem;
   var selectedValue = selectOne.options[selectOne.selectedIndex].value;
   var form = selectOne.parentElement;
 
@@ -443,24 +450,42 @@ var syncTypeWithMinPrice = function (evt) {
   selectTwo.placeholder = selectTwo.min;
 };
 
-// var onUserFormElemChange = function (evt) {
-//   var target = evt.target;
-//
-//   switch (target) {
-//     case checkinSelectElem:
-//       syncSelectElemValue(checkinSelectElem, checkoutSelectElem);
-//       break;
-//     case checkoutSelectElem:
-//       syncSelectElemValue(checkoutSelectElem, checkinSelectElem);
-//       break;
-//     case typeSelectElem:
-//       syncTypeWithMinPrice();
-//       break;
-//   }
-// };
-//
-// userFormElem.addEventListener('change', onUserFormElemChange);
+var syncRoomsWithGuests = function (evt) {
+  var selectOne = evt.currentTarget;
+  var selectTwo = userFormElem.querySelector("select[name='capacity']");
+  var options = selectTwo.querySelectorAll('option');
+
+  for (var i = 0; i <options.length; i++) {
+    options[i].disabled = !CAPACITY_NUMBER[selectOne.value].includes(options[i].value);
+    if (!options[i].disabled) {
+      selectTwo.value = options[i].value;
+    }
+  }
+};
+
+var closeForm = function () {
+  var success = document.querySelector('.success');
+  success.classList.add('hidden');
+};
+
+var onFormEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closeForm();
+  }
+};
+
+var onUserFormElemSubmit = function (evt) {
+  var formValid = true;
+  if (formValid === true) {
+    var success = document.querySelector('.success');
+    success.classList.remove('hidden');
+    onFormEscPress();
+    evt.preventDefault();
+  }
+};
 
 checkinSelectElem.addEventListener('change', syncCheckinSelect);
 checkoutSelectElem.addEventListener('change', syncCheckoutSelect);
 typeSelectElem.addEventListener('change', syncTypeWithMinPrice);
+numRoomSelectElem.addEventListener('change', syncRoomsWithGuests);
+userFormElem.addEventListener('submit', onUserFormElemSubmit);
