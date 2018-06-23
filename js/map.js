@@ -441,16 +441,14 @@ var syncTypeWithMinPrice = function (evt) {
   selectTwo.placeholder = selectTwo.min;
 };
 
-var syncRoomsWithGuests = function (evt) {
-  var selectOne = evt.currentTarget;
+var syncRoomsWithGuests = function () {
+  var selectOne = userFormElem.querySelector("select[name='rooms']");
   var selectTwo = userFormElem.querySelector("select[name='capacity']");
   var options = selectTwo.querySelectorAll('option');
+  console.log(selectOne);
 
   for (var i = 0; i < options.length; i++) {
     options[i].disabled = !CAPACITY_NUMBER[selectOne.value].includes(options[i].value);
-    if (!options[i].disabled) {
-      selectTwo.value = options[i].value;
-    }
   }
 };
 
@@ -545,19 +543,18 @@ var onFormEscPress = function (evt) {
   }
 };
 
-
+syncRoomsWithGuests();
 titleInputElem.addEventListener('invalid', onTitleInputElemInvalid);
 titleInputElem.addEventListener('input', function (evt) {
   evt.target.style.border = VALID_FIELD_BORDER;
 });
 
 priceInputElem.addEventListener('invalid', onpriceInputElemInvalid);
-capacitySelectElem.addEventListener('change', syncRoomsWithGuests);
+numRoomSelectElem.addEventListener('change', syncRoomsWithGuests);
 
 checkinSelectElem.addEventListener('change', syncCheckinSelect);
 checkoutSelectElem.addEventListener('change', syncCheckoutSelect);
 typeSelectElem.addEventListener('change', syncTypeWithMinPrice);
-numRoomSelectElem.addEventListener('change', syncRoomsWithGuests);
 
 // userFormElem.addEventListener('submit', onUserFormElemSubmit);
 // FORM_RESET.addEventListener('click', onFormResetClick);
