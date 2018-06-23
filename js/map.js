@@ -331,7 +331,9 @@ var openPopup = function () {
 
 var closePopup = function () {
   var mapCard = document.querySelector('.map__card');
-  mapCard.classList.add('hidden');
+  if (mapCard) {
+    mapCard.classList.add('hidden');
+  }
 };
 
 var onPopupCloseClick = function () {
@@ -397,6 +399,8 @@ var INVALID_FIELD_BORDER = '2px solid red';
 
 var VALID_FIELD_BORDER = '';
 
+var FORM_RESET = userFormElem.querySelector('.ad-form__reset');
+
 var syncTwoSelect = function (evt, selectTwo) {
   var selectOne = evt.currentTarget;
   var selectedOption = selectOne.options[selectOne.selectedIndex];
@@ -450,37 +454,10 @@ var syncRoomsWithGuests = function (evt) {
   }
 };
 
-var showSuccesBlock = function () {
-  var success = document.querySelector('.success');
-  success.classList.remove('hidden');
-};
-
-var deleteFieldValue = function () {
-  var form = document.forms[1];
-  var elements = form.elements;
-
-  for (var i = 0; i < elements.length; i++) {
-    elements[i].value = '';
-  }
-};
-
-var deleteMapPins = function () {
-  var mapPinBlock = document.querySelector('.map__pins');
-  for (var i = 0; i < mapPinBlock.children.length; i++) {
-    if (mapPinBlock.children[i].id == true) {
-      mapPinBlock.children[i].remove();
-    }
-  }
-};
-
-var hideActiveMap = function () {
-  MAP.classList.add('map--faded');
-  FORM.classList.add('ad-form--disabled');
-  toogleDisabledOnArrayElements(FIELDSETS, true);
-  // MAP_PIN_LIST.appendChild(mapPinFragment);
-};
-
 var onTitleInputElemInvalid = function (evt) {
+  console.log(evt);
+  // evt.preventDefault();
+  console.log(evt.target.validity);
   if (evt.target.validity.tooShort) {
     evt.target.setCustomValidity('Заголовок объявления должен состоять минимум из 30 символов');
   } else if (evt.target.validity.tooLong) {
@@ -510,20 +487,68 @@ var onpriceInputElemInvalid = function (evt) {
   evt.target.style.border = INVALID_FIELD_BORDER;
 };
 
+var onFormResetClick = function () {
+  deleteFieldValue();
+  closePopup();
+  hideActiveMap();
+  MAP_PIN_MAIN.addEventListener('mouseup', onMapPinMainMouseUp);
+  MAP_PIN_MAIN.addEventListener('keydown', onMapPinMainPressEnter);
+};
 
 var onUserFormElemSubmit = function (evt) {
   showSuccesBlock();
   deleteFieldValue();
   closePopup();
   hideActiveMap();
+  onFormEscPress();
   evt.preventDefault();
 };
 
+var hideActiveMap = function () {
+  MAP.classList.add('map--faded');
+  FORM.classList.add('ad-form--disabled');
+  toogleDisabledOnArrayElements(FIELDSETS, true);
+  addressInput.value = getInputAddressCoordinates(getCoordinatesMapPinMain());
+};
+
+var deleteMapPins = function () {
+  var mapPinBlock = document.querySelector('.map__pins');
+  for (var i = 0; i < mapPinBlock.children.length; i++) {
+    if (mapPinBlock.children[i].id === true) {
+      mapPinBlock.children[i].remove();
+    }
+  }
+};
+
+var deleteFieldValue = function () {
+  var form = document.forms[1];
+  var elements = form.elements;
+
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].value = '';
+  }
+};
+
+var showSuccesBlock = function () {
+  var success = document.querySelector('.success');
+  success.classList.remove('hidden');
+};
+
+var hideSuccessBlock = function () {
+  var success = document.querySelector('.success');
+  success.classList.add('hidden');
+};
+
+var onFormEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    hideSuccessBlock();
+  }
+};
+
+
 titleInputElem.addEventListener('invalid', onTitleInputElemInvalid);
 titleInputElem.addEventListener('input', function (evt) {
-  if (!evt.target.validity.valid) {
-    evt.target.style.border = VALID_FIELD_BORDER;
-  }
+  evt.target.style.border = VALID_FIELD_BORDER;
 });
 
 priceInputElem.addEventListener('invalid', onpriceInputElemInvalid);
@@ -534,4 +559,5 @@ checkoutSelectElem.addEventListener('change', syncCheckoutSelect);
 typeSelectElem.addEventListener('change', syncTypeWithMinPrice);
 numRoomSelectElem.addEventListener('change', syncRoomsWithGuests);
 
-userFormElem.addEventListener('submit', onUserFormElemSubmit);
+// userFormElem.addEventListener('submit', onUserFormElemSubmit);
+// FORM_RESET.addEventListener('click', onFormResetClick);
