@@ -382,11 +382,9 @@ var priceInputElem = userFormElem.querySelector("input[name='price']");
 
 var numRoomSelectElem = userFormElem.querySelector("select[name='rooms']");
 
-var capacitySelectElem = userFormElem.querySelector("select[name='capacity']");
-
-var addressInputElem = userFormElem.querySelector("input[name='address']");
-
 var titleInputElem = userFormElem.querySelector("input[name='title']");
+
+var capacitySelectElem = userFormElem.querySelector("select[name='capacity']");
 
 var CAPACITY_NUMBER = {
   '1': ['1'],
@@ -397,7 +395,9 @@ var CAPACITY_NUMBER = {
 
 var INVALID_FIELD_BORDER = '2px solid red';
 
-var syncCheckinSelect = function (evt) {
+var VALID_FIELD_BORDER = '';
+
+var syncTwoSelect = function (evt, selectTwo) {
   var selectOne = evt.currentTarget;
   var selectedOption = selectOne.options[selectOne.selectedIndex];
   var form = selectOne.parentElement;
@@ -405,8 +405,6 @@ var syncCheckinSelect = function (evt) {
   while(form.tagName !== 'FORM'){
     form = form.parentElement;
   }
-
-  var selectTwo = form.querySelector("select[name='timeout']");
 
   for (var i = 0; i < selectTwo.options.length; i++) {
     if (selectTwo.options[i].value === selectedOption.value) {
@@ -416,23 +414,12 @@ var syncCheckinSelect = function (evt) {
   }
 };
 
+var syncCheckinSelect = function (evt) {
+  syncTwoSelect(evt, checkoutSelectElem);
+};
+
 var syncCheckoutSelect = function (evt) {
-  var selectOne = evt.currentTarget;
-  var selectedOption = selectOne.options[selectOne.selectedIndex];
-  var form = selectOne.parentElement;
-
-  while(form.tagName !== 'FORM'){
-    form = form.parentElement;
-  }
-
-  var selectTwo = form.querySelector("select[name='timein']");
-
-  for (var i = 0; i < selectTwo.options.length; i++) {
-    if (selectTwo.options[i].value === selectedOption.value) {
-      selectTwo.options[i].selected = 'true';
-      break;
-    }
-  }
+  syncTwoSelect(evt, checkinSelectElem);
 };
 
 var syncTypeWithMinPrice = function (evt) {
@@ -455,7 +442,7 @@ var syncRoomsWithGuests = function (evt) {
   var selectTwo = userFormElem.querySelector("select[name='capacity']");
   var options = selectTwo.querySelectorAll('option');
 
-  for (var i = 0; i <options.length; i++) {
+  for (var i = 0; i < options.length; i++) {
     options[i].disabled = !CAPACITY_NUMBER[selectOne.value].includes(options[i].value);
     if (!options[i].disabled) {
       selectTwo.value = options[i].value;
@@ -466,7 +453,6 @@ var syncRoomsWithGuests = function (evt) {
 var showSuccesBlock = function () {
   var success = document.querySelector('.success');
   success.classList.remove('hidden');
-
 };
 
 var deleteFieldValue = function () {
@@ -479,14 +465,19 @@ var deleteFieldValue = function () {
 };
 
 var deleteMapPins = function () {
-
+  var mapPinBlock = document.querySelector('.map__pins');
+  for (var i = 0; i < mapPinBlock.children.length; i++) {
+    if (mapPinBlock.children[i].id == true) {
+      mapPinBlock.children[i].remove();
+    }
+  }
 };
 
 var hideActiveMap = function () {
   MAP.classList.add('map--faded');
   FORM.classList.add('ad-form--disabled');
-  removeDisabledOnArrayElements(FIELDSETS);
-  MAP_PIN_LIST.appendChild(mapPinFragment);
+  toogleDisabledOnArrayElements(FIELDSETS, true);
+  // MAP_PIN_LIST.appendChild(mapPinFragment);
 };
 
 var onTitleInputElemInvalid = function (evt) {
@@ -512,22 +503,31 @@ var onpriceInputElemInvalid = function (evt) {
     evt.target.setCustomValidity('Обязательное для заполнения поле')
   } else if (evt.target.validity.rangeUnderflow) {
     evt.target.setCustomValidity('Минимальная цена составляет не менее ' +
-      priceInputElem.min);
+      evt.target.min);
   } else {
     evt.target.setCustomValidity('');
   }
   evt.target.style.border = INVALID_FIELD_BORDER;
 };
 
+
 var onUserFormElemSubmit = function (evt) {
   showSuccesBlock();
   deleteFieldValue();
   closePopup();
+  hideActiveMap();
   evt.preventDefault();
 };
 
 titleInputElem.addEventListener('invalid', onTitleInputElemInvalid);
+titleInputElem.addEventListener('input', function (evt) {
+  if (!evt.target.validity.valid) {
+    evt.target.style.border = VALID_FIELD_BORDER;
+  }
+});
+
 priceInputElem.addEventListener('invalid', onpriceInputElemInvalid);
+capacitySelectElem.addEventListener('change', syncRoomsWithGuests);
 
 checkinSelectElem.addEventListener('change', syncCheckinSelect);
 checkoutSelectElem.addEventListener('change', syncCheckoutSelect);
