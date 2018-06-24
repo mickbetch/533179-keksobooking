@@ -453,9 +453,6 @@ var syncRoomsWithGuests = function () {
 };
 
 var onTitleInputElemInvalid = function (evt) {
-  console.log(evt);
-  // evt.preventDefault();
-  console.log(evt.target.validity);
   if (evt.target.validity.tooShort) {
     evt.target.setCustomValidity('Заголовок объявления должен состоять минимум из 30 символов');
   } else if (evt.target.validity.tooLong) {
