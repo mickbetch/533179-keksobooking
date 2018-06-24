@@ -466,6 +466,14 @@ var onTitleInputElemInvalid = function (evt) {
   evt.target.style.border = INVALID_FIELD_BORDER;
 };
 
+var onTitleInputElemInput = function (evt) {
+  if (evt.target.value.length < 30) {
+    evt.target.setCustomValidity('Заголовок объявления должен состоять минимум из 30 символов');
+  } else {
+    evt.target.setCustomValidity('');
+  }
+};
+
 var onpriceInputElemInvalid = function (evt) {
   if (evt.target.validity.typeMismatch) {
     evt.target.setCustomValidity('Используйте числовые значения');
@@ -542,6 +550,7 @@ var onFormEscPress = function (evt) {
 
 syncRoomsWithGuests();
 titleInputElem.addEventListener('invalid', onTitleInputElemInvalid);
+titleInputElem.addEventListener('input', onTitleInputElemInput);
 titleInputElem.addEventListener('input', function (evt) {
   evt.target.style.border = VALID_FIELD_BORDER;
 });
