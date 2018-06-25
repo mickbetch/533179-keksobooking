@@ -504,14 +504,6 @@ var onPriceInputElemInvalid = function (evt) {
 //   MAP_PIN_MAIN.addEventListener('keydown', onMapPinMainPressEnter);
 // };
 //
-// var onFORMSubmit = function (evt) {
-//   showSuccesBlock();
-//   deleteFieldValue();
-//   closePopup();
-//   hideActiveMap();
-//   onFormEscPress();
-//   evt.preventDefault();
-// };
 //
 // var hideActiveMap = function () {
 //   MAP.classList.add('map--faded');
@@ -529,30 +521,39 @@ var onPriceInputElemInvalid = function (evt) {
 //   }
 // };
 //
-// var deleteFieldValue = function () {
-//   var form = document.forms[1];
-//   var elements = form.elements;
-//
-//   for (var i = 0; i < elements.length; i++) {
-//     elements[i].value = '';
-//   }
-// };
-//
-// var showSuccesBlock = function () {
-//   var success = document.querySelector('.success');
-//   success.classList.remove('hidden');
-// };
-//
-// var hideSuccessBlock = function () {
-//   var success = document.querySelector('.success');
-//   success.classList.add('hidden');
-// };
-//
-// var onFormEscPress = function (evt) {
-//   if (evt.keyCode === ESC_KEYCODE) {
-//     hideSuccessBlock();
-//   }
-// };
+
+var onFormEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    hideSuccessBlock();
+  }
+};
+
+var showSuccesBlock = function () {
+  var success = document.querySelector('.success');
+  success.classList.remove('hidden');
+
+  document.addEventListener('keydown', onFormEscPress);
+};
+
+var hideSuccessBlock = function () {
+  var success = document.querySelector('.success');
+  success.classList.add('hidden');
+};
+
+var deleteFieldValue = function () {
+  var form = document.forms[1];
+  var elements = form.elements;
+
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].value = '';
+  }
+};
+
+var onFormSubmit = function (evt) {
+  showSuccesBlock();
+  deleteFieldValue();
+  evt.preventDefault();
+};
 
 syncTypeWithMinPrice();
 syncRoomsWithGuests();
@@ -570,5 +571,5 @@ CHECKIN_SELECT_ELEM.addEventListener('change', onCheckinChange);
 CHECKOUT_SELECT_ELEM.addEventListener('change', onCheckoutChange);
 TYPE_SELECT_ELEM.addEventListener('change', onTypeSelectElemChange);
 
-// FORM.addEventListener('submit', onFORMSubmit);
+FORM.addEventListener('submit', onFormSubmit);
 // FORM_RESET.addEventListener('click', onFormResetClick);
