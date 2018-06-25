@@ -86,6 +86,8 @@ var NUM_ROOM_SELECT_ELEM = FORM.querySelector("select[name='rooms']");
 
 var TITLE_INPUT_ELEM = FORM.querySelector("input[name='title']");
 
+var CAPACITY_SELECT_ELEM = FORM.querySelector("select[name='capacity']");
+
 var CAPACITY_NUMBER = {
   '1': ['1'],
   '2': ['1', '2'],
@@ -434,11 +436,18 @@ var syncTypeWithMinPrice = function (evt) {
 var syncRoomsWithGuests = function () {
   var selectOne = FORM.querySelector("select[name='rooms']");
   var selectTwo = FORM.querySelector("select[name='capacity']");
+  var allowedCapacity = CAPACITY_NUMBER[selectOne.value];
   var options = selectTwo.querySelectorAll('option');
   console.log(selectOne);
 
   for (var i = 0; i < options.length; i++) {
-    options[i].disabled = !CAPACITY_NUMBER[selectOne.value].includes(options[i].value);
+        // options[i].disabled = !CAPACITY_NUMBER[selectOne.value].includes(options[i].value);
+    options[i].disabled = allowedCapacity.indexOf(options[i].value) === -1;
+  }
+  if (allowedCapacity.indexOf(selectTwo.value) === -1) {
+    selectTwo.setCustomValidity('Введено неправильное значение');
+  } else {
+    selectTwo.setCustomValidity('');
   }
 };
 
@@ -459,6 +468,7 @@ var onNumRoomSelectElemChange = function () {
 };
 
 var onTitleInputElemInvalid = function (evt) {
+  evt.target.style.border = INVALID_FIELD_BORDER;
   if (evt.target.validity.tooShort) {
     evt.target.setCustomValidity('Заголовок объявления должен состоять минимум из 30 символов');
   } else if (evt.target.validity.tooLong) {
@@ -468,8 +478,8 @@ var onTitleInputElemInvalid = function (evt) {
     evt.target.setCustomValidity('Обязательное для заполнения поле');
   } else {
     evt.target.setCustomValidity('');
+    evt.target.style.border = VALID_FIELD_BORDER;
   }
-  evt.target.style.border = INVALID_FIELD_BORDER;
 };
 
 var onTitleInputElemInput = function (evt) {
@@ -481,46 +491,37 @@ var onTitleInputElemInput = function (evt) {
 };
 
 var onPriceInputElemInvalid = function (evt) {
+  evt.target.style.border = INVALID_FIELD_BORDER;
   if (evt.target.validity.typeMismatch) {
     evt.target.setCustomValidity('Используйте числовые значения');
   } else if (evt.target.validity.rangeOverflow) {
-    evt.target.setCustomValidity('Цена не должна превышать 1 000 000')
+    evt.target.setCustomValidity('Цена не должна превышать 1 000 000');
   } else if (evt.target.validity.valueMissing) {
-    evt.target.setCustomValidity('Обязательное для заполнения поле')
+    evt.target.setCustomValidity('Обязательное для заполнения поле');
   } else if (evt.target.validity.rangeUnderflow) {
     evt.target.setCustomValidity('Минимальная цена составляет не менее ' +
       evt.target.min);
   } else {
     evt.target.setCustomValidity('');
+    evt.target.style.border = VALID_FIELD_BORDER;
   }
-  evt.target.style.border = INVALID_FIELD_BORDER;
 };
 
-// var onFormResetClick = function () {
-//   deleteFieldValue();
-//   closePopup();
-//   hideActiveMap();
-//   MAP_PIN_MAIN.addEventListener('mouseup', onMapPinMainMouseUp);
-//   MAP_PIN_MAIN.addEventListener('keydown', onMapPinMainPressEnter);
-// };
-//
-//
-// var hideActiveMap = function () {
-//   MAP.classList.add('map--faded');
-//   FORM.classList.add('ad-form--disabled');
-//   toogleDisabledOnArrayElements(FIELDSETS, true);
-//   addressInput.value = getInputAddressCoordinates(getCoordinatesMapPinMain());
-// };
-//
-// var deleteMapPins = function () {
-//   var mapPinBlock = document.querySelector('.map__pins');
-//   for (var i = 0; i < mapPinBlock.children.length; i++) {
-//     if (mapPinBlock.children[i].id === true) {
-//       mapPinBlock.children[i].remove();
-//     }
-//   }
-// };
-//
+var deleteMapPins = function () {
+  var mapPinBlock = document.querySelector('.map__pins');
+  var mapPins = mapPinBlock.querySelectorAll('.map__pin:not(.map__pin--main)');
+  for (var i = 0; i < mapPins.length; i++) {
+    mapPinBlock.removeChild(mapPins[i]);
+  }
+};
+
+var hideActiveMap = function () {
+  MAP.classList.add('map--faded');
+  FORM.classList.add('ad-form--disabled');
+  toogleDisabledOnArrayElements(FIELDSETS, true);
+  deleteMapPins();
+  addressInput.value = getInputAddressCoordinates(getCoordinatesMapPinMain());
+};
 
 var onFormEscPress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
@@ -538,20 +539,21 @@ var showSuccesBlock = function () {
 var hideSuccessBlock = function () {
   var success = document.querySelector('.success');
   success.classList.add('hidden');
-};
-
-var deleteFieldValue = function () {
-  var form = document.forms[1];
-  var elements = form.elements;
-
-  for (var i = 0; i < elements.length; i++) {
-    elements[i].value = '';
-  }
+  document.removeEventListener('keydown', onFormEscPress);
 };
 
 var onFormSubmit = function (evt) {
   showSuccesBlock();
-  deleteFieldValue();
+  FORM.reset();
+  hideActiveMap();
+  closePopup();
+  evt.preventDefault();
+};
+
+var onFormResetClick = function (evt) {
+  FORM.reset();
+  hideActiveMap();
+  closePopup();
   evt.preventDefault();
 };
 
@@ -559,17 +561,17 @@ syncTypeWithMinPrice();
 syncRoomsWithGuests();
 TITLE_INPUT_ELEM.addEventListener('invalid', onTitleInputElemInvalid);
 TITLE_INPUT_ELEM.addEventListener('input', onTitleInputElemInput);
-TITLE_INPUT_ELEM.addEventListener('input', function (evt) {
-  evt.target.style.border = VALID_FIELD_BORDER;
-  console.log(evt.target.checkValidity());
-});
+
 
 PRICE_INPUT_ELEM.addEventListener('invalid', onPriceInputElemInvalid);
+PRICE_INPUT_ELEM.addEventListener('input', onPriceInputElemInvalid);
 NUM_ROOM_SELECT_ELEM.addEventListener('change', onNumRoomSelectElemChange);
 
 CHECKIN_SELECT_ELEM.addEventListener('change', onCheckinChange);
 CHECKOUT_SELECT_ELEM.addEventListener('change', onCheckoutChange);
 TYPE_SELECT_ELEM.addEventListener('change', onTypeSelectElemChange);
 
+CAPACITY_SELECT_ELEM.addEventListener('change', syncRoomsWithGuests);
+
 FORM.addEventListener('submit', onFormSubmit);
-// FORM_RESET.addEventListener('click', onFormResetClick);
+FORM_RESET.addEventListener('click', onFormResetClick);
