@@ -84,7 +84,7 @@ var NUM_ROOM_SELECT_ELEM = FORM.querySelector('select[name="rooms"]');
 
 var TITLE_INPUT_ELEM = FORM.querySelector('input[name="title"]');
 
-var CAPACITY_SELECT_ELEM = FORM.querySelector("select[name='capacity']");
+var CAPACITY_SELECT_ELEM = FORM.querySelector('select[name="capacity"]');
 
 var CAPACITY_NUMBER = {
   '1': ['1'],
@@ -404,7 +404,7 @@ var syncTwoSelect = function (evt, selectTwo) {
   var selectedOption = selectOne.options[selectOne.selectedIndex];
   var form = selectOne.parentElement;
 
-  while (form.tagName !== 'FORM'){
+  while (form.tagName !== 'FORM') {
     form = form.parentElement;
   }
 
