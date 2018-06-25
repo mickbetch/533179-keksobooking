@@ -65,6 +65,40 @@ var ENTER_KEYCODE = 13;
 var SPACE_KEYCODE = 32;
 var STYLE_MAP_PIN_MAIN = getComputedStyle(MAP_PIN_MAIN);
 
+var MIN_PRICES = {
+  bungalo: '0',
+  flat: '1000',
+  house: '5000',
+  palace: '10000'
+};
+
+var FORM = document.querySelector('.ad-form');
+
+var CHECKIN_SELECT_ELEM = FORM.querySelector("select[name='timein']");
+
+var CHECKOUT_SELECT_ELEM = FORM.querySelector("select[name='timeout']");
+
+var TYPE_SELECT_ELEM = FORM.querySelector("select[name='type']");
+
+var PRICE_INPUT_ELEM = FORM.querySelector("input[name='price']");
+
+var NUM_ROOM_SELECT_ELEM = FORM.querySelector("select[name='rooms']");
+
+var TITLE_INPUT_ELEM = FORM.querySelector("input[name='title']");
+
+var CAPACITY_NUMBER = {
+  '1': ['1'],
+  '2': ['1', '2'],
+  '3': ['1', '2', '3'],
+  '100': ['0']
+};
+
+var INVALID_FIELD_BORDER = '2px solid red';
+
+var VALID_FIELD_BORDER = '';
+
+var FORM_RESET = FORM.querySelector('.ad-form__reset');
+
 /*
 * Генерация случайного числа
 * {min} number
@@ -365,42 +399,6 @@ toogleDisabledOnArrayElements(FIELDSETS, true);
 
 // Валидация форм
 
-var MIN_PRICES = {
-  bungalo: '0',
-  flat: '1000',
-  house: '5000',
-  palace: '10000'
-};
-
-var userFormElem = document.querySelector('.ad-form');
-
-var checkinSelectElem = userFormElem.querySelector("select[name='timein']");
-
-var checkoutSelectElem = userFormElem.querySelector("select[name='timeout']");
-
-var typeSelectElem = userFormElem.querySelector("select[name='type']");
-
-var priceInputElem = userFormElem.querySelector("input[name='price']");
-
-var numRoomSelectElem = userFormElem.querySelector("select[name='rooms']");
-
-var titleInputElem = userFormElem.querySelector("input[name='title']");
-
-var capacitySelectElem = userFormElem.querySelector("select[name='capacity']");
-
-var CAPACITY_NUMBER = {
-  '1': ['1'],
-  '2': ['1', '2'],
-  '3': ['1', '2', '3'],
-  '100': ['0']
-};
-
-var INVALID_FIELD_BORDER = '2px solid red';
-
-var VALID_FIELD_BORDER = '';
-
-var FORM_RESET = userFormElem.querySelector('.ad-form__reset');
-
 var syncTwoSelect = function (evt, selectTwo) {
   var selectOne = evt.currentTarget;
   var selectedOption = selectOne.options[selectOne.selectedIndex];
@@ -418,16 +416,8 @@ var syncTwoSelect = function (evt, selectTwo) {
   }
 };
 
-var syncCheckinSelect = function (evt) {
-  syncTwoSelect(evt, checkoutSelectElem);
-};
-
-var syncCheckoutSelect = function (evt) {
-  syncTwoSelect(evt, checkinSelectElem);
-};
-
 var syncTypeWithMinPrice = function (evt) {
-  var selectOne = typeSelectElem;
+  var selectOne = FORM.querySelector("select[name='type']");
   var selectedValue = selectOne.options[selectOne.selectedIndex].value;
   var form = selectOne.parentElement;
 
@@ -435,21 +425,37 @@ var syncTypeWithMinPrice = function (evt) {
     form = form.parentElement;
   }
 
-  var selectTwo = userFormElem.querySelector("input[name='price']");
+  var selectTwo = FORM.querySelector("input[name='price']");
 
   selectTwo.min = MIN_PRICES[selectedValue];
   selectTwo.placeholder = selectTwo.min;
 };
 
 var syncRoomsWithGuests = function () {
-  var selectOne = userFormElem.querySelector("select[name='rooms']");
-  var selectTwo = userFormElem.querySelector("select[name='capacity']");
+  var selectOne = FORM.querySelector("select[name='rooms']");
+  var selectTwo = FORM.querySelector("select[name='capacity']");
   var options = selectTwo.querySelectorAll('option');
   console.log(selectOne);
 
   for (var i = 0; i < options.length; i++) {
     options[i].disabled = !CAPACITY_NUMBER[selectOne.value].includes(options[i].value);
   }
+};
+
+var onCheckinChange = function (evt) {
+  syncTwoSelect(evt, CHECKOUT_SELECT_ELEM);
+};
+
+var onCheckoutChange = function (evt) {
+  syncTwoSelect(evt, CHECKIN_SELECT_ELEM);
+};
+
+var onTypeSelectElemChange = function () {
+  syncTypeWithMinPrice();
+};
+
+var onNumRoomSelectElemChange = function () {
+  syncRoomsWithGuests();
 };
 
 var onTitleInputElemInvalid = function (evt) {
@@ -474,7 +480,7 @@ var onTitleInputElemInput = function (evt) {
   }
 };
 
-var onpriceInputElemInvalid = function (evt) {
+var onPriceInputElemInvalid = function (evt) {
   if (evt.target.validity.typeMismatch) {
     evt.target.setCustomValidity('Используйте числовые значения');
   } else if (evt.target.validity.rangeOverflow) {
@@ -490,77 +496,79 @@ var onpriceInputElemInvalid = function (evt) {
   evt.target.style.border = INVALID_FIELD_BORDER;
 };
 
-var onFormResetClick = function () {
-  deleteFieldValue();
-  closePopup();
-  hideActiveMap();
-  MAP_PIN_MAIN.addEventListener('mouseup', onMapPinMainMouseUp);
-  MAP_PIN_MAIN.addEventListener('keydown', onMapPinMainPressEnter);
-};
+// var onFormResetClick = function () {
+//   deleteFieldValue();
+//   closePopup();
+//   hideActiveMap();
+//   MAP_PIN_MAIN.addEventListener('mouseup', onMapPinMainMouseUp);
+//   MAP_PIN_MAIN.addEventListener('keydown', onMapPinMainPressEnter);
+// };
+//
+// var onFORMSubmit = function (evt) {
+//   showSuccesBlock();
+//   deleteFieldValue();
+//   closePopup();
+//   hideActiveMap();
+//   onFormEscPress();
+//   evt.preventDefault();
+// };
+//
+// var hideActiveMap = function () {
+//   MAP.classList.add('map--faded');
+//   FORM.classList.add('ad-form--disabled');
+//   toogleDisabledOnArrayElements(FIELDSETS, true);
+//   addressInput.value = getInputAddressCoordinates(getCoordinatesMapPinMain());
+// };
+//
+// var deleteMapPins = function () {
+//   var mapPinBlock = document.querySelector('.map__pins');
+//   for (var i = 0; i < mapPinBlock.children.length; i++) {
+//     if (mapPinBlock.children[i].id === true) {
+//       mapPinBlock.children[i].remove();
+//     }
+//   }
+// };
+//
+// var deleteFieldValue = function () {
+//   var form = document.forms[1];
+//   var elements = form.elements;
+//
+//   for (var i = 0; i < elements.length; i++) {
+//     elements[i].value = '';
+//   }
+// };
+//
+// var showSuccesBlock = function () {
+//   var success = document.querySelector('.success');
+//   success.classList.remove('hidden');
+// };
+//
+// var hideSuccessBlock = function () {
+//   var success = document.querySelector('.success');
+//   success.classList.add('hidden');
+// };
+//
+// var onFormEscPress = function (evt) {
+//   if (evt.keyCode === ESC_KEYCODE) {
+//     hideSuccessBlock();
+//   }
+// };
 
-var onUserFormElemSubmit = function (evt) {
-  showSuccesBlock();
-  deleteFieldValue();
-  closePopup();
-  hideActiveMap();
-  onFormEscPress();
-  evt.preventDefault();
-};
-
-var hideActiveMap = function () {
-  MAP.classList.add('map--faded');
-  FORM.classList.add('ad-form--disabled');
-  toogleDisabledOnArrayElements(FIELDSETS, true);
-  addressInput.value = getInputAddressCoordinates(getCoordinatesMapPinMain());
-};
-
-var deleteMapPins = function () {
-  var mapPinBlock = document.querySelector('.map__pins');
-  for (var i = 0; i < mapPinBlock.children.length; i++) {
-    if (mapPinBlock.children[i].id === true) {
-      mapPinBlock.children[i].remove();
-    }
-  }
-};
-
-var deleteFieldValue = function () {
-  var form = document.forms[1];
-  var elements = form.elements;
-
-  for (var i = 0; i < elements.length; i++) {
-    elements[i].value = '';
-  }
-};
-
-var showSuccesBlock = function () {
-  var success = document.querySelector('.success');
-  success.classList.remove('hidden');
-};
-
-var hideSuccessBlock = function () {
-  var success = document.querySelector('.success');
-  success.classList.add('hidden');
-};
-
-var onFormEscPress = function (evt) {
-  if (evt.keyCode === ESC_KEYCODE) {
-    hideSuccessBlock();
-  }
-};
-
+syncTypeWithMinPrice();
 syncRoomsWithGuests();
-titleInputElem.addEventListener('invalid', onTitleInputElemInvalid);
-titleInputElem.addEventListener('input', onTitleInputElemInput);
-titleInputElem.addEventListener('input', function (evt) {
+TITLE_INPUT_ELEM.addEventListener('invalid', onTitleInputElemInvalid);
+TITLE_INPUT_ELEM.addEventListener('input', onTitleInputElemInput);
+TITLE_INPUT_ELEM.addEventListener('input', function (evt) {
   evt.target.style.border = VALID_FIELD_BORDER;
+  console.log(evt.target.checkValidity());
 });
 
-priceInputElem.addEventListener('invalid', onpriceInputElemInvalid);
-numRoomSelectElem.addEventListener('change', syncRoomsWithGuests);
+PRICE_INPUT_ELEM.addEventListener('invalid', onPriceInputElemInvalid);
+NUM_ROOM_SELECT_ELEM.addEventListener('change', onNumRoomSelectElemChange);
 
-checkinSelectElem.addEventListener('change', syncCheckinSelect);
-checkoutSelectElem.addEventListener('change', syncCheckoutSelect);
-typeSelectElem.addEventListener('change', syncTypeWithMinPrice);
+CHECKIN_SELECT_ELEM.addEventListener('change', onCheckinChange);
+CHECKOUT_SELECT_ELEM.addEventListener('change', onCheckoutChange);
+TYPE_SELECT_ELEM.addEventListener('change', onTypeSelectElemChange);
 
-// userFormElem.addEventListener('submit', onUserFormElemSubmit);
+// FORM.addEventListener('submit', onFORMSubmit);
 // FORM_RESET.addEventListener('click', onFormResetClick);
