@@ -72,17 +72,17 @@ var MIN_PRICES = {
   palace: '10000'
 };
 
-var CHECKIN_SELECT_ELEM = FORM.querySelector("select[name='timein']");
+var CHECKIN_SELECT_ELEM = FORM.querySelector('select[name="timein"]');
 
 var CHECKOUT_SELECT_ELEM = FORM.querySelector('select[name="timeout"]');
 
-var TYPE_SELECT_ELEM = FORM.querySelector("select[name='type']");
+var TYPE_SELECT_ELEM = FORM.querySelector('select[name="type"]');
 
-var PRICE_INPUT_ELEM = FORM.querySelector("input[name='price']");
+var PRICE_INPUT_ELEM = FORM.querySelector('input[name="price"]');
 
-var NUM_ROOM_SELECT_ELEM = FORM.querySelector("select[name='rooms']");
+var NUM_ROOM_SELECT_ELEM = FORM.querySelector('select[name="rooms"]');
 
-var TITLE_INPUT_ELEM = FORM.querySelector("input[name='title']");
+var TITLE_INPUT_ELEM = FORM.querySelector('input[name="title"]');
 
 var CAPACITY_SELECT_ELEM = FORM.querySelector("select[name='capacity']");
 
@@ -404,11 +404,11 @@ var syncTwoSelect = function (evt, selectTwo) {
   var selectedOption = selectOne.options[selectOne.selectedIndex];
   var form = selectOne.parentElement;
 
-  while(form.tagName !== 'FORM'){
+  while (form.tagName !== 'FORM'){
     form = form.parentElement;
   }
 
-  for (var i = 0; i < selectTwo.options.length; i++) {
+  for (i = 0; i < selectTwo.options.length; i++) {
     if (selectTwo.options[i].value === selectedOption.value) {
       selectTwo.options[i].selected = 'true';
       break;
@@ -416,30 +416,28 @@ var syncTwoSelect = function (evt, selectTwo) {
   }
 };
 
-var syncTypeWithMinPrice = function (evt) {
-  var selectOne = FORM.querySelector("select[name='type']");
+var syncTypeWithMinPrice = function () {
+  var selectOne = FORM.querySelector('select[name="type"]');
   var selectedValue = selectOne.options[selectOne.selectedIndex].value;
   var form = selectOne.parentElement;
 
-  while(form.tagName !== 'FORM'){
+  while (form.tagName !== 'FORM') {
     form = form.parentElement;
   }
 
-  var selectTwo = FORM.querySelector("input[name='price']");
+  var selectTwo = FORM.querySelector('input[name="price"]');
 
   selectTwo.min = MIN_PRICES[selectedValue];
   selectTwo.placeholder = selectTwo.min;
 };
 
 var syncRoomsWithGuests = function () {
-  var selectOne = FORM.querySelector("select[name='rooms']");
-  var selectTwo = FORM.querySelector("select[name='capacity']");
+  var selectOne = FORM.querySelector('select[name="rooms"]');
+  var selectTwo = FORM.querySelector('select[name="capacity"]');
   var allowedCapacity = CAPACITY_NUMBER[selectOne.value];
   var options = selectTwo.querySelectorAll('option');
-  console.log(selectOne);
 
-  for (var i = 0; i < options.length; i++) {
-        // options[i].disabled = !CAPACITY_NUMBER[selectOne.value].includes(options[i].value);
+  for (i = 0; i < options.length; i++) {
     options[i].disabled = allowedCapacity.indexOf(options[i].value) === -1;
   }
   if (allowedCapacity.indexOf(selectTwo.value) === -1) {
@@ -508,7 +506,7 @@ var onPriceInputElemInvalid = function (evt) {
 var deleteMapPins = function () {
   var mapPinBlock = document.querySelector('.map__pins');
   var mapPins = mapPinBlock.querySelectorAll('.map__pin:not(.map__pin--main)');
-  for (var i = 0; i < mapPins.length; i++) {
+  for (i = 0; i < mapPins.length; i++) {
     mapPinBlock.removeChild(mapPins[i]);
   }
 };
