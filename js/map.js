@@ -72,11 +72,9 @@ var MIN_PRICES = {
   palace: '10000'
 };
 
-var FORM = document.querySelector('.ad-form');
-
 var CHECKIN_SELECT_ELEM = FORM.querySelector("select[name='timein']");
 
-var CHECKOUT_SELECT_ELEM = FORM.querySelector("select[name='timeout']");
+var CHECKOUT_SELECT_ELEM = FORM.querySelector('select[name="timeout"]');
 
 var TYPE_SELECT_ELEM = FORM.querySelector("select[name='type']");
 
