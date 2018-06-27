@@ -277,12 +277,6 @@ var renderMapPins = function (el, template, index) {
   return mapPin;
 };
 
-// Генерация маркеров и  их сохранение в документ-фрагмент
-// var mapPinFragment = document.createDocumentFragment();
-// for (var i = 0; i < ADVERTISEMENTS.length; i++) {
-//   mapPinFragment.appendChild(renderMapPins(ADVERTISEMENTS[i], TEMPLATE_MAP_PIN, i));
-// }
-
 var pasteMapPins = function () {
   var mapPinFragment = document.createDocumentFragment();
   for (var i = 0; i < ADVERTISEMENTS.length; i++) {
@@ -309,21 +303,11 @@ var createMapCard = function (template, advertment) {
 
 // ВЕТКА MODULE-4 ОБРАБОТКА СОБЫТИЙ
 
-// var getCoordinatesMapPinMain = function () {
-//   return {
-//     'top': parseInt(STYLE_MAP_PIN_MAIN.top, 10),
-//     'left': parseInt(STYLE_MAP_PIN_MAIN.left, 10),
-//     'width': parseInt(STYLE_MAP_PIN_MAIN.width, 10),
-//     'height': parseInt(STYLE_MAP_PIN_MAIN.height, 10)
-//   };
-// };
-
 var getInputAddressCoordinates = function (coordinates, width, height) {
   var string = (parseInt(coordinates.left, 10) + width) + ', ' + (parseInt(coordinates.top, 10) + height);
   return string;
 };
 
-// Функция добавление элементам массива атрибутов disabled
 var toogleDisabledOnArrayElements = function (arr, isDisabled) {
   for (var i = 0; i < arr.length; i++) {
     arr[i].setAttribute('disabled', isDisabled);
@@ -363,7 +347,6 @@ MAP_PIN_MAIN.addEventListener('mouseup', onMapPinMainMouseUp);
 MAP_PIN_MAIN.addEventListener('keydown', onMapPinMainPressEnter);
 
 // ПЕРЕТАСКМВАНИЕ ГЛАВНОГО МАРКЕРА!!!!!!
-
 MAP_PIN_MAIN.addEventListener('mousedown', function (evt) {
   evt.preventDefault();
 
@@ -568,7 +551,7 @@ var hideActiveMap = function () {
   FORM.classList.add('ad-form--disabled');
   toogleDisabledOnArrayElements(FIELDSETS, true);
   deleteMapPins();
-  addressInput.value = getInputAddressCoordinates(MAP_PIN_MAIN.style, MAP_PIN_MAIN_HALF_WIDTH, MAP_PIN_MAIN_HEIGHT);
+  addressInput.value = getInputAddressCoordinates(STYLE_MAP_PIN_MAIN, MAP_PIN_MAIN_HALF_WIDTH, MAP_PIN_MAIN_HEIGHT);
 };
 
 var onFormEscPress = function (evt) {
@@ -596,6 +579,9 @@ var onFormSubmit = function (evt) {
   hideActiveMap();
   closePopup();
   evt.preventDefault();
+  FORM.removeEventListener('submit', onFormSubmit);
+  MAP_PIN_MAIN.addEventListener('mouseup', onMapPinMainMouseUp);
+  MAP_PIN_MAIN.addEventListener('keydown', onMapPinMainPressEnter);
 };
 
 var onFormResetClick = function (evt) {
@@ -605,6 +591,7 @@ var onFormResetClick = function (evt) {
   evt.preventDefault();
   FORM_RESET.removeEventListener('click', onFormResetClick);
   MAP_PIN_MAIN.addEventListener('mouseup', onMapPinMainMouseUp);
+  MAP_PIN_MAIN.addEventListener('keydown', onMapPinMainPressEnter);
 };
 
 TITLE_INPUT_ELEM.addEventListener('invalid', onTitleInputElemInvalid);
