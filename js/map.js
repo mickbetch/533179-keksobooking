@@ -64,8 +64,10 @@ var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
 var SPACE_KEYCODE = 32;
 var STYLE_MAP_PIN_MAIN = getComputedStyle(MAP_PIN_MAIN);
-var MAP_PIN_MAIN_HEIGHT = parseInt(STYLE_MAP_PIN_MAIN.height, 10);
-var MAP_PIN_MAIN_HALF_WIDTH = Math.floor(parseInt(STYLE_MAP_PIN_MAIN.width, 10) / 2);
+var MAP_PIN_MAIN_HEIGHT = 87;
+var MAP_PIN_MAIN_HALF_WIDTH = 32;
+var MAP_PIN_MAIN_START_LEFT = '570px';
+var MAP_PIN_MAIN_START_TOP = '375px';
 
 var MIN_PRICES = {
   bungalo: '0',
@@ -303,6 +305,11 @@ var createMapCard = function (template, advertment) {
 
 // ВЕТКА MODULE-4 ОБРАБОТКА СОБЫТИЙ
 
+var getStartMapPinCoords = function () {
+  MAP_PIN_MAIN.style.left = MAP_PIN_MAIN_START_LEFT;
+  MAP_PIN_MAIN.style.top = MAP_PIN_MAIN_START_TOP;
+};
+
 var getInputAddressCoordinates = function (coordinates, width, height) {
   var string = (parseInt(coordinates.left, 10) + width) + ', ' + (parseInt(coordinates.top, 10) + height);
   return string;
@@ -347,31 +354,74 @@ MAP_PIN_MAIN.addEventListener('mouseup', onMapPinMainMouseUp);
 MAP_PIN_MAIN.addEventListener('keydown', onMapPinMainPressEnter);
 
 // ПЕРЕТАСКМВАНИЕ ГЛАВНОГО МАРКЕРА!!!!!!
+
+var block = document.querySelector('.map__overlay');
+var small = document.querySelector('.map__pin--main');
+
+var limits = {
+  top: 130,
+  bottom: 630,
+  right: block.offsetLeft + block.offsetWidth - small.offsetWidth,
+  left: block.offsetLeft
+};
+
+var convertOffsetToCoords = function (x, y) {
+  return {
+    x: x + MAP_PIN_MAIN_HALF_WIDTH,
+    y: y + MAP_PIN_MAIN_HEIGHT
+  };
+};
+
+var convertCoordsToOffset = function (coord) {
+  return {
+    x: coord.x - MAP_PIN_MAIN_HALF_WIDTH,
+    y: coord.y - MAP_PIN_MAIN_HEIGHT
+  };
+};
+
 MAP_PIN_MAIN.addEventListener('mousedown', function (evt) {
   evt.preventDefault();
 
   var startCoords = {
-    x: evt.clientX,
-    y: evt.clientY
+    x: evt.pageX,
+    y: evt.pageY
   };
 
   var onMouseMove = function (moveEvt) {
     moveEvt.preventDefault();
 
     var shift = {
-      x: startCoords.x - moveEvt.clientX,
-      y: startCoords.y - moveEvt.clientY
+      x: startCoords.x - moveEvt.pageX,
+      y: startCoords.y - moveEvt.pageY
+    };
+    var currentCoords = convertOffsetToCoords(MAP_PIN_MAIN.offsetLeft, MAP_PIN_MAIN.offsetTop);
+
+    var newCoords = {
+      x: currentCoords.x - shift.x,
+      y: currentCoords.y - shift.y
     };
 
+    if (newCoords.y > limits.bottom) {
+      newCoords.y = limits.bottom;
+    } else if (newCoords.y < limits.top) {
+      newCoords.y = limits.top;
+    }
+    if (newCoords.x > limits.right) {
+      newCoords.x = limits.right;
+    } else if (newCoords.x < limits.left) {
+      newCoords.x = limits.left;
+    }
+
+    var offsets = convertCoordsToOffset(newCoords);
+
+    MAP_PIN_MAIN.style.top = offsets.y + 'px';
+    MAP_PIN_MAIN.style.left = offsets.x + 'px';
+
+    addressInput.value = newCoords.x + ', ' + newCoords.y;
     startCoords = {
-      x: moveEvt.clientX,
-      y: moveEvt.clientY
+      x: moveEvt.pageX,
+      y: moveEvt.pageY
     };
-
-    MAP_PIN_MAIN.style.top = (MAP_PIN_MAIN.offsetTop - shift.y) + 'px';
-    MAP_PIN_MAIN.style.left = (MAP_PIN_MAIN.offsetLeft - shift.x) + 'px';
-
-    addressInput.value = getInputAddressCoordinates(MAP_PIN_MAIN.style, MAP_PIN_MAIN_HALF_WIDTH, MAP_PIN_MAIN_HEIGHT);
   };
 
   var onMouseUp = function (upEvt) {
@@ -551,6 +601,7 @@ var hideActiveMap = function () {
   FORM.classList.add('ad-form--disabled');
   toogleDisabledOnArrayElements(FIELDSETS, true);
   deleteMapPins();
+  getStartMapPinCoords();
   addressInput.value = getInputAddressCoordinates(STYLE_MAP_PIN_MAIN, MAP_PIN_MAIN_HALF_WIDTH, MAP_PIN_MAIN_HEIGHT);
 };
 
@@ -579,7 +630,6 @@ var onFormSubmit = function (evt) {
   hideActiveMap();
   closePopup();
   evt.preventDefault();
-  FORM.removeEventListener('submit', onFormSubmit);
   MAP_PIN_MAIN.addEventListener('mouseup', onMapPinMainMouseUp);
   MAP_PIN_MAIN.addEventListener('keydown', onMapPinMainPressEnter);
 };
@@ -589,7 +639,6 @@ var onFormResetClick = function (evt) {
   hideActiveMap();
   closePopup();
   evt.preventDefault();
-  FORM_RESET.removeEventListener('click', onFormResetClick);
   MAP_PIN_MAIN.addEventListener('mouseup', onMapPinMainMouseUp);
   MAP_PIN_MAIN.addEventListener('keydown', onMapPinMainPressEnter);
 };
