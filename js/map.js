@@ -361,7 +361,7 @@ var small = document.querySelector('.map__pin--main');
 var limits = {
   top: 130,
   bottom: 630,
-  right: block.offsetLeft + block.offsetWidth - small.offsetWidth,
+  right: block.offsetLeft + block.offsetWidth,
   left: block.offsetLeft
 };
 
