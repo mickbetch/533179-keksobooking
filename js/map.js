@@ -265,14 +265,14 @@ var onMapPinClick = function (evt) {
 };
 
 // Функция создания маркера-пина
-var renderMapPins = function (el, template, index) {
+var renderMapPin = function (item, template, index) {
   var mapPin = template.cloneNode(true);
   var mapPinWidth = mapPin.style.width;
   var mapPinHeight = mapPin.style.height;
 
-  mapPin.style = 'left: ' + (el.location.x - (mapPinWidth / 2)) + 'px; top: ' + (el.location.y - mapPinHeight) + 'px;';
-  mapPin.querySelector('img').src = el.author.avatar;
-  mapPin.querySelector('img').alt = el.offer.title[index];
+  mapPin.style = 'left: ' + (item.location.x - (mapPinWidth / 2)) + 'px; top: ' + (item.location.y - mapPinHeight) + 'px;';
+  mapPin.querySelector('img').src = item.author.avatar;
+  mapPin.querySelector('img').alt = item.offer.title[index];
   mapPin.id = index;
   mapPin.addEventListener('click', onMapPinClick);
 
@@ -282,7 +282,7 @@ var renderMapPins = function (el, template, index) {
 var pasteMapPins = function () {
   var mapPinFragment = document.createDocumentFragment();
   for (var i = 0; i < ADVERTISEMENTS.length; i++) {
-    mapPinFragment.appendChild(renderMapPins(ADVERTISEMENTS[i], TEMPLATE_MAP_PIN, i));
+    mapPinFragment.appendChild(renderMapPin(ADVERTISEMENTS[i], TEMPLATE_MAP_PIN, i));
   }
   return mapPinFragment;
 };
@@ -305,7 +305,7 @@ var createMapCard = function (template, advertment) {
 
 // ВЕТКА MODULE-4 ОБРАБОТКА СОБЫТИЙ
 
-var getStartMapPinCoords = function () {
+var setStartMapPinCoords = function () {
   MAP_PIN_MAIN.style.left = MAP_PIN_MAIN_START_LEFT;
   MAP_PIN_MAIN.style.top = MAP_PIN_MAIN_START_TOP;
 };
@@ -356,7 +356,6 @@ MAP_PIN_MAIN.addEventListener('keydown', onMapPinMainPressEnter);
 // ПЕРЕТАСКМВАНИЕ ГЛАВНОГО МАРКЕРА!!!!!!
 
 var block = document.querySelector('.map__overlay');
-var small = document.querySelector('.map__pin--main');
 
 var limits = {
   top: 130,
@@ -588,11 +587,10 @@ var onPriceInputElemInvalid = function (evt) {
   }
 };
 
-var deleteMapPins = function () {
-  var mapPinBlock = document.querySelector('.map__pins');
-  var mapPins = mapPinBlock.querySelectorAll('.map__pin:not(.map__pin--main)');
+var deleteMapPins = function (parentElem, classNameOfDeletedChildren) {
+  var mapPins = parentElem.querySelectorAll(classNameOfDeletedChildren);
   for (var i = 0; i < mapPins.length; i++) {
-    mapPinBlock.removeChild(mapPins[i]);
+    parentElem.removeChild(mapPins[i]);
   }
 };
 
@@ -600,8 +598,8 @@ var hideActiveMap = function () {
   MAP.classList.add('map--faded');
   FORM.classList.add('ad-form--disabled');
   toogleDisabledOnArrayElements(FIELDSETS, true);
-  deleteMapPins();
-  getStartMapPinCoords();
+  deleteMapPins(MAP_PIN_LIST, '.map__pin:not(.map__pin--main)');
+  setStartMapPinCoords();
   addressInput.value = getInputAddressCoordinates(STYLE_MAP_PIN_MAIN, MAP_PIN_MAIN_HALF_WIDTH, MAP_PIN_MAIN_HEIGHT);
 };
 
