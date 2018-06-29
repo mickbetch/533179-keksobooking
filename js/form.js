@@ -135,7 +135,7 @@
     }
   };
 
-    var onFormEscPress = function (evt) {
+  var onFormEscPress = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
       hideSuccessBlock();
     }

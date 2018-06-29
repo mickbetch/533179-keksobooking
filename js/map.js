@@ -14,7 +14,6 @@
   var SPACE_KEYCODE = 32;
   var MAP_PIN_MAIN_HEIGHT = 84;
   var MAP_PIN_MAIN_HALF_WIDTH = 32;
-  var MAP = document.querySelector('.map');
   var MAP_PIN_LIST = MAP.querySelector('.map__pins');
   var MAP_PIN_MAIN = MAP.querySelector('.map__pin--main');
   var STYLE_MAP_PIN_MAIN = getComputedStyle(MAP_PIN_MAIN);

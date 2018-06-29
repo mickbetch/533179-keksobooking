@@ -99,7 +99,6 @@
     }
     return advertiseList;
   };
-// Массив объектов с объявлениями
 
   var ADVERTISEMENTS = generateAdvertisement(ADVERTISEMENT_COUNT).slice(0);
 
