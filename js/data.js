@@ -61,50 +61,13 @@
     }
     return URLs;
   };
-// Массив с адресами картинок
+
   var PICTURES = generateURLs(ADVERTISEMENT_COUNT);
   var picturesCopies = PICTURES.slice(0, PICTURES.length);
   var RANDOM_LIST_URLS = window.utils.shuffleArray(picturesCopies);
   var RANDOM_LIST_TITLES = window.utils.shuffleArray(ADVERTISEMENT_TITLES_COPIES);
 
-// Функция создания описания удобств жилья
-  var createFeaturesElem = function (feature) {
-    var featureElem = document.createElement('li');
-    featureElem.classList.add('popup__feature', 'popup__feature--' + feature);
-    return featureElem;
-  };
-  var createPhotoElem = function () {
-    var photoElem = document.createElement('img');
-    photoElem.classList.add('popup__photo');
-    photoElem.width = '45';
-    photoElem.height = '40';
-    photoElem.alt = 'Фотография жилья';
-    return photoElem;
-  };
-  var cleanNode = function (parentElement) {
-    while (parentElement.firstChild) {
-      parentElement.removeChild(parentElement.firstChild);
-    }
-  };
-  var renderFeaturesElem = function (featuresArr, parentElement) {
-    cleanNode(parentElement);
-    var featuresFragment = document.createDocumentFragment();
-    for (var i = 0; i < featuresArr.length; i++) {
-      featuresFragment.appendChild(createFeaturesElem(featuresArr[i]));
-    }
-    return featuresFragment;
-  };
-  var renderPhotoElem = function (photosArr, parentElement) {
-    cleanNode(parentElement);
-    var featuresFragment = document.createDocumentFragment();
-    for (var i = 0; i < photosArr.length; i++) {
-      var photo = createPhotoElem();
-      photo.src = photosArr[i];
-      featuresFragment.appendChild(photo);
-    }
-    return featuresFragment;
-  };
-// Функция генерации массива объявлений
+  // Функция генерации массива объявлений
   var generateAdvertisement = function (n) {
     var advertiseList = [];
     var advertiseEl;
@@ -143,7 +106,5 @@
   window.data = {
     ADVERTISEMENTS: ADVERTISEMENTS,
     HOUSE_LABELS: HOUSE_LABELS,
-    renderFeaturesElem: renderFeaturesElem,
-    renderPhotoElem: renderPhotoElem
   };
 })();
