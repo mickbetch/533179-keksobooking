@@ -103,80 +103,69 @@ var VALID_FIELD_BORDER = '';
 
 var FORM_RESET = FORM.querySelector('.ad-form__reset');
 
-/*
-* Генерация случайного числа
-* {min} number
-* {max} number
-* */
-var getRandomNumber = function (min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-};
+// utils.js
+(function () {
 
-/*
-* Генерация строки с ведущим нулем типа '01'
-* {number} number числовое значение
-* {length} number разрядность чила(от 1 до 9 - '1', от 10 и до 99 - '2')
-* */
-var leadingZeroes = function (number, length) {
-  var string = '' + number;
-  while (string.length < length) {
-    string = '0' + string;
-  }
-  return string;
-};
+  var getRandomNumber = function (min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  };
 
-/*
-* Генерация массива адресов картинок, отличающихся номером
-* {count} number количество картинок
-* */
-var generateURLs = function (count) {
-  var URLs = [];
-  for (var i = 1; i <= count; i++) {
-    URLs.push('img/avatars/user' + leadingZeroes(i, 2) + '.png');
-  }
-  return URLs;
-};
-
+  var leadingZeroes = function (number, length) {
+    var string = '' + number;
+    while (string.length < length) {
+      string = '0' + string;
+    }
+    return string;
+  };
+  var generateURLs = function (count) {
+    var URLs = [];
+    for (var i = 1; i <= count; i++) {
+      URLs.push('img/avatars/user' + leadingZeroes(i, 2) + '.png');
+    }
+    return URLs;
+  };
 // Массив с адресами картинок
-var PICTURES = generateURLs(ADVERTISEMENT_COUNT);
-var picturesCopies = PICTURES.slice(0, PICTURES.length);
-
-/*
-* Создание массива с раположением элементов в слуйчайном порядке
-* {arr} arr массив
-* */
-var shuffleArray = function (arr) {
-  var elements = [];
-  while (arr.length > 0) {
-    var returnedElement = arr.splice(getRandomNumber(0, arr.length - 1), 1);
-    elements.push(returnedElement[0]);
-  }
-  return elements;
-};
-
-// Массив случайных элементов с картинками маркера
-var RANDOM_LIST_URLS = shuffleArray(picturesCopies);
-
-// Массив случайных элементов с заголовками карточек-объявлений
-var RANDOM_LIST_TITLES = shuffleArray(ADVERTISEMENT_TITLES_COPIES);
-
-/*
-* Используется с методом массива sort для сортировки элементов массива случайным образом
-* */
-var compareRandom = function () {
-  return Math.random() - 0.5;
-};
-
+  var PICTURES = generateURLs(ADVERTISEMENT_COUNT);
+  var picturesCopies = PICTURES.slice(0, PICTURES.length);
+  /*
+	* Создание массива с раположением элементов в слуйчайном порядке
+	* {arr} arr массив
+	* */
+  var shuffleArray = function (arr) {
+    var elements = [];
+    while (arr.length > 0) {
+      var returnedElement = arr.splice(getRandomNumber(0, arr.length - 1), 1);
+      elements.push(returnedElement[0]);
+    }
+    return elements;
+  };
+  var RANDOM_LIST_URLS = shuffleArray(picturesCopies);
+  var RANDOM_LIST_TITLES = shuffleArray(ADVERTISEMENT_TITLES_COPIES);
+  /*
+	* Используется с методом массива sort для сортировки элементов массива случайным образом
+	* */
+  var compareRandom = function () {
+    return Math.random() - 0.5;
+  };
 // Функция получения случайного элемента массива
-var getRandomArrayElement = function (arr) {
-  return arr[getRandomNumber(0, arr.length - 1)];
-};
-
+  var getRandomArrayElement = function (arr) {
+    return arr[getRandomNumber(0, arr.length - 1)];
+  };
 // Функция получения массива с случайной длинной
-var getRandomArrayLength = function (arr) {
-  var randomLength = getRandomNumber(0, arr.length);
-  return arr.slice(0, randomLength);
-};
+  var getRandomArrayLength = function (arr) {
+    var randomLength = getRandomNumber(0, arr.length);
+    return arr.slice(0, randomLength);
+  };
+
+  window.utils = {
+    getRandomNumber: getRandomNumber,
+    RANDOM_LIST_URLS: RANDOM_LIST_URLS,
+    RANDOM_LIST_TITLES: RANDOM_LIST_TITLES,
+    compareRandom: compareRandom,
+    getRandomArrayElement: getRandomArrayElement,
+    getRandomArrayLength: getRandomArrayLength
+  };
+})();
 
 // Функция создания описания удобств жилья
 var createFeaturesElem = function (feature) {
@@ -228,25 +217,25 @@ var generateAdvertisement = function (n) {
   var advertiseEl;
   for (var i = 0; i < n; i++) {
     var randomLocation = {
-      'x': getRandomNumber(MIN_X, MAX_X),
-      'y': getRandomNumber(MIN_Y, MAX_Y)
+      'x': window.utils.getRandomNumber(MIN_X, MAX_X),
+      'y': window.utils.getRandomNumber(MIN_Y, MAX_Y)
     };
     advertiseEl = {
       'author': {
-        'avatar': RANDOM_LIST_URLS[i]
+        'avatar': window.utils.RANDOM_LIST_URLS[i]
       },
       'offer': {
-        'title': RANDOM_LIST_TITLES[i],
+        'title': window.utils.RANDOM_LIST_TITLES[i],
         'address': randomLocation.x + ', ' + randomLocation.y,
-        'price': getRandomNumber(MIN_PRICE, MAX_PRICE),
-        'type': getRandomArrayElement(HOUSE_TYPES),
-        'rooms': getRandomNumber(1, 5),
-        'guests': getRandomNumber(1, 5),
-        'checkin': getRandomArrayElement(CHECK_INS),
-        'checkout': getRandomArrayElement(CHECK_OUTS),
-        'features': getRandomArrayLength(houseDescriptionCopy),
+        'price': window.utils.getRandomNumber(MIN_PRICE, MAX_PRICE),
+        'type': window.utils.getRandomArrayElement(HOUSE_TYPES),
+        'rooms': window.utils.getRandomNumber(1, 5),
+        'guests': window.utils.getRandomNumber(1, 5),
+        'checkin': window.utils.getRandomArrayElement(CHECK_INS),
+        'checkout': window.utils.getRandomArrayElement(CHECK_OUTS),
+        'features': window.utils.getRandomArrayLength(houseDescriptionCopy),
         'description': '',
-        'photos': HOUSE_PHOTO_COPY.sort(compareRandom)
+        'photos': HOUSE_PHOTO_COPY.sort(window.utils.compareRandom)
       },
       'location': randomLocation
     };
