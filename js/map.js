@@ -56,9 +56,31 @@
     document.addEventListener('keydown', onPopupEscPress);
   };
 
-  var getClickedMapPinId = function (elem) {
+  var getClickedMapPinId = function (elem, data) {
     var offerIndex = parseInt(elem.id, 10);
-    return window.data.ADVERTISEMENTS[offerIndex];
+    return data[offerIndex];
+  };
+
+  var renderMapPin = function (item, template, index) {
+    var mapPin = template.cloneNode(true);
+    var mapPinWidth = mapPin.style.width;
+    var mapPinHeight = mapPin.style.height;
+
+    mapPin.style = 'left: ' + (item.location.x - (mapPinWidth / 2)) + 'px; top: ' + (item.location.y - mapPinHeight) + 'px;';
+    mapPin.querySelector('img').src = item.author.avatar;
+    mapPin.querySelector('img').alt = item.offer.title[index];
+    mapPin.id = index;
+    mapPin.addEventListener('click', onMapPinClick);
+
+    return mapPin;
+  };
+
+  var pasteMapPins = function (data) {
+    var mapPinFragment = document.createDocumentFragment();
+    for (var i = 0; i < data.length; i++) {
+      mapPinFragment.appendChild(renderMapPin(data[i], TEMPLATE_MAP_PIN, i));
+    }
+    MAP_PIN_LIST.appendChild(mapPinFragment);
   };
 
   var renderMapCard = function (template, advertment) {
@@ -77,27 +99,45 @@
     openPopup();
   };
 
-  var renderMapPin = function (item, template, index) {
-    var mapPin = template.cloneNode(true);
-    var mapPinWidth = mapPin.style.width;
-    var mapPinHeight = mapPin.style.height;
 
-    mapPin.style = 'left: ' + (item.location.x - (mapPinWidth / 2)) + 'px; top: ' + (item.location.y - mapPinHeight) + 'px;';
-    mapPin.querySelector('img').src = item.author.avatar;
-    mapPin.querySelector('img').alt = item.offer.title[index];
-    mapPin.id = index;
-    mapPin.addEventListener('click', onMapPinClick);
-
-    return mapPin;
+  var onDataLoadSuccess = function (data) {
+    pasteMapPins(data);
   };
 
-  var pasteMapPins = function () {
-    var mapPinFragment = document.createDocumentFragment();
-    for (var i = 0; i < window.data.ADVERTISEMENTS.length; i++) {
-      mapPinFragment.appendChild(renderMapPin(window.data.ADVERTISEMENTS[i], TEMPLATE_MAP_PIN, i));
-    }
-    return mapPinFragment;
+  var onDataLoadError = function (error) {
+    var errorElem = document.createElement('div');
+    errorElem.classList.add('error', 'error--bottom');
+    errorElem.textContent = error;
+    document.body.insertAdjacentElement('afterbegin', errorElem);
   };
+
+
+  // var getClickedMapPinId = function (elem) {
+  //   var offerIndex = parseInt(elem.id, 10);
+  //   return window.data.ADVERTISEMENTS[offerIndex];
+  // };
+
+  // var renderMapPin = function (item, template, index) {
+  //   var mapPin = template.cloneNode(true);
+  //   var mapPinWidth = mapPin.style.width;
+  //   var mapPinHeight = mapPin.style.height;
+	//
+  //   mapPin.style = 'left: ' + (item.location.x - (mapPinWidth / 2)) + 'px; top: ' + (item.location.y - mapPinHeight) + 'px;';
+  //   mapPin.querySelector('img').src = item.author.avatar;
+  //   mapPin.querySelector('img').alt = item.offer.title[index];
+  //   mapPin.id = index;
+  //   mapPin.addEventListener('click', onMapPinClick);
+	//
+  //   return mapPin;
+  // };
+
+  // var pasteMapPins = function () {
+  //   var mapPinFragment = document.createDocumentFragment();
+  //   for (var i = 0; i < window.data.ADVERTISEMENTS.length; i++) {
+  //     mapPinFragment.appendChild(renderMapPin(window.data.ADVERTISEMENTS[i], TEMPLATE_MAP_PIN, i));
+  //   }
+  //   return mapPinFragment;
+  // };
 
   var getInputAddressCoordinates = function (coordinates, width, height) {
     var string = (parseInt(coordinates.left, 10) + width) + ', ' + (parseInt(coordinates.top, 10) + height);
@@ -134,7 +174,7 @@
     MAP.classList.remove('map--faded');
     FORM.classList.remove('ad-form--disabled');
     removeDisabledOnArrayElements(FIELDSETS);
-    MAP_PIN_LIST.appendChild(pasteMapPins());
+    window.backend.download(onDataLoadSuccess, onDataLoadError);
     window.form.syncTypeWithMinPrice();
     window.form.syncRoomsWithGuests();
   };
