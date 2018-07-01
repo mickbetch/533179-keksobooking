@@ -30,7 +30,33 @@
   var VALID_FIELD_BORDER = '';
 
   var FORM_RESET = FORM.querySelector('.ad-form__reset');
+// ---------------------
+  var onXhrLoad = function () {
+    showSuccesBlock();
+    window.map.hideActiveMap();
+  };
 
+  var onXhrError = function (error) {
+    var errorElem = document.createElement('div');
+    errorElem.classList.add('error');
+    errorElem.textContent = error;
+    document.body.insertAdjacentElement('afterbegin', errorElem);
+
+    document.addEventListener('keydown', function(evt) {
+      if (evt.keyCode === ESC_KEYCODE) {
+        errorElem.classList.add('hidden');
+      }
+    });
+  };
+
+  var onFormSubmit = function (evt) {
+    window.backend.upload(new FormData(evt.target), onXhrLoad, onXhrError);
+
+    evt.preventDefault();
+  };
+
+  FORM.addEventListener('submit', onFormSubmit);
+// -----------------------
   var syncTwoSelect = function (evt, selectTwo) {
     var selectOne = evt.currentTarget;
     var selectedOption = selectOne.options[selectOne.selectedIndex];
@@ -145,6 +171,7 @@
     var success = document.querySelector('.success');
     success.classList.remove('hidden');
 
+    document.addEventListener('click', hideSuccessBlock);
     document.addEventListener('keydown', onFormEscPress);
   };
 
@@ -154,11 +181,11 @@
     document.removeEventListener('keydown', onFormEscPress);
   };
 
-  var onFormSubmit = function (evt) {
-    evt.preventDefault();
-    showSuccesBlock();
-    window.map.hideActiveMap();
-  };
+  // var onFormSubmit = function (evt) {
+  //   evt.preventDefault();
+  //   showSuccesBlock();
+  //   window.map.hideActiveMap();
+  // };
 
   var onFormResetClick = function (evt) {
     evt.preventDefault();
@@ -179,7 +206,7 @@
 
   CAPACITY_SELECT_ELEM.addEventListener('change', syncRoomsWithGuests);
 
-  FORM.addEventListener('submit', onFormSubmit);
+  // FORM.addEventListener('submit', onFormSubmit);
   FORM_RESET.addEventListener('click', onFormResetClick);
 
   window.form = {

@@ -1216,3 +1216,19 @@ fieldset {
       -ms-transform: translateX(-50%);
           transform: translateX(-50%);
 }
+
+.error {
+  position: fixed;
+  top: 150px;
+  z-index: 100;
+  margin: 0 auto;
+  width: 1200px;
+  padding: 20px;
+  font-size: 30px;
+  font-weight: 700;
+  text-align: center;
+  color: white;
+  background-color: lightgrey;
+  border: 5px solid orangered;
+  border-radius: 5px;
+}
