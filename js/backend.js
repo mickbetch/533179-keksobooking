@@ -3,6 +3,8 @@
 (function () {
   var TIMEOUT = 10000;
 
+  var SERVER_STATUS_OK = 200;
+
   var ERRORS = {
     generalError: function (status) {
       return 'Статус ответа: ' + status + '' + xhr.statusText;
@@ -27,7 +29,7 @@
     xhr.timeout = TIMEOUT;
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === SERVER_STATUS_OK) {
         onLoad(xhr.response);
       }	else {
         onError(ERRORS.generalError(xhr.status));

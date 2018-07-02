@@ -1,25 +1,26 @@
 'use strict';
 
 (function () {
-  // Функция создания описания удобств жилья
-  var createFeaturesElem = function (feature) {
-    var featureElem = document.createElement('li');
-    featureElem.classList.add('popup__feature', 'popup__feature--' + feature);
-    return featureElem;
+
+  var HOUSE_LABELS = {
+    'palace': 'дворец',
+    'flat': 'квартира',
+    'house': 'дом',
+    'bungalo': 'бунгало'
   };
-  var createPhotoElem = function () {
-    var photoElem = document.createElement('img');
-    photoElem.classList.add('popup__photo');
-    photoElem.width = '45';
-    photoElem.height = '40';
-    photoElem.alt = 'Фотография жилья';
-    return photoElem;
-  };
+
   var cleanNode = function (parentElement) {
     while (parentElement.firstChild) {
       parentElement.removeChild(parentElement.firstChild);
     }
   };
+
+  var createFeaturesElem = function (feature) {
+    var featureElem = document.createElement('li');
+    featureElem.classList.add('popup__feature', 'popup__feature--' + feature);
+    return featureElem;
+  };
+
   var renderFeaturesElem = function (featuresArr, parentElement) {
     cleanNode(parentElement);
     var featuresFragment = document.createDocumentFragment();
@@ -28,6 +29,16 @@
     }
     return featuresFragment;
   };
+
+  var createPhotoElem = function () {
+    var photoElem = document.createElement('img');
+    photoElem.classList.add('popup__photo');
+    photoElem.width = '45';
+    photoElem.height = '40';
+    photoElem.alt = 'Фотография жилья';
+    return photoElem;
+  };
+
   var renderPhotoElem = function (photosArr, parentElement) {
     cleanNode(parentElement);
     var featuresFragment = document.createDocumentFragment();
@@ -39,17 +50,17 @@
     return featuresFragment;
   };
 
-  var createMapCard = function (template, advertment) {
-    template.querySelector('.popup__title').textContent = advertment.offer.title;
-    template.querySelector('.popup__text--address').textContent = advertment.offer.address;
-    template.querySelector('.popup__text--price').textContent = advertment.offer.price + '₽/ночь';
-    template.querySelector('.popup__type').textContent = window.data.HOUSE_LABELS[advertment.offer.type];
-    template.querySelector('.popup__text--capacity').textContent = advertment.offer.rooms + ' комнаты для ' + advertment.offer.guests + ' гостей';
-    template.querySelector('.popup__text--time').textContent = 'Заезд после ' + advertment.offer.checkin + ', выезд до ' + advertment.offer.checkout;
-    template.querySelector('.popup__features').appendChild(renderFeaturesElem(advertment.offer.features, template.querySelector('.popup__features')));
-    template.querySelector('.popup__description').textContent = advertment.offer.description;
-    template.querySelector('.popup__photos').appendChild(renderPhotoElem(advertment.offer.photos, template.querySelector('.popup__photos')));
-    template.querySelector('.popup__avatar').src = advertment.author.avatar;
+  var createMapCard = function (template, data) {
+    template.querySelector('.popup__title').textContent = data.offer.title;
+    template.querySelector('.popup__text--address').textContent = data.offer.address;
+    template.querySelector('.popup__text--price').textContent = data.offer.price + '₽/ночь';
+    template.querySelector('.popup__type').textContent = HOUSE_LABELS[data.offer.type];
+    template.querySelector('.popup__text--capacity').textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
+    template.querySelector('.popup__text--time').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
+    template.querySelector('.popup__features').appendChild(renderFeaturesElem(data.offer.features, template.querySelector('.popup__features')));
+    template.querySelector('.popup__description').textContent = data.offer.description;
+    template.querySelector('.popup__photos').appendChild(renderPhotoElem(data.offer.photos, template.querySelector('.popup__photos')));
+    template.querySelector('.popup__avatar').src = data.author.avatar;
 
     return template;
   };
