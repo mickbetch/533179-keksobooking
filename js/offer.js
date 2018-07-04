@@ -9,12 +9,6 @@
     'bungalo': 'бунгало'
   };
 
-  var cleanNode = function (parentElement) {
-    while (parentElement.firstChild) {
-      parentElement.removeChild(parentElement.firstChild);
-    }
-  };
-
   var createFeaturesElem = function (feature) {
     var featureElem = document.createElement('li');
     featureElem.classList.add('popup__feature', 'popup__feature--' + feature);
@@ -22,7 +16,7 @@
   };
 
   var renderFeaturesElem = function (featuresArr, parentElement) {
-    cleanNode(parentElement);
+    window.utils.cleanNode(parentElement);
     var featuresFragment = document.createDocumentFragment();
     for (var i = 0; i < featuresArr.length; i++) {
       featuresFragment.appendChild(createFeaturesElem(featuresArr[i]));
@@ -40,7 +34,7 @@
   };
 
   var renderPhotoElem = function (photosArr, parentElement) {
-    cleanNode(parentElement);
+    window.utils.cleanNode(parentElement);
     var featuresFragment = document.createDocumentFragment();
     for (var i = 0; i < photosArr.length; i++) {
       var photo = createPhotoElem();
