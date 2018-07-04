@@ -9,9 +9,6 @@
   var FORM = document.forms[1];
   var FIELDSETS = document.forms[1].querySelectorAll('fieldset');
   var addressInput = FORM.querySelector('#address');
-  var ESC_KEYCODE = 27;
-  var ENTER_KEYCODE = 13;
-  var SPACE_KEYCODE = 32;
   var MAP_PIN_MAIN_HEIGHT = 84;
   var MAP_PIN_MAIN_HALF_WIDTH = 32;
   var MAP_PIN_LIST = MAP.querySelector('.map__pins');
@@ -23,6 +20,13 @@
   var selectElems = FILTER_FORM.querySelectorAll('.map__filter');
   var featureCheckboxElems = FILTER_FORM.querySelectorAll('input[type="checkbox"]');
   var block = document.querySelector('.map__overlay');
+
+  var Code = {
+    ESC: 27,
+    ENTER: 13,
+    SPACE: 32
+  };
+
   var limits = {
     top: 130,
     bottom: 630,
@@ -35,7 +39,9 @@
   };
 
   var mapData = [];
+
   var filteredOffers = mapData;
+  
   var onDataLoadSuccess = function (data) {
     pasteMapPins(data);
     mapData = data;
@@ -50,7 +56,7 @@
       window.utils.hideErrorMessage(errorElem);
     });
     document.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === ESC_KEYCODE) {
+      if (evt.keyCode === Code.ESC) {
         window.utils.hideErrorMessage(errorElem);
       }
     });
@@ -60,7 +66,7 @@
     mapCard.classList.remove('hidden');
   };
   var onPopupEscPress = function (evt) {
-    if (evt.keyCode === ESC_KEYCODE) {
+    if (evt.keyCode === Code.ESC) {
       closePopup();
     }
   };
@@ -154,7 +160,7 @@
     MAP_PIN_MAIN.removeEventListener('keydown', onMapPinMainPressEnter);
   };
   var onMapPinMainPressEnter = function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE || evt.keyCode === SPACE_KEYCODE) {
+    if (evt.keyCode === Code.ENTER || evt.keyCode === Code.SPACE) {
       showActiveMap();
     }
     MAP_PIN_MAIN.removeEventListener('mouseup', onMapPinMainMouseUp);
@@ -303,8 +309,7 @@
 
   window.map = {
     hideActiveMap: hideActiveMap,
-    onDataLoadError: onDataLoadError,
-    pasteMapPins: pasteMapPins
+    onDataLoadError: onDataLoadError
   };
 })();
 
