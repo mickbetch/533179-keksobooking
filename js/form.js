@@ -30,49 +30,19 @@
   var VALID_FIELD_BORDER = '';
 
   var FORM_RESET = FORM.querySelector('.ad-form__reset');
-// ---------------------
+
   var onXhrLoad = function () {
     showSuccesBlock();
     window.map.hideActiveMap();
   };
 
-  var onXhrError = function (error) {
-    var errorElem = document.createElement('div');
-    errorElem.classList.add('error');
-    errorElem.textContent = error;
-    document.body.insertAdjacentElement('afterbegin', errorElem);
-
-    document.addEventListener('keydown', function(evt) {
-      if (evt.keyCode === ESC_KEYCODE) {
-        errorElem.classList.add('hidden');
-      }
-    });
-  };
-
   var onFormSubmit = function (evt) {
-    window.backend.upload(new FormData(evt.target), onXhrLoad, onXhrError);
+    window.backend.upload(new FormData(evt.target), onXhrLoad, window.map.onDataLoadError);
 
     evt.preventDefault();
   };
 
   FORM.addEventListener('submit', onFormSubmit);
-// -----------------------
-  var syncTwoSelect = function (evt, selectTwo) {
-    var selectOne = evt.currentTarget;
-    var selectedOption = selectOne.options[selectOne.selectedIndex];
-    var form = selectOne.parentElement;
-
-    while (form.tagName !== 'FORM') {
-      form = form.parentElement;
-    }
-
-    for (var i = 0; i < selectTwo.options.length; i++) {
-      if (selectTwo.options[i].value === selectedOption.value) {
-        selectTwo.options[i].selected = 'true';
-        break;
-      }
-    }
-  };
 
   var syncTypeWithMinPrice = function () {
     var selectOne = FORM.querySelector('select[name="type"]');
@@ -106,11 +76,11 @@
   };
 
   var onCheckinChange = function (evt) {
-    syncTwoSelect(evt, CHECKOUT_SELECT_ELEM);
+    window.utils.syncTwoSelect(evt, CHECKOUT_SELECT_ELEM);
   };
 
   var onCheckoutChange = function (evt) {
-    syncTwoSelect(evt, CHECKIN_SELECT_ELEM);
+    window.utils.syncTwoSelect(evt, CHECKIN_SELECT_ELEM);
   };
 
   var onTypeSelectElemChange = function () {

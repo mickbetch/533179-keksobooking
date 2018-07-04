@@ -17,8 +17,8 @@
   var MAP_PIN_LIST = MAP.querySelector('.map__pins');
   var MAP_PIN_MAIN = MAP.querySelector('.map__pin--main');
   var STYLE_MAP_PIN_MAIN = getComputedStyle(MAP_PIN_MAIN);
-  var MAP_PIN_MAIN_START_LEFT = '570px';
-  var MAP_PIN_MAIN_START_TOP = '375px';
+  var MAP_PIN_MAIN_START_LEFT = MAP_PIN_MAIN.offsetLeft + 'px';
+  var MAP_PIN_MAIN_START_TOP = MAP_PIN_MAIN.offsetTop + 'px';
 
 
   var block = document.querySelector('.map__overlay');
@@ -99,7 +99,6 @@
     openPopup();
   };
 
-
   var onDataLoadSuccess = function (data) {
     pasteMapPins(data);
 
@@ -111,6 +110,16 @@
     errorElem.classList.add('error', 'error--bottom');
     errorElem.textContent = error;
     document.body.insertAdjacentElement('afterbegin', errorElem);
+
+    setTimeout(window.utils.hideErrorMessage, 3000, errorElem);
+    document.addEventListener('click', function () {
+      window.utils.hideErrorMessage(errorElem);
+    });
+    document.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === ESC_KEYCODE) {
+        window.utils.hideErrorMessage(errorElem);
+      }
+    });
   };
 
   var getInputAddressCoordinates = function (coordinates, width, height) {
@@ -258,7 +267,8 @@
 
   window.map = {
     hideActiveMap: hideActiveMap,
-    mapData: []
+    mapData: [],
+    onDataLoadError: onDataLoadError
   };
 })();
 

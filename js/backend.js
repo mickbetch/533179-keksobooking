@@ -1,13 +1,13 @@
 'use strict';
 
 (function () {
-  var TIMEOUT = 10000;
+  var TIMEOUT = 5000;
 
   var SERVER_STATUS_OK = 200;
 
   var ERRORS = {
     generalError: function (status) {
-      return 'Статус ответа: ' + status + '' + xhr.statusText;
+      return 'Статус ответа: ' + status;
     },
     connectionError: function () {
       return 'Произошла ошибка соединения';
