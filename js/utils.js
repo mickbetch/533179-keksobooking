@@ -36,6 +36,14 @@
     }
   };
 
+  var removeElems = function () {
+    var pins = document.querySelectorAll('.map__pin[id]');
+
+    pins.forEach(function (pin) {
+      pin.parentNode.removeChild(pin);
+    });
+  };
+
   var syncTwoSelect = function (evt, selectTwo) {
     var selectOne = evt.currentTarget;
     var selectedOption = selectOne.options[selectOne.selectedIndex];
@@ -62,6 +70,7 @@
     cleanNode: cleanNode,
     syncTwoSelect: syncTwoSelect,
     hideErrorMessage: hideErrorMessage,
+    removeElems: removeElems,
     getRandomNumber: getRandomNumber,
     shuffleArray: shuffleArray,
     compareRandom: compareRandom,
