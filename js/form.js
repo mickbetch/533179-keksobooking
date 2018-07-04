@@ -31,10 +31,6 @@
 
   var FORM_RESET = FORM.querySelector('.ad-form__reset');
 
-  var hideErrorMessage = function (error) {
-    error.classList.add('hidden');
-  };
-
   var onXhrLoad = function () {
     showSuccesBlock();
     window.map.hideActiveMap();

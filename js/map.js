@@ -115,7 +115,7 @@
     document.addEventListener('click', function () {
       window.utils.hideErrorMessage(errorElem);
     });
-    document.addEventListener('keydown', function(evt) {
+    document.addEventListener('keydown', function (evt) {
       if (evt.keyCode === ESC_KEYCODE) {
         window.utils.hideErrorMessage(errorElem);
       }
