@@ -41,7 +41,7 @@
   var mapData = [];
 
   var filteredOffers = mapData;
-  
+
   var onDataLoadSuccess = function (data) {
     pasteMapPins(data);
     mapData = data;
@@ -275,14 +275,14 @@
       selectElem.dataset.feature = selectElem.id.replace(/housing-/i, '');
     });
 
-  var filters = Array.from(selectElems).reduce(function (acc, selectedOption) {
-    var optionName = selectedOption.dataset.feature;
-    acc[optionName] = selectedOption.options[selectedOption.selectedIndex].value;
+    var filters = Array.from(selectElems).reduce(function (acc, selectedOption) {
+      var optionName = selectedOption.dataset.feature;
+      acc[optionName] = selectedOption.options[selectedOption.selectedIndex].value;
 
-    return acc;
+      return acc;
     }, {});
 
-  filters.features = Array.from(featureCheckboxElems)
+    filters.features = Array.from(featureCheckboxElems)
     .filter(function (checkedBox) {
       return checkedBox.checked;
     })
@@ -290,15 +290,14 @@
       return checkedBox.value;
     });
 
-  filteredOffers = mapData.filter(function (rent) {
-    return checkType(rent.offer.type, filters.type) &&
-      checkType(rent.offer.rooms, filters.rooms) &&
-      checkType(rent.offer.guests, filters.guests) &&
-      checkRentCost(rent.offer.price, filters.price) &&
-      checkFeatures(rent.offer.features, filters.features);
-  });
-  handleFiltering(filteredOffers);
-
+    filteredOffers = mapData.filter(function (rent) {
+      return checkType(rent.offer.type, filters.type) &&
+        checkType(rent.offer.rooms, filters.rooms) &&
+        checkType(rent.offer.guests, filters.guests) &&
+        checkRentCost(rent.offer.price, filters.price) &&
+        checkFeatures(rent.offer.features, filters.features);
+    });
+    handleFiltering(filteredOffers);
   };
 
   FILTER_FORM.addEventListener('change', function () {
