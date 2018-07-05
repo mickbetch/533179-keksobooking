@@ -81,9 +81,8 @@
     if (mapCard) {
       mapCard.classList.add('hidden');
     }
-    if (mapPins) {
-      window.utils.removeActiveClass();
-    }
+    window.utils.removeActiveClass();
+
   };
 
   var onPopupCloseClick = function () {
