@@ -42,7 +42,7 @@
 
     xhr.addEventListener('load', function () {
       if (xhr.status === SERVER_STATUS_OK) {
-          onLoad(xhr.response);
+        onLoad(xhr.response);
       }	else {
         onError(ERRORS.generalError(xhr.status));
       }
