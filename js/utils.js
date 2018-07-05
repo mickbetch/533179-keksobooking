@@ -44,6 +44,14 @@
     });
   };
 
+  var removeActiveClass = function () {
+    var mapPins = document.querySelectorAll('.map__pin--active');
+
+    mapPins.forEach(function (pin) {
+      pin.classList.remove('map__pin--active');
+    });
+  };
+
   var syncTwoSelect = function (evt, selectTwo) {
     var selectOne = evt.currentTarget;
     var selectedOption = selectOne.options[selectOne.selectedIndex];
@@ -71,10 +79,6 @@
     syncTwoSelect: syncTwoSelect,
     hideErrorMessage: hideErrorMessage,
     removeElems: removeElems,
-    getRandomNumber: getRandomNumber,
-    shuffleArray: shuffleArray,
-    compareRandom: compareRandom,
-    getRandomArrayElement: getRandomArrayElement,
-    getRandomArrayLength: getRandomArrayLength
+    removeActiveClass: removeActiveClass
   };
 })();

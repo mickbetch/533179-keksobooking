@@ -33,6 +33,7 @@
     right: block.offsetLeft + block.offsetWidth,
     left: block.offsetLeft
   };
+
   var PRICE_RANGES = {
     low: 10000,
     high: 50000
@@ -46,6 +47,7 @@
     pasteMapPins(data);
     mapData = data;
   };
+
   var onDataLoadError = function (error) {
     var errorElem = document.createElement('div');
     errorElem.classList.add('error', 'error--bottom');
@@ -61,21 +63,29 @@
       }
     });
   };
+
   var openPopup = function () {
     var mapCard = document.querySelector('.map__card');
     mapCard.classList.remove('hidden');
   };
+
   var onPopupEscPress = function (evt) {
     if (evt.keyCode === Code.ESC) {
       closePopup();
     }
   };
+
   var closePopup = function () {
     var mapCard = document.querySelector('.map__card');
+    var mapPins = document.querySelectorAll('.map__pin--active');
     if (mapCard) {
       mapCard.classList.add('hidden');
     }
+    if (mapPins) {
+      window.utils.removeActiveClass();
+    }
   };
+
   var onPopupCloseClick = function () {
     var popupClose = document.querySelector('.popup__close');
     popupClose.addEventListener('click', function () {
@@ -83,10 +93,12 @@
     });
     document.addEventListener('keydown', onPopupEscPress);
   };
+
   var getClickedMapPinId = function (elem) {
     var offerIndex = parseInt(elem.id, 10);
     return mapData[offerIndex];
   };
+
   var renderMapPin = function (item, template, index) {
     var mapPin = template.cloneNode(true);
     var mapPinWidth = mapPin.style.width;
@@ -98,6 +110,7 @@
     mapPin.addEventListener('click', onMapPinClick);
     return mapPin;
   };
+
   var pasteMapPins = function (data) {
     var mapPinFragment = document.createDocumentFragment();
     for (var i = 0; i < data.length; i++) {
@@ -105,6 +118,7 @@
     }
     MAP_PIN_LIST.appendChild(mapPinFragment);
   };
+
   var renderMapCard = function (template, data) {
     var oldOfferElem = MAP.querySelector('.map__card');
     var offerElem = window.offer.createMapCard(template, data);
@@ -114,37 +128,46 @@
       MAP.insertBefore(window.offer.createMapCard(template, data), PLACE_BEFORE_CARD_LIST);
     }
   };
+
   var onMapPinClick = function (evt) {
+    window.utils.removeActiveClass();
+    evt.currentTarget.classList.add('map__pin--active');
     renderMapCard(TEMPLATE_MAP_CARD, getClickedMapPinId(evt.currentTarget), onDataLoadError);
     onPopupCloseClick();
     openPopup();
   };
+
   var getInputAddressCoordinates = function (coordinates, width, height) {
     var string = (parseInt(coordinates.left, 10) + width) + ', ' + (parseInt(coordinates.top, 10) + height);
     return string;
   };
+
   var toogleDisabledOnArrayElements = function (arr, isDisabled) {
     for (var i = 0; i < arr.length; i++) {
       arr[i].setAttribute('disabled', isDisabled);
     }
   };
+
   var convertOffsetToCoords = function (x, y) {
     return {
       x: x + MAP_PIN_MAIN_HALF_WIDTH,
       y: y + MAP_PIN_MAIN_HEIGHT
     };
   };
+
   var convertCoordsToOffset = function (coord) {
     return {
       x: coord.x - MAP_PIN_MAIN_HALF_WIDTH,
       y: coord.y - MAP_PIN_MAIN_HEIGHT
     };
   };
+
   var removeDisabledOnArrayElements = function (arr) {
     for (var i = 0; i < arr.length; i++) {
       arr[i].removeAttribute('disabled');
     }
   };
+
   var showActiveMap = function () {
     MAP.classList.remove('map--faded');
     FORM.classList.remove('ad-form--disabled');
@@ -154,11 +177,13 @@
     window.form.syncTypeWithMinPrice();
     window.form.syncRoomsWithGuests();
   };
+
   var onMapPinMainMouseUp = function () {
     showActiveMap();
     MAP_PIN_MAIN.removeEventListener('mouseup', onMapPinMainMouseUp);
     MAP_PIN_MAIN.removeEventListener('keydown', onMapPinMainPressEnter);
   };
+
   var onMapPinMainPressEnter = function (evt) {
     if (evt.keyCode === Code.ENTER || evt.keyCode === Code.SPACE) {
       showActiveMap();
@@ -166,6 +191,7 @@
     MAP_PIN_MAIN.removeEventListener('mouseup', onMapPinMainMouseUp);
     MAP_PIN_MAIN.removeEventListener('keydown', onMapPinMainPressEnter);
   };
+
   MAP_PIN_MAIN.addEventListener('mouseup', onMapPinMainMouseUp);
   MAP_PIN_MAIN.addEventListener('keydown', onMapPinMainPressEnter);
   MAP_PIN_MAIN.addEventListener('mousedown', function (evt) {
@@ -213,16 +239,19 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
+
   var setStartMapPinCoords = function () {
     MAP_PIN_MAIN.style.left = MAP_PIN_MAIN_START_LEFT;
     MAP_PIN_MAIN.style.top = MAP_PIN_MAIN_START_TOP;
   };
+
   var deleteMapPins = function (parentElem, classNameOfDeletedChildren) {
     var mapPins = parentElem.querySelectorAll(classNameOfDeletedChildren);
     for (var i = 0; i < mapPins.length; i++) {
       parentElem.removeChild(mapPins[i]);
     }
   };
+
   var hideActiveMap = function () {
     MAP.classList.add('map--faded');
     FORM.classList.add('ad-form--disabled');
