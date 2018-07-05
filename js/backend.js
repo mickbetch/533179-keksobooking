@@ -3,7 +3,7 @@
 (function () {
   var TIMEOUT = 5000;
   var SERVER_STATUS_OK = 200;
-  var RESPONSE_DATA_LENGTH = 5;
+
 
   var ERRORS = {
     generalError: function (status) {
@@ -27,12 +27,6 @@
    * @param {Array} response - Ответ сервера
    * @return {Array}
    */
-  var sliceXhrGetResponse = function (response) {
-    if (Array.isArray(response)) {
-      return response.slice(0, RESPONSE_DATA_LENGTH);
-    }
-    return response;
-  };
 
   var createXhr = function (responseType, timeout) {
     var xhr = new XMLHttpRequest();
@@ -43,16 +37,12 @@
     return xhr;
   };
 
-  var processXhr = function (onLoad, onError, responseModifier) {
+  var processXhr = function (onLoad, onError) {
     var xhr = createXhr('json', TIMEOUT);
 
     xhr.addEventListener('load', function () {
       if (xhr.status === SERVER_STATUS_OK) {
-        if (responseModifier) {
-          onLoad(responseModifier(xhr.response));
-        }	else {
           onLoad(xhr.response);
-        }
       }	else {
         onError(ERRORS.generalError(xhr.status));
       }
@@ -70,7 +60,7 @@
   };
 
   var download = function (onLoad, onError) {
-    var response = processXhr(onLoad, onError, sliceXhrGetResponse);
+    var response = processXhr(onLoad, onError);
 
     response.open('GET', serverUrl.DOWNLOAD);
     response.send();

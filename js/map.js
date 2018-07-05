@@ -41,11 +41,20 @@
 
   var mapData = [];
 
-  var filteredOffers = mapData;
+  var filteredOffers;
+
+  var PIN_LIMIT_ON_MAP = 5;
+
+  var applyLimitForItemsOnMap = function (data) {
+    if (Array.isArray(data)) {
+      return data.slice(0, PIN_LIMIT_ON_MAP);
+    }
+    return data;
+  };
 
   var onDataLoadSuccess = function (data) {
-    pasteMapPins(data);
-    mapData = data;
+    mapData = filteredOffers = data;
+    pasteMapPins(applyLimitForItemsOnMap(data));
   };
 
   var onDataLoadError = function (error) {
@@ -77,7 +86,6 @@
 
   var closePopup = function () {
     var mapCard = document.querySelector('.map__card');
-    var mapPins = document.querySelectorAll('.map__pin--active');
     if (mapCard) {
       mapCard.classList.add('hidden');
     }
@@ -93,9 +101,9 @@
     document.addEventListener('keydown', onPopupEscPress);
   };
 
-  var getClickedMapPinId = function (elem) {
+  var getClickedMapPinData = function (elem) {
     var offerIndex = parseInt(elem.id, 10);
-    return mapData[offerIndex];
+    return filteredOffers[offerIndex];
   };
 
   var renderMapPin = function (item, template, index) {
@@ -131,7 +139,7 @@
   var onMapPinClick = function (evt) {
     window.utils.removeActiveClass();
     evt.currentTarget.classList.add('map__pin--active');
-    renderMapCard(TEMPLATE_MAP_CARD, getClickedMapPinId(evt.currentTarget), onDataLoadError);
+    renderMapCard(TEMPLATE_MAP_CARD, getClickedMapPinData(evt.currentTarget), onDataLoadError);
     onPopupCloseClick();
     openPopup();
   };
@@ -294,7 +302,7 @@
 
   var handleFiltering = function (filteredRents) {
     window.utils.removeElems();
-    pasteMapPins(filteredRents);
+    pasteMapPins(applyLimitForItemsOnMap(filteredRents));
   };
 
   var onFilterFormElemChange = function () {
