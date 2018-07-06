@@ -54,7 +54,7 @@
     syncTwoSelect: syncTwoSelect,
     hideErrorMessage: hideErrorMessage,
     removeElems: removeElems,
-    removeActiveClass: removeActiveClass,
-    messageError: messageError
+    removeActiveClass: removeActiveClass
+    // messageError: messageError
   };
 })();
