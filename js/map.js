@@ -46,10 +46,21 @@
   var PIN_LIMIT_ON_MAP = 5;
 
   var applyLimitForItemsOnMap = function (data) {
-    if (Array.isArray(data)) {
-      return data.slice(0, PIN_LIMIT_ON_MAP);
+    var mainPinCoords = window.getMainPinCoords();
+    data.forEach(function (item) {
+      var catX = mainPinCoords.x - item.location.x;
+      var catY = mainPinCoords.y - item.location.y;
+      var distance = Math.floor(Math.sqrt(Math.pow(catX, 2) + Math.pow(catY, 2)));
+      item.distance = distance;
+    });
+    var sortedData = data.sort(function (a, b) {
+      return a.distance > b.distance;
+    });
+
+    if (Array.isArray(sortedData)) {
+      return sortedData.slice(0, PIN_LIMIT_ON_MAP);
     }
-    return data;
+    return sortedData;
   };
 
   var onDataLoadSuccess = function (data) {
@@ -228,6 +239,12 @@
       } else if (newCoords.x < limits.left) {
         newCoords.x = limits.left;
       }
+      // ------------
+      window.getMainPinCoords = function () {
+        return newCoords;
+      };
+      window.map.newCoords = newCoords;
+      // ------------------
       var offsets = convertCoordsToOffset(newCoords);
       MAP_PIN_MAIN.style.top = offsets.y + 'px';
       MAP_PIN_MAIN.style.left = offsets.x + 'px';
@@ -300,10 +317,10 @@
     });
   };
 
-  var handleFiltering = function (filteredRents) {
-    window.utils.removeElems();
-    pasteMapPins(applyLimitForItemsOnMap(filteredRents));
-  };
+  // var handleFiltering = function (filteredRents) {
+  //   window.utils.removeElems();
+  //   pasteMapPins(applyLimitForItemsOnMap(filteredRents));
+  // };
 
   var onFilterFormElemChange = function () {
     closePopup();
@@ -333,14 +350,13 @@
         checkRentCost(rent.offer.price, filters.price) &&
         checkFeatures(rent.offer.features, filters.features);
     });
-    handleFiltering(filteredOffers);
+    window.utils.removeElems();
+    pasteMapPins(applyLimitForItemsOnMap(filteredOffers));
   };
 
   FILTER_FORM.addEventListener('change', function () {
     window.debounce(onFilterFormElemChange);
   });
-
-  // ---------------------------------------
 
   window.map = {
     hideActiveMap: hideActiveMap,
