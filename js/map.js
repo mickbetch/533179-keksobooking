@@ -132,7 +132,7 @@
     var data = mapData;
     window.utils.removeElems();
     closePopup();
-    window.filteredData = window.filter(data);
+    var filteredData = window.filter(data);
     filteredData.sort(function (a, b) {
       return calculateDistance(a) - calculateDistance(b);
     });

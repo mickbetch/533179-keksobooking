@@ -42,7 +42,8 @@
 
   var filterFeatures = function (item) {
     var arr = Array.from(featureCheckboxElems).filter(function (checkedBox) {
-      return checkedBox.checked;});
+      return checkedBox.checked;
+    });
     return arr.every(function (feature) {
       return item.offer.features.indexOf(feature.value) !== -1;
     });
