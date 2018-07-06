@@ -1,9 +1,13 @@
 'use strict';
 
 (function () {
-  var FILTER_FORM = document.querySelector('.map__filters');
-  var selectElems = FILTER_FORM.querySelectorAll('.map__filter');
-  var featureCheckboxElems = FILTER_FORM.querySelectorAll('input[type="checkbox"]');
+  var MAP_FILTERS = document.querySelector('.map__filters');
+  var selectElems = MAP_FILTERS.querySelectorAll('.map__filter');
+  var featureCheckboxElems = MAP_FILTERS.querySelectorAll('input[type="checkbox"]');
+  var FILTER_TYPE = MAP_FILTERS.querySelector('#housing-type');
+  var FILTER_PRICE = MAP_FILTERS.querySelector('#housing-price');
+  var FILTER_ROOMS = MAP_FILTERS.querySelector('#housing-rooms');
+  var FILTER_GUESTS = MAP_FILTERS.querySelector('#housing-guests');
 
   var PRICE_RANGES = {
     low: 10000,
@@ -12,6 +16,10 @@
 
   var checkType = function (offerType, filterType) {
     return filterType === 'any' || filterType === offerType.toString();
+  };
+
+  var checkNumber = function (offerValue, filterValue) {
+    return filterValue === 'any' || parseInt(filterValue.toString(), 10) === parseInt(offerValue.toString(), 10);
   };
 
   var getRentCostRange = function (offerRentCost) {
@@ -28,53 +36,30 @@
     return filtersCost === 'any' || filtersCost === getRentCostRange(offerRentCost);
   };
 
-  var checkFeatures = function (offerFeatures, neededFeatures) {
-    return neededFeatures.every(function (feature) {
-      return offerFeatures.indexOf(feature) > -1;
-    });
-  };
-
   selectElems.forEach(function (selectElem) {
     selectElem.dataset.feature = selectElem.id.replace(/housing-/i, '');
   });
 
-  var filters = Array.from(selectElems).reduce(function (acc, selectedOption) {
-    var optionName = selectedOption.dataset.feature;
-    acc[optionName] = selectedOption.options[selectedOption.selectedIndex].value;
-
-    return acc;
-  }, {});
-
-  filters.features = Array.from(featureCheckboxElems)
-    .filter(function (checkedBox) {
-      return checkedBox.checked;
-    })
-    .map(function (checkedBox) {
-      return checkedBox.value;
+  var filterFeatures = function (item) {
+    var arr = Array.from(featureCheckboxElems).filter(function (checkedBox) {
+      return checkedBox.checked;});
+    return arr.every(function (feature) {
+      return item.offer.features.indexOf(feature.value) !== -1;
     });
+  };
 
-  var filterOffers = function (rent) {
-    return checkType(rent.offer.type, filters.type) &&
-      checkType(rent.offer.rooms, filters.rooms) &&
-      checkType(rent.offer.guests, filters.guests) &&
-      checkRentCost(rent.offer.price, filters.price) &&
-      checkFeatures(rent.offer.features, filters.features);
+  var filterOffers = function (data) {
+    return checkType(data.offer.type, FILTER_TYPE.value) &&
+      checkNumber(data.offer.rooms, FILTER_ROOMS.value) &&
+      checkNumber(data.offer.guests, FILTER_GUESTS.value) &&
+      checkRentCost(data.offer.price, FILTER_PRICE.value) &&
+      filterFeatures(data);
   };
 
   var filterRents = function (data) {
-    return data.filter(filterOffers(data));
+    return data.filter(filterOffers);
   };
 
-
-  var onFilterFormElemChange = function () {
-    window.map.closePopup();
-    window.utils.removeElems();
-    window.map.pasteMapPins(window.map.applyLimitForItemsOnMap(filterRents(window.map.mapData)));
-  };
-
-  FILTER_FORM.addEventListener('change', function () {
-    window.debounce(onFilterFormElemChange);
-  });
 
   window.filter = filterRents;
 

@@ -45,11 +45,16 @@
     return error;
   };
 
+  var messageError = function (message) {
+    console.error(message);
+  };
+
   window.utils = {
     cleanNode: cleanNode,
     syncTwoSelect: syncTwoSelect,
     hideErrorMessage: hideErrorMessage,
     removeElems: removeElems,
-    removeActiveClass: removeActiveClass
+    removeActiveClass: removeActiveClass,
+    messageError: messageError
   };
 })();
