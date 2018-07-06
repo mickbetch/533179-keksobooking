@@ -136,20 +136,10 @@
     MAP_PIN_LIST.appendChild(mapPinFragment);
   };
 
-  var renderMapCard = function (template, data) {
-    var oldOfferElem = MAP.querySelector('.map__card');
-    var offerElem = window.offer.createMapCard(template, data);
-    if (oldOfferElem) {
-      MAP.replaceChild(offerElem, oldOfferElem);
-    } else {
-      MAP.insertBefore(window.offer.createMapCard(template, data), PLACE_BEFORE_CARD_LIST);
-    }
-  };
-
   var onMapPinClick = function (evt) {
     window.utils.removeActiveClass();
     evt.currentTarget.classList.add('map__pin--active');
-    renderMapCard(TEMPLATE_MAP_CARD, getClickedMapPinData(evt.currentTarget), onDataLoadError);
+    window.card(getClickedMapPinData(evt.currentTarget), onDataLoadError);
     onPopupCloseClick();
     openPopup();
   };
