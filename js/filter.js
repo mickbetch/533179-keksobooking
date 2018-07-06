@@ -62,7 +62,7 @@
   };
 
   var filterRents = function (data) {
-    return data.filter(filterOffers);
+    return data.filter(filterOffers(data));
   };
 
 
@@ -75,5 +75,7 @@
   FILTER_FORM.addEventListener('change', function () {
     window.debounce(onFilterFormElemChange);
   });
+
+  window.filter = filterRents;
 
 })();
