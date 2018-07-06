@@ -50,10 +50,11 @@
       window.utils.messageError('Массив объявлений не инициализирован');
       return;
     }
+
     var data = mapData;
     window.utils.removeElems();
     closePopup();
-    var filteredData = window.filter(data);
+    window.filteredData = window.filter(data);
     filteredData.sort(function (a, b) {
       return calculateDistance(a) - calculateDistance(b);
     });
@@ -111,7 +112,7 @@
 
   var getClickedMapPinData = function (elem) {
     var offerIndex = parseInt(elem.id, 10);
-    return mapData[offerIndex];
+    return window.filteredData[offerIndex];
   };
 
   var renderMapPin = function (item, template, index) {
