@@ -124,10 +124,10 @@
   };
 
   var renderMap = function () {
-    if (mapData === undefined || mapData === null) {
-      window.utils.messageError('Массив объявлений не инициализирован');
-      return;
-    }
+    // if (mapData === undefined || mapData === null) {
+    //   window.utils.messageError('Массив объявлений не инициализирован');
+    //   return;
+    // }
 
     var data = mapData;
     window.utils.removeElems();

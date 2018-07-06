@@ -45,9 +45,9 @@
     return error;
   };
 
-  var messageError = function (message) {
-    console.error(message);
-  };
+  // var messageError = function (message) {
+  //   console.error(message);
+  // };
 
   window.utils = {
     cleanNode: cleanNode,
