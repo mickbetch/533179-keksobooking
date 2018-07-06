@@ -132,11 +132,11 @@
     var data = mapData;
     window.utils.removeElems();
     closePopup();
-    var filteredData = window.filter(data);
-    filteredData.sort(function (a, b) {
+    window.map.filteredData = window.filter(data);
+    window.map.filteredData.sort(function (a, b) {
       return calculateDistance(a) - calculateDistance(b);
     });
-    pasteMapPins(filteredData);
+    pasteMapPins(window.map.filteredData);
   };
 
   var onDataLoadSuccess = function (data) {
@@ -246,7 +246,8 @@
   window.map = {
     hideActiveMap: hideActiveMap,
     onDataLoadError: onDataLoadError,
-    mapData: mapData
+    mapData: mapData,
+    filteredData: []
   };
 })();
 

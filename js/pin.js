@@ -7,7 +7,7 @@
 
   var getClickedMapPinData = function (elem) {
     var offerIndex = parseInt(elem.id, 10);
-    return window.filteredData[offerIndex];
+    return window.map.filteredData[offerIndex];
   };
 
   var openPopup = function () {
