@@ -18,7 +18,7 @@
     '100': ['0']
   };
 
-  var MIN_PRICES = {
+  var typesToMinPrice = {
     bungalo: '0',
     flat: '1000',
     house: '5000',
@@ -31,18 +31,30 @@
 
   var FORM_RESET = FORM.querySelector('.ad-form__reset');
 
-  var onXhrLoad = function () {
+  var showSuccesBlock = function () {
+    var success = document.querySelector('.success');
+    success.classList.remove('hidden');
+
+    document.addEventListener('click', hideSuccessBlock);
+    document.addEventListener('keydown', onFormEscPress);
+  };
+
+  var hideSuccessBlock = function () {
+    var success = document.querySelector('.success');
+    success.classList.add('hidden');
+    document.removeEventListener('keydown', onFormEscPress);
+  };
+
+  var onFormLoad = function () {
     showSuccesBlock();
     window.map.hideActiveMap();
   };
 
   var onFormSubmit = function (evt) {
-    window.backend.upload(new FormData(evt.target), onXhrLoad, window.map.onDataLoadError);
+    window.backend.upload(new FormData(evt.target), onFormLoad, window.map.onDataLoadError);
 
     evt.preventDefault();
   };
-
-  FORM.addEventListener('submit', onFormSubmit);
 
   var syncTypeWithMinPrice = function () {
     var selectOne = FORM.querySelector('select[name="type"]');
@@ -55,7 +67,7 @@
 
     var selectTwo = FORM.querySelector('input[name="price"]');
 
-    selectTwo.min = MIN_PRICES[selectedValue];
+    selectTwo.min = typesToMinPrice[selectedValue];
     selectTwo.placeholder = selectTwo.min;
   };
 
@@ -137,26 +149,6 @@
     }
   };
 
-  var showSuccesBlock = function () {
-    var success = document.querySelector('.success');
-    success.classList.remove('hidden');
-
-    document.addEventListener('click', hideSuccessBlock);
-    document.addEventListener('keydown', onFormEscPress);
-  };
-
-  var hideSuccessBlock = function () {
-    var success = document.querySelector('.success');
-    success.classList.add('hidden');
-    document.removeEventListener('keydown', onFormEscPress);
-  };
-
-  // var onFormSubmit = function (evt) {
-  //   evt.preventDefault();
-  //   showSuccesBlock();
-  //   window.map.hideActiveMap();
-  // };
-
   var onFormResetClick = function (evt) {
     evt.preventDefault();
     window.map.hideActiveMap();
@@ -176,7 +168,7 @@
 
   CAPACITY_SELECT_ELEM.addEventListener('change', syncRoomsWithGuests);
 
-  // FORM.addEventListener('submit', onFormSubmit);
+  FORM.addEventListener('submit', onFormSubmit);
   FORM_RESET.addEventListener('click', onFormResetClick);
 
   window.form = {

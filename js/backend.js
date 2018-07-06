@@ -2,8 +2,8 @@
 
 (function () {
   var TIMEOUT = 5000;
-
   var SERVER_STATUS_OK = 200;
+
 
   var ERRORS = {
     generalError: function (status) {
@@ -13,7 +13,7 @@
       return 'Произошла ошибка соединения';
     },
     timeoutError: function (timeout) {
-      return 'Запрос не успел выполниться за ' + timeout + 'мс';
+      return 'Запрос не успел выполниться за ' + timeout + ' мс';
     }
   };
 
@@ -22,11 +22,23 @@
     UPLOAD: 'https://js.dump.academy/keksobooking'
   };
 
-  var getData = function (onLoad, onError) {
+  /**
+   * Подрезает полученный из сервера массив данных
+   * @param {Array} response - Ответ сервера
+   * @return {Array}
+   */
+
+  var createXhr = function (responseType, timeout) {
     var xhr = new XMLHttpRequest();
 
-    xhr.responseType = 'json';
-    xhr.timeout = TIMEOUT;
+    xhr.responseType = responseType;
+    xhr.timeout = timeout;
+
+    return xhr;
+  };
+
+  var processXhr = function (onLoad, onError) {
+    var xhr = createXhr('json', TIMEOUT);
 
     xhr.addEventListener('load', function () {
       if (xhr.status === SERVER_STATUS_OK) {
@@ -48,17 +60,17 @@
   };
 
   var download = function (onLoad, onError) {
-    var xhr = getData(onLoad, onError);
+    var response = processXhr(onLoad, onError);
 
-    xhr.open('GET', serverUrl.DOWNLOAD);
-    xhr.send();
+    response.open('GET', serverUrl.DOWNLOAD);
+    response.send();
   };
 
   var upload = function (data, onLoad, onError) {
-    var xhr = getData(onLoad, onError);
+    var response = processXhr(onLoad, onError);
 
-    xhr.open('POST', serverUrl.UPLOAD);
-    xhr.send(data);
+    response.open('POST', serverUrl.UPLOAD);
+    response.send(data);
   };
 
   window.backend = {
